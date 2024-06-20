@@ -16,7 +16,12 @@ client.on(Events.MessageCreate, async (message) => {
 
     const args = message.content.slice(1)
 
-    if(args === "hola") message.reply("Hola")
+    try
+{
+const command = requiere(`${args}`);
+command.run(mensaje);
+}catch (error) {
+console.log(`Error general`)}
 })
 
 //Conectar cliente

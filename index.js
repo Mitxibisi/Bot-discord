@@ -36,7 +36,7 @@ client.on(Events.GuildMemberRemove, async (member) => {
     const welcomeChannelId = '732006205454811206';
     const channel = await client.channels.fetch(welcomeChannelId);
 
-    if(args === "hola") message.reply("Hola")
+    hannel.send(`**<@${member.user.id}> Y SE MARCHOO**`);
 })
 
 //Conectar cliente

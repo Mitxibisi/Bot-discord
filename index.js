@@ -10,9 +10,10 @@ const client = new Client({
 client.on(Events.ClientReady, async () => {
     console.log(`Conectado como ${client.user.username}!`);
 });
+
 client.on(Events.MessageCreate, async (message) => {
     if (message.author.bot) return;
-    if (!message.content.startsWith('-')) return;
+    if (!message.content.startsWith('.')) return;
 
     const args = message.content.slice(1).split(' ')[0]
 
@@ -36,7 +37,7 @@ client.on(Events.GuildMemberRemove, async (member) => {
     const welcomeChannelId = '732006205454811206';
     const channel = await client.channels.fetch(welcomeChannelId);
 
-    hannel.send(`**<@${member.user.id}> Y SE MARCHOO**`);
+    channel.send(`**<@${member.user.id}> Y SE MARCHOO**`);
 })
 
 //Conectar cliente

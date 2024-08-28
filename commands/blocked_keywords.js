@@ -48,4 +48,4 @@ module.exports = [
     'nakedfilms', 'hotfilms', 'sexmovies', 'adultmovies', 'eroticmovies',
     'dirtymovies', 'pornmovies', 'x-ratedmovies', 'sexvideos', 'pornvideos',
     'adultvideos', 'dirtyvideos', 'eroticvideos', 'nakedvideos'
-];
+]

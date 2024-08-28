@@ -1,5 +1,6 @@
 const puppeteer = require('puppeteer');
-const blockedDomains = require('./blocked_domains');
+const blockedDomains = require('./blocked_keywords');
+
     module.exports = {
         description: 'Busca en Google usando Puppeteer y devuelve la primera URL',
         run: async (message) => {

@@ -5,7 +5,6 @@ const blockedKeys = require('./blocked_keywords');
         description: 'Busca en Google usando Puppeteer y devuelve la primera URL',
         run: async (message) => {
             if (!message.content.startsWith('.search ')) return;
-            const lowerCaseMessage = message.content.toLowerCase();
 
             const query = message.content.replace('.search', '');
             const url = `https://www.google.com/search?q=${encodeURIComponent(query)}`;

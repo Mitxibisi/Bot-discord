@@ -7,14 +7,32 @@ const client = new Client({
 
 // Función para limpiar el canal
 async function clearChannel(channelId) {
-    const channel = await client.channels.fetch(channelId);
-    if (!channel || !channel.isTextBased()) return;
+    try {
+        const channel = await client.channels.fetch(channelId);
+        if (!channel || !channel.isTextBased()) {
+            console.error('El canal no es de texto o no se pudo encontrar.');
+            return;
+        }
 
-    let messages;
-    do {
-        messages = await channel.messages.fetch({ limit: 100 });
-        messages.forEach(msg => msg.delete().catch(console.error));
-    } while (messages.size > 0);
+        let messages;
+        do {
+            // Obtener los últimos 100 mensajes del canal
+            messages = await channel.messages.fetch({ limit: 100 });
+            
+            // Eliminar cada mensaje
+            for (const msg of messages.values()) {
+                try {
+                    await msg.delete();
+                } catch (error) {
+                    console.error(`Error al eliminar el mensaje con ID ${msg.id}:`, error);
+                }
+            }
+        } while (messages.size > 0);
+
+        console.log('Canal limpio con éxito.');
+    } catch (error) {
+        console.error('Error al limpiar el canal:', error);
+    }
 }
 
 // Manejo de eventos

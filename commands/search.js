@@ -24,9 +24,19 @@ const blockedKeys = require('./blocked_keywords');
                 await browser.close();
 
                 const lowerCaseURL = firstResult.url.toLowerCase();  // Asegúrate de acceder a `url`, no `content`
+                const lowerCasemessage = message.content.toLowerCase();
+                const regex2 = /\+\p{L}/u;
 
                 // Asumiendo que `blockedKeys` es una lista de palabras clave prohibidas
                 let censored = false;  // Bandera para saber si se debe censurar
+                let censoredKey = false;
+
+                for (const keyword of blockedKeys) {
+                    if (lowerCasemessage.includes(keyword)) {
+                        censoredKey = true;
+                        break;  // Salimos del bucle si encontramos una coincidencia
+                    }
+                }
 
                 for (const keyword of blockedKeys) {
                     if (lowerCaseURL.includes(keyword)) {
@@ -35,7 +45,11 @@ const blockedKeys = require('./blocked_keywords');
                     }
                 }
 
-                if (censored) {
+                if (regex2.test(lowerCasemessage)) {
+                    censoredKey = true;
+                }
+
+                if (censored||censoredKey) {
                     message.reply('Filtro de censura activado.');
                 } else {
                     if (firstResult) {

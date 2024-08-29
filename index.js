@@ -1,4 +1,5 @@
 const { Client, Events } = require('discord.js');
+const { token } = require('./client');
 
 // Crear nuevo cliente de Discord
 const client = new Client({
@@ -83,4 +84,4 @@ client.on(Events.GuildMemberRemove, async (member) => {
 });
 
 //Conectar cliente
-client.login("MTI1MjcwMTM5NTk2NzAyMTA3Ng.GD4Nb6.rAx_FPlZPv6hipVLW-IbxSqoV11Srg_O-opMWc");
+client.login(token);

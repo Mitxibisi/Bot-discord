@@ -20,7 +20,15 @@ module.exports = [
     'sexually', 'explicit', 'taboo', 'nudity', 'dirty', 'kinky', 'erotic', 'adultfilm',
     'fetish', 'bdsm', 'bondage', 'roleplay', 'kink', 'adultart', 'adultvideos', 'adultcontent',
     'nudephotos', 'nakedphotos', 'adultphotos', 'dirtyphotos', 'sexyphotos', 'pornphotos',
-    'adultclips', 'pornclips', 'dirtyclips', 'sexclips', 'eroticclips', 'nudeclips',
+    'adultclips', 'pornclips', 'dirtyclips', 'sexclips', 'eroticclips', 'nudeclips', 'swingers',
+    'desnudez',
+    'voyeur',
+    'nudismo',
+    'perversión',
+    'pornstars',
+    'exhibicionista',
+    'estimulador',
+    'sadomasoquista',
 
     // Nombres de sitios web para adultos comunes (sin extensiones)
     'pornhub', 'xvideos', 'redtube', 'youporn', 'xnxx',

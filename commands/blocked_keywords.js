@@ -1,4 +1,4 @@
-module.exports = [
+export default [
     // Palabras clave relacionadas con contenido para adultos
     'porn', 'pornography', 'sex', 'sexy', 'nude', 'naked', 'adult', 'xxx', 'erotic',
     'vagina', 'penis', 'boobs', 'butt', 'ass', 'dick', 'pussy', 'cum', 'ejaculation',

@@ -4,6 +4,7 @@ import { createCanvas, loadImage } from 'canvas';
 import path from 'path';
 import { Client, Events, EmbedBuilder, GatewayIntentBits } from 'discord.js';
 import { fileURLToPath } from 'url';
+import { exec, execSync } from 'child_process';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -59,6 +60,28 @@ client.on(Events.MessageCreate, async (message) => {
             console.error(`Error al ejecutar el comando ${args}:`, error);
             message.reply("Hubo un error al ejecutar el comando.");
         }
+    }
+
+    if (message.content === '!encender') {
+        // Encender el segundo bot
+        exec('node index2.js', (error, stdout, stderr) => {
+            if (error) {
+                console.error(`Error al encender el segundo bot: ${error.message}`);
+                return;
+            }
+            if (stderr) {
+                console.error(`stderr: ${stderr}`);
+                return;
+            }
+            console.log(`stdout: ${stdout}`);
+        });
+        message.channel.send('Segundo bot encendido.');
+    }
+
+    if (message.content === '!apagar') {
+        // Apagar el segundo bot
+        execSync('pkill -f node');
+        message.channel.send('Segundo bot apagado.');
     }
 
     if (message.content === '!embed') {
@@ -125,10 +148,7 @@ client.on(Events.MessageCreate, async (message) => {
 
             const embed = new EmbedBuilder()
                 .setColor(0x0099ff)
-                .setTitle('Perfil de Usuario')
-                .setDescription(`${message.author.username}`)
                 .setImage('attachment://' + attachmentName)
-                .setFooter({ text: 'Generado automáticamente' });
 
             await message.channel.send({
                 embeds: [embed],

@@ -2,8 +2,6 @@ import puppeteer from 'puppeteer';
 import blockedKeys from './blocked_keywords.js';
 
 export async function run(message) {
-    if (!message.content.startsWith('.search ')) return;
-
     const query = message.content.replace('.search ', '');
     const url = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
 

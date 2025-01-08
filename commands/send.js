@@ -5,7 +5,7 @@ export async function run(message, client) {
     console.log(`Received message: ${lowerCaseMessage}`); // Mensaje de depuración
 
     // Verifica si el mensaje contiene la palabra "send"
-    if (lowerCaseMessage.startsWith('!send')) { // Asegúrate de que el comando empiece con !send
+    if (lowerCaseMessage.startsWith('%send')) { // Asegúrate de que el comando empiece con !send
         // Extrae el comando después de !send y divide los argumentos
         const args = message.content.slice(6).trim().split(/ +/); // `!send` tiene 6 caracteres
         console.log(`Arguments: ${args}`); // Mensaje de depuración

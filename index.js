@@ -3,6 +3,7 @@ import { Client, CommandInteraction, Events, GatewayIntentBits } from 'discord.j
 import { fileURLToPath } from 'url';
 import { exec, execSync } from 'child_process';
 import { compileFunction } from 'vm';
+import { db, getUser, addXp, createUser} from './database.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -11,7 +12,8 @@ const client = new Client({
     intents: [
         GatewayIntentBits.Guilds,
         GatewayIntentBits.GuildMessages,
-        GatewayIntentBits.MessageContent
+        GatewayIntentBits.MessageContent,
+        GatewayIntentBits.GuildMembers
     ]
 });
 
@@ -19,18 +21,26 @@ client.on(Events.ClientReady, () => {
     console.log(`Conectado como ${client.user.tag}!`);
 });
 
+
+
 client.on(Events.GuildMemberAdd, async (member) => {
     const welcomeChannelId = '732006205454811206';
-    const channel = await client.channels.fetch(welcomeChannelId);
-
-    if (channel) {
-        const commandPath = './commands/profile.js';
-        const commandModule = await import(commandPath);
-        if (typeof commandModule.run === 'function') {
-            await commandModule.run(member, channel);
+    try {
+        const channel = await client.channels.fetch(welcomeChannelId);
+        if (channel) {
+            console.log("Intentando cargar el comando: profile");
+            const commandPath = './templates/profile.js';
+            const commandModule = await import(commandPath);
+            console.log(`Módulo cargado desde: ${commandPath}`);
+            if (typeof commandModule.run === 'function') {
+                await commandModule.run(member, channel);
+                }
+            }
         }
-    }
-});
+         catch (error) {
+            console.error(`Error en GuildMemberAdd: ${error.message}`);
+        }   
+    });
 
 client.on(Events.GuildMemberRemove, async (member) => {
     const welcomeChannelId = '732006205454811206';
@@ -43,6 +53,8 @@ client.on(Events.GuildMemberRemove, async (member) => {
 
 client.on(Events.MessageCreate, async (message) => {
     if (message.author.bot) return;
+
+    createUser(message.author.id, message.author.username);
 
     if (message.content.startsWith('%')) {
         const args = message.content.slice(1).split(' ')[0];  // Extrae el comando después del punto
@@ -84,6 +96,10 @@ client.on(Events.MessageCreate, async (message) => {
         // Apagar el segundo bot
         execSync('pkill -f node');
         message.channel.send('Segundo bot apagado.');
+    }
+
+    if (message.content === '!addexp'){
+        addXp(message.author.id, 50)
     }
 });
 

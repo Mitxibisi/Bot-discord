@@ -4,13 +4,18 @@ import blockedKeys from './blocked_keywords.js';
 export async function run(message) {
     const query = message.content.replace('%search ', '');
     const url = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
-
     try {
-        const browser = await puppeteer.launch();
+        // Lanzar el navegador en modo headless
+        const browser = await puppeteer.launch({
+            headless: true, // Ejecutar sin interfaz gráfica
+            executablePath: '/usr/bin/chromium-browser', // Ruta del ejecutable de Chromium
+            args: ['--no-sandbox', '--disable-setuid-sandbox'] // Argumentos para evitar problemas de permisos
+        });
+        
         const page = await browser.newPage();
         await page.goto(url);
 
-        // Obtiene el primer resultado
+        // Obtener el primer resultado
         const firstResult = await page.evaluate(() => {
             const result = document.querySelector('h3');
             const link = result.closest('a');
@@ -19,13 +24,14 @@ export async function run(message) {
 
         await browser.close();
 
+        // Censura de resultados
         const lowerCaseURL = firstResult.url.toLowerCase();
         const lowerCaseMessage = message.content.toLowerCase();
         const regex2 = /\+\p{L}/u;
-
         let censored = false;
         let censoredKey = false;
 
+        // Revisar las palabras clave bloqueadas en el mensaje
         for (const keyword of blockedKeys) {
             if (lowerCaseMessage.includes(keyword)) {
                 censoredKey = true;
@@ -33,6 +39,7 @@ export async function run(message) {
             }
         }
 
+        // Revisar las palabras clave bloqueadas en la URL
         for (const keyword of blockedKeys) {
             if (lowerCaseURL.includes(keyword)) {
                 censored = true;
@@ -40,10 +47,12 @@ export async function run(message) {
             }
         }
 
+        // Verificar si el mensaje contiene caracteres prohibidos
         if (regex2.test(lowerCaseMessage)) {
             censoredKey = true;
         }
 
+        // Responder según el filtro de censura
         if (censored || censoredKey) {
             message.reply('Filtro de censura activado.');
         } else {

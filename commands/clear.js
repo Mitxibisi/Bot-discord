@@ -25,7 +25,7 @@ async function clearChannel(channelId, client) {
 }
 
 export async function run(message, client) {
-        if (message.content.startsWith('.clear')) {
+        if (message.content.startsWith('%clear')) {
             await clearChannel(message.channel.id, client);
             return message.channel.send('Channel cleared!').then(msg => {
                 setTimeout(() => msg.delete(), 5000);

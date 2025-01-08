@@ -44,7 +44,7 @@ export async function run(member,Finalchannel) {
         ctx.closePath();
         ctx.clip();
 
-        const avatarURL = member.displayAvatarURL({ format: 'webp', size: 1024 });
+        const avatarURL = member.user.displayAvatarURL({ dynamic: true, format: 'webp', size: 512 });
         const response = await fetch(avatarURL);
         if (!response.ok) throw new Error('No se pudo descargar el avatar');
 
@@ -61,7 +61,7 @@ export async function run(member,Finalchannel) {
         ctx.fillStyle = 'black'; // Color del texto blanco
         ctx.textAlign = 'center';
 
-        const username = member.user.id;
+        const username = member.user.username;
         const text = username.charAt(0).toUpperCase() + username.slice(1).toLowerCase();
         const textX = canvasWidth / 2;
         const textY = (canvasHeight / 2) + 50;
@@ -102,6 +102,6 @@ export async function run(member,Finalchannel) {
         });
     } catch (error) {
         console.error('Error al generar el perfil:', error);
-        message.reply('Hubo un error al generar tu perfil.');
+        Finalchannel.send('Hubo un error al generar tu perfil.');
     }
 }

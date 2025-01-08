@@ -1,7 +1,8 @@
 import path from 'path';
-import { Client, Events, GatewayIntentBits } from 'discord.js';
+import { Client, CommandInteraction, Events, GatewayIntentBits } from 'discord.js';
 import { fileURLToPath } from 'url';
 import { exec, execSync } from 'child_process';
+import { compileFunction } from 'vm';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -23,7 +24,11 @@ client.on(Events.GuildMemberAdd, async (member) => {
     const channel = await client.channels.fetch(welcomeChannelId);
 
     if (channel) {
-        channel.send(`**<@${member.user.id}> bienvenido a la comunidad**`);
+        const commandPath = './commands/profile.js';
+        const commandModule = await import(commandPath);
+        if (typeof commandModule.run === 'function') {
+            await commandModule.run(member, channel);
+        }
     }
 });
 

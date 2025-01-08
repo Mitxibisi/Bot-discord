@@ -3,7 +3,7 @@ import { EmbedBuilder } from 'discord.js';
 async function sendUserRoles(message) {
     // Asegúrate de que el mensaje proviene de un servidor
     if (!message.guild) {
-        return message.reply('Este comando solo se puede usar en servidores.');
+        return message.reply('Este comandó ndo solo se puede usar en servidores.');
     }
 
     // Obtén el usuario mencionado o el autor del mensaje si no se menciona a nadie

@@ -8,7 +8,7 @@ import { EmbedBuilder } from 'discord.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-export async function run(message) {
+export async function run(member,Finalchannel) {
     try {
         const canvasWidth = 1000;
         const canvasHeight = 800;
@@ -44,7 +44,7 @@ export async function run(message) {
         ctx.closePath();
         ctx.clip();
 
-        const avatarURL = message.author.displayAvatarURL({ format: 'webp', size: 1024 });
+        const avatarURL = member.displayAvatarURL({ format: 'webp', size: 1024 });
         const response = await fetch(avatarURL);
         if (!response.ok) throw new Error('No se pudo descargar el avatar');
 
@@ -61,7 +61,7 @@ export async function run(message) {
         ctx.fillStyle = 'black'; // Color del texto blanco
         ctx.textAlign = 'center';
 
-        const username = message.author.username;
+        const username = member.user.id;
         const text = username.charAt(0).toUpperCase() + username.slice(1).toLowerCase();
         const textX = canvasWidth / 2;
         const textY = (canvasHeight / 2) + 50;
@@ -96,7 +96,7 @@ export async function run(message) {
             .setColor(0x006400)
             .setImage('attachment://' + attachmentName);
 
-         await message.channel.send({
+         await Finalchannel.send({
             embeds: [embed],
             files: [{ attachment, name: attachmentName }]
         });

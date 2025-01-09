@@ -1,6 +1,6 @@
 import { EmbedBuilder } from 'discord.js';
 
-async function sendUserRoles(message) {
+async function sendUserRoles(message,user) {
     // Asegúrate de que el mensaje proviene de un servidor
     if (!message.guild) {
         return message.reply('Este comandó ndo solo se puede usar en servidores.');
@@ -34,10 +34,10 @@ export async function run(message) {
         .setDescription(await sendUserRoles(message))
         .setThumbnail('https://t3.ftcdn.net/jpg/03/18/01/96/360_F_318019685_EV3M47BKGuK3iFG5cOQmVjPy15bc7CkC.jpg')
         .addFields(
-            { name: 'Campo 1', value: 'Este es el valor del campo 1' },
-            { name: 'Campo 2', value: 'Este es el valor del campo 2' },
-            { name: 'Campo en línea', value: 'Este campo está en línea', inline: true },
-            { name: 'Otro campo en línea', value: 'Este también está en línea', inline: true }
+            { name: 'Nivel', value: user.level },
+            { name: 'ExperienciaMax', value: user.levelupxp },
+            { name: 'ExperienciaActual', value: user.xp, inline: true },
+            { name: 'RolId', value: user.rolid, inline: true }
         )
         .setFooter({ text: 'Este es un pie de página', iconURL: 'https://t3.ftcdn.net/jpg/03/18/01/96/360_F_318019685_EV3M47BKGuK3iFG5cOQmVjPy15bc7CkC.jpg' });
 

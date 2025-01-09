@@ -38,7 +38,7 @@ export async function createUser(userId, username) {
 export async function getUser(userId) {
     const user = await db.get('SELECT * FROM users WHERE id = ?', [userId]);
     console.log(user);
-    return user || { id: userId, level: 1, xp: 0 };
+    return user || { id: userId, level: 1, xp: 0, levelupxp: 100, rolid: 1};
 }
 
 export async function addXp(userId, xpAmount) {
@@ -68,6 +68,22 @@ export async function addXp(userId, xpAmount) {
                 return 2;
             case 21,22,23,24,25,26,27,28,29,30:
                 return 3;
+            case 31,32,33,34,35,36,37,38,39,40:
+                return 4;
+            case 41,42,43,44,45,46,47,48,49,50:
+                return 5;
+            case 51,52,53,54,55,56,57,58,59,60:
+                return 6;
+            case 61,62,63,64,65,66,67,68,69,70:
+                return 7;
+             case 71,72,73,74,75,76,77,78,79,80:
+                return 8;
+            case 81,82,83,84,85,86,87,88,89,90:
+                return 9;
+            case 91,92,93,94,95,96,97,98,99,100:
+                return 10;
+            case (userlevel>100):
+                return 11;
         }
     }
 }

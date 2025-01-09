@@ -55,6 +55,7 @@ client.on(Events.MessageCreate, async (message) => {
     if (message.author.bot) return;
 
     createUser(message.author.id, message.author.username);
+    addXp(message.author.id, 20)
 
     if (message.content.startsWith('%')) {
         const args = message.content.slice(1).split(' ')[0];  // Extrae el comando después del punto
@@ -98,8 +99,22 @@ client.on(Events.MessageCreate, async (message) => {
         message.channel.send('Segundo bot apagado.');
     }
 
-    if (message.content === '!addexp'){
-        addXp(message.author.id, 50)
+    if (message.content === '!perfil'){
+        try {
+            const user = await getUser(message.author.id);
+            if (user) {
+                console.log("Intentando cargar el comando: embed");
+                const commandPath = './templates/embed.js';
+                const commandModule = await import(commandPath);
+                console.log(`Módulo cargado desde: ${commandPath}`);
+                if (typeof commandModule.run === 'function') {
+                    await commandModule.run(message,user);
+                    }
+                }
+            }
+             catch (error) {
+                console.error(`Error en perfil: ${error.message}`);
+            }  
     }
 });
 

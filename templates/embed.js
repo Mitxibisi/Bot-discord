@@ -37,7 +37,7 @@ export async function run(message, user) {
             { name: 'Nivel', value: user.level },
             { name: 'ExperienciaMax', value: user.levelupxp },
             { name: 'ExperienciaActual', value: user.xp, inline: true },
-            { name: 'RolId', value: user.rolid, inline: true }
+
         )
         .setFooter({ text: 'Este es un pie de página', iconURL: 'https://t3.ftcdn.net/jpg/03/18/01/96/360_F_318019685_EV3M47BKGuK3iFG5cOQmVjPy15bc7CkC.jpg' });
 

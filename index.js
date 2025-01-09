@@ -99,23 +99,22 @@ client.on(Events.MessageCreate, async (message) => {
         message.channel.send('Segundo bot apagado.');
     }
 
-    if (message.content === '!perfil'){
-        try {
-            const user = await getUser(message.author.id);
-            if (user) {
-                console.log("Intentando cargar el comando: embed");
-                const commandPath = './templates/embed.js';
-                const commandModule = await import(commandPath);
-                console.log(`Módulo cargado desde: ${commandPath}`);
+    if (message.content === '!perfil') {
+            try {
+            const user = await getUser(message.author.id); // Obtén los datos del usuario de la base de datos
+            console.log(user); // Para depuración
+            console.log("Intentando cargar el comando: embed");
+            const commandPath = './templates/embed.js';
+            const commandModule = await import(commandPath);
+            console.log(`Módulo cargado desde: ${commandPath}`);
+
                 if (typeof commandModule.run === 'function') {
-                    await commandModule.run(message,user);
-                    }
+                    await commandModule.run(message, user); // Pasa `user` al comando
+                 }
+
+            } catch (error) {
+               console.error(`Error en perfil: ${error.message}`);
                 }
-            }
-             catch (error) {
-                console.error(`Error en perfil: ${error.message}`);
-            }  
     }
 });
-
 client.login("MTI1MjcwMTM5NTk2NzAyMTA3Ng.G6Kk3N.Q_Ypo8lh4MU3TeJA7PY3gHTCJ_66Sm5CfEhxfU");

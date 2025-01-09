@@ -1,6 +1,6 @@
 import { EmbedBuilder } from 'discord.js';
 
-async function sendUserRoles(message,user) {
+async function sendUserRoles(message) {
     // Asegúrate de que el mensaje proviene de un servidor
     if (!message.guild) {
         return message.reply('Este comandó ndo solo se puede usar en servidores.');
@@ -27,7 +27,7 @@ async function sendUserRoles(message,user) {
     return (`${member.user.tag} tiene los siguientes roles: ${rolesMessage}`);
 }
 
-export async function run(message) {
+export async function run(message, user) {
     const embed = new EmbedBuilder()
         .setColor(0x0099ff)
         .setTitle(message.author.username)

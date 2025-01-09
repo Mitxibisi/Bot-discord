@@ -69,12 +69,5 @@ export async function addXp(userId, xpAmount) {
             case 21,22,23,24,25,26,27,28,29,30:
                 return 3;
         }
-        
-        
-     
-
-           
-
-
     }
 }

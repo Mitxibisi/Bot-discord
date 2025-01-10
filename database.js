@@ -1,5 +1,7 @@
 import sqlite3 from 'sqlite3';
 import { open } from 'sqlite';
+import { ConsoleMessage } from 'puppeteer';
+import { escapeBulletedList } from 'discord.js';
 
 // Conexión inicial a la base de datos
 export const db = await open({
@@ -20,70 +22,98 @@ await db.exec(`
 `);
 
 export async function createUser(userId, username) {
-    // Verifica si el usuario ya existe
-    const existingUser = await db.get('SELECT * FROM users WHERE id = ?', [userId]);
-
-    if (!existingUser) {
-     // Si no existe, lo inserta en la base de datos
-      await db.run(
-       'INSERT INTO users (id, username, level, xp, levelupxp, rolid) VALUES (?, ?, ?, ?, ?, ?)',
-        [userId, username, 1, 0, 100, 1]
-        );
-    console.log(`Usuario ${username} creado con éxito.`);
+    try {
+        const existingUser = await db.get('SELECT * FROM users WHERE id = ?', [userId]);
+        if (!existingUser) {
+            await db.run(
+                'INSERT INTO users (id, username, level, xp, levelupxp, rolid) VALUES (?, ?, ?, ?, ?, ?)',
+                [userId, username, 1, 0, 100, 1]
+            );
+            console.log(`Usuario ${username} creado con éxito.`);
+        } else {
+            console.log(`Usuario ${username} ya existe.`);
+        }
+    } catch (error) {
+        console.error('Error en createUser:', error.message);
     }
-
 }
 
 // Funciones para manejar la base de datos
 export async function getUser(userId) {
-    const user = await db.get('SELECT * FROM users WHERE id = ?', [userId]);
-    console.log(user);
-    return user || { id: userId, level: 1, xp: 0, levelupxp: 100, rolid: 1};
+    try {
+        const user = await db.get('SELECT * FROM users WHERE id = ?', [userId]);
+        if (user) {
+            console.log('Usuario encontrado:', user);
+            return user;
+        } else {
+            console.log(`Usuario con ID ${userId} no encontrado.`);
+            return null; // Devuelve null explícitamente si no existe
+        }
+    } catch (error) {
+        console.error('Error en getUser:', error.message);
+        return null; // En caso de error, también devuelve null
+    }
 }
 
 export async function addXp(userId, xpAmount) {
     const user = await getUser(userId);
-    const newXp = user.xp + xpAmount;
-    let newLevel = user.level;
-    let newlevelupxp = user.levelupxp;
-    let newrol = user.rolid;
-
-    if (newXp >= newlevelupxp) {
-        newLevel += Math.floor(newXp / newlevelupxp);
-        newlevelupxp = user.levelupxp + (user.levelupxp * 0.20);
-        newrol = rolManager(newLevel);
+    if (!user) {
+        console.error(`El usuario con ID ${userId} no existe.`);
+        return null; // Salimos de la función si el usuario no existe
     }
 
-    await db.run(
-        'INSERT OR REPLACE INTO users (id, username, level, xp, levelupxp, rolid) VALUES (?, ?, ?, ?, ?, ?)',
-        [userId, user.username || 'Unknown', newLevel, newXp % newlevelupxp, newlevelupxp, newrol]
-    );
-    return { level: newLevel, xp: newXp % newlevelupxp, levelupxp: newlevelupxp, rol: newrol};
+    const newXp = user.xp + xpAmount;
+    let newLevel = user.level;
+    let newLevelUpXp = user.levelupxp;
+    let newRol = user.rolid;
 
-    function rolManager(userlevel){
-        switch (userlevel){
-            case 1,2,3,4,5,6,7,8,9,10:
-                return 1;
-            case 11,12,13,14,15,16,17,18,19,20:
-                return 2;
-            case 21,22,23,24,25,26,27,28,29,30:
-                return 3;
-            case 31,32,33,34,35,36,37,38,39,40:
-                return 4;
-            case 41,42,43,44,45,46,47,48,49,50:
-                return 5;
-            case 51,52,53,54,55,56,57,58,59,60:
-                return 6;
-            case 61,62,63,64,65,66,67,68,69,70:
-                return 7;
-             case 71,72,73,74,75,76,77,78,79,80:
-                return 8;
-            case 81,82,83,84,85,86,87,88,89,90:
-                return 9;
-            case 91,92,93,94,95,96,97,98,99,100:
-                return 10;
-            case (userlevel>100):
-                return 11;
-        }
+    // Manejo de subida de nivel
+    if (newXp >= newLevelUpXp) {
+        newLevel += Math.floor(newXp / newLevelUpXp); // Incrementa nivel
+        newLevelUpXp = Math.round(newLevelUpXp * 1.2); // Ajusta XP para subir nivel
+        newRol = await  rolManager(newLevel); // Determina nuevo rol
+    }
+
+
+    // Actualiza la base de datos
+    await db.run(
+        'UPDATE users SET level = ?, xp = ?, levelupxp = ?, rolid = ? WHERE id = ?',
+        [newLevel, newXp, newLevelUpXp, newRol, userId]
+    );
+
+    return {
+        level: newLevel,
+        xp: newXp,
+        levelupxp: newLevelUpXp,
+        rolid: newRol,
+    };
+}
+
+function rolManager(userLevel) {
+    switch (true) {
+        case userLevel >= 1 && userLevel <= 10:
+            return 1;
+        case userLevel >= 11 && userLevel <= 20:
+            return 2;
+        case userLevel >= 21 && userLevel <= 30:
+            return 3;
+        case userLevel >= 31 && userLevel <= 40:
+            return 4;
+        case userLevel >= 41 && userLevel <= 50:
+            return 5;
+        case userLevel >= 51 && userLevel <= 60:
+            return 6;
+        case userLevel >= 61 && userLevel <= 70:
+            return 7;
+        case userLevel >= 71 && userLevel <= 80:
+            return 8;
+        case userLevel >= 81 && userLevel <= 90:
+            return 9;
+        case userLevel >= 91 && userLevel <= 100:
+            return 10;
+        case userLevel > 100:
+            return 11;
+        default:
+            return 0; // En caso de que el nivel no encaje en ninguna categoría
     }
 }

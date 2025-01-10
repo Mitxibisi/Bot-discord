@@ -114,6 +114,7 @@ client.on(Events.MessageCreate, async (message) => {
 
             } catch (error) {
                console.error(`Error en perfil: ${error.message}`);
+               message.reply('Error al generar el perfil');
                 }
     }
 });

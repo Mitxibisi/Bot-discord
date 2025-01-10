@@ -32,12 +32,12 @@ export async function run(message, user) {
     const color = randomColor();
     const embed = new EmbedBuilder()
         .setColor(color)
-        .setTitle(`**${message.member.displayName} - Nivel: ${user.level.toString()}**`)
-        .setDescription(`Exp: ${user.xp.toString()} / ${user.levelupxp.toString()}`)
-        .setThumbnail(message.author.displayAvatarURL({dynamic: true, size: 512}))
+        .setTitle(`**${message.member.displayName}**`)
+        .setDescription(await sendUserRoles(message))
+        .setThumbnail(message.author.displayAvatarURL({Dynamic}))
         .addFields(
-            { value: await sendUserRoles(message) },
-
+            { name: 'Nivel', value: user.level.toString() },
+            { name: 'Exp', value:`${user.xp.toString()} / ${user.levelupxp.toString()}` },
             { name: 'Miembro desde: ', value: message.member.joinedAt.toString()}
         )
         .setFooter({ text: 'Este es un pie de página', iconURL: 'https://t3.ftcdn.net/jpg/03/18/01/96/360_F_318019685_EV3M47BKGuK3iFG5cOQmVjPy15bc7CkC.jpg' });

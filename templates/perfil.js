@@ -7,7 +7,7 @@ async function sendUserRoles(message) {
         return message.reply('Este comandó ndo solo se puede usar en servidores.');
     }
 
-    // Obtén el usuario mencionado o el autor del mensaje si no se menciona a nadie
+    // Obtén el usuario mencionado o el author del mensaje si no se menciona a nadie
     const member = message.mentions.members.first() || message.member;
 
     // Si no se puede obtener el miembro, envía un mensaje de error
@@ -25,22 +25,22 @@ async function sendUserRoles(message) {
     const rolesMessage = roles.length > 0 ? roles : 'Este usuario no tiene roles asignados.';
 
     // Envía un mensaje con los roles del usuario
-    return (`${member.user.tag} tiene los siguientes roles: ${rolesMessage}`);
+    return (rolesMessage);
 }
 
 export async function run(message, user) {
     const color = randomColor();
     const embed = new EmbedBuilder()
         .setColor(color)
-        .setTitle(`**${message.member.displayName}**`)
-        .setDescription(await sendUserRoles(message))
-        .setThumbnail(message.author.displayAvatarURL({Dynamic}))
+        .setTitle(`**${message.member.displayName} - Nivel ${user.level.toString()}**`)
+        .setDescription(`Exp: ${user.xp.toString()} / ${user.levelupxp.toString()}`)
+        .setThumbnail(message.author.displayAvatarURL({dynamic: true, size: 512}))
         .addFields(
-            { name: 'Nivel', value: user.level.toString() },
-            { name: 'Exp', value:`${user.xp.toString()} / ${user.levelupxp.toString()}` },
+            { name: `Roles asignados:`, value: await sendUserRoles(message) },
+
             { name: 'Miembro desde: ', value: message.member.joinedAt.toString()}
         )
-        .setFooter({ text: 'Este es un pie de página', iconURL: 'https://t3.ftcdn.net/jpg/03/18/01/96/360_F_318019685_EV3M47BKGuK3iFG5cOQmVjPy15bc7CkC.jpg' });
+
 
     message.channel.send({ embeds: [embed] });
 }

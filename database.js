@@ -1,7 +1,5 @@
 import sqlite3 from 'sqlite3';
 import { open } from 'sqlite';
-import { ConsoleMessage } from 'puppeteer';
-import { escapeBulletedList } from 'discord.js';
 
 // Conexión inicial a la base de datos
 export const db = await open({
@@ -14,10 +12,10 @@ await db.exec(`
     CREATE TABLE IF NOT EXISTS users (
         id TEXT PRIMARY KEY,
         username TEXT,
-        level INTEGER DEFAULT 1,
+        level INTEGER DEFAULT 0,
         xp INTEGER DEFAULT 0,
-        levelupxp INTEGER DEFAULT 100,
-        rolid INTEGER DEFAULT 1
+        levelupxp INTEGER DEFAULT 50,
+        rolid INTEGER DEFAULT 0
     )
 `);
 
@@ -27,7 +25,7 @@ export async function createUser(userId, username) {
         if (!existingUser) {
             await db.run(
                 'INSERT INTO users (id, username, level, xp, levelupxp, rolid) VALUES (?, ?, ?, ?, ?, ?)',
-                [userId, username, 1, 0, 100, 1]
+                [userId, username, 0, 0, 50, 0]
             );
             console.log(`Usuario ${username} creado con éxito.`);
         } else {
@@ -55,11 +53,11 @@ export async function getUser(userId) {
     }
 }
 
-export async function addXp(userId, xpAmount) {
+export async function addXp(userId, xpAmount, guildMember, message) {
     const user = await getUser(userId);
     if (!user) {
         console.error(`El usuario con ID ${userId} no existe.`);
-        return null; // Salimos de la función si el usuario no existe
+        return null;
     }
 
     const newXp = user.xp + xpAmount;
@@ -69,21 +67,36 @@ export async function addXp(userId, xpAmount) {
 
     // Manejo de subida de nivel
     if (newXp >= newLevelUpXp) {
-        newLevel += Math.floor(newXp / newLevelUpXp); // Incrementa nivel
-        newLevelUpXp = Math.round(newLevelUpXp * 1.2); // Ajusta XP para subir nivel
-        newRol = await  rolManager(newLevel); // Determina nuevo rol
-    }
+        const oldrol = newRol
+        newLevel += Math.floor(newXp / newLevelUpXp);
+        newLevelUpXp = Math.round(newLevelUpXp * 1.80);
+        newRol = rolManager(newLevel);
+        const commandPath = './templates/levelup.js';
+        const commandModule = await import(commandPath);
+        console.log(`Módulo cargado desde: ${commandPath}`);
+        if (typeof commandModule.run === 'function') {
+          await commandModule.run(message, newLevel); // Pasa `user` al comando
+        }
 
+        if (oldrol != newRol){
+            // Asignar rol en Discord
+            if (guildMember) {
+                await AssignRole(guildMember, newRol, message);
+            } else {
+                console.error("El GuildMember no está definido para la asignación del rol.");
+            }
+         }
+    }
 
     // Actualiza la base de datos
     await db.run(
         'UPDATE users SET level = ?, xp = ?, levelupxp = ?, rolid = ? WHERE id = ?',
-        [newLevel, newXp, newLevelUpXp, newRol, userId]
+        [newLevel, newXp % newLevelUpXp, newLevelUpXp, newRol, userId]
     );
 
     return {
         level: newLevel,
-        xp: newXp,
+        xp: newXp % newLevelUpXp,
         levelupxp: newLevelUpXp,
         rolid: newRol,
     };
@@ -111,9 +124,67 @@ function rolManager(userLevel) {
             return 9;
         case userLevel >= 91 && userLevel <= 100:
             return 10;
-        case userLevel > 100:
+        case userLevel > 100 && userLevel <= 120:
             return 11;
+        case userLevel > 120:
+            return 12;
         default:
             return 0; // En caso de que el nivel no encaje en ninguna categoría
     }
+}
+
+async function AssignRole(member, rolid, message) {
+    const roleMap = {
+        1: '732231534915878943',
+        2: '732232053004697653',
+        3: '732230701025329284',
+        4: '1328442723388096565',
+        5: '732232898517663775',
+        6: '732229932029050980',
+        7: '1328442988942332006',
+        8: '1328444632639737941',
+        9: '1328444510941745183',
+        10: '1328443356858023946',
+        11: '1328855786385834098',
+        12: '732234069232058440',
+    };
+
+    const roleId = roleMap[rolid];
+    if (!roleId) {
+        console.error(`No se encontró un rol en Discord para rolid = ${rolid}`);
+        return;
+    }
+
+    try {
+        // Elimina los roles previos del usuario que están en `roleMap`
+        for (const id of Object.values(roleMap)) {
+            if (member.roles.cache.has(id) && id !== roleId) {
+                await member.roles.remove(id);
+                console.log(`Rol con ID ${id} eliminado de ${member.displayName}`);
+            }
+        }
+
+        const role = member.guild.roles.cache.get(roleId);
+        if (role) {
+            // Añade el rol al miembro
+            await member.roles.add(role);
+            console.log(`Rol ${role.name} asignado a ${member.displayName} (rolid = ${rolid}).`);
+            message.reply(`Felicidades ${member.displayName} has alcanzado el nuevo rol de ${role.name}`);
+        } else {
+            console.error(`No se encontró el rol en Discord con ID ${roleId}.`);
+        }
+    } catch (error) {
+        console.error(`Error al asignar el rol: ${error.message}`);
+    }
+}
+
+export async function reset(userId) {
+    const newLevel = 0; 
+    const newXp = 0;
+    const newLevelUpXp = 50;
+    const newRol = 0;
+    await db.run(
+        'UPDATE users SET level = ?, xp = ?, levelupxp = ?, rolid = ? WHERE id = ?',
+        [newLevel, newXp, newLevelUpXp, newRol, userId]
+    );
 }

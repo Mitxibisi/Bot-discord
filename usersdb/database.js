@@ -1,9 +1,10 @@
 import sqlite3 from 'sqlite3';
 import { open } from 'sqlite';
+import { levelupmessage } from '../templates/levelup.js'
 
 // Conexión inicial a la base de datos
 export const db = await open({
-    filename: './database.sqlite',
+    filename: './usersdb/database.sqlite',
     driver: sqlite3.Database
 });
 
@@ -71,12 +72,7 @@ export async function addXp(userId, xpAmount, guildMember, message) {
         newLevel += Math.floor(newXp / newLevelUpXp);
         newLevelUpXp = Math.round(newLevelUpXp * 1.80);
         newRol = rolManager(newLevel);
-        const commandPath = './templates/levelup.js';
-        const commandModule = await import(commandPath);
-        console.log(`Módulo cargado desde: ${commandPath}`);
-        if (typeof commandModule.run === 'function') {
-          await commandModule.run(message, newLevel); // Pasa `user` al comando
-        }
+        levelupmessage(message,newLevel);
 
         if (oldrol != newRol){
             // Asignar rol en Discord
@@ -170,10 +166,10 @@ async function AssignRole(member, rolid, message) {
             await member.roles.add(role);
             console.log(`Rol ${role.name} asignado a ${member.displayName} (rolid = ${rolid}).`);
             message.reply(`
-                	🎉 **¡Felicidades!** 🎉
-                **Usuario:** <@${member.id}>
-                **Nuevo Rol:** 🚀 **${role.name}**
-                ¡Sigue así para llegar más lejos! 🚀💪
+🎉 **¡Felicidades!**🎉
+**Usuario:** <@${member.id}>
+**Nuevo Rol:** 🚀 **${role.name}**
+Sigue así para llegar más lejos! 🚀💪
                 `);
         } else {
             console.error(`No se encontró el rol en Discord con ID ${roleId}.`);

@@ -365,3 +365,4 @@ FodyWeavers.xsd
 # Ignorar archivos que contienen datos sensibles
 Start-Service ssh-agent
 Start-Service ssh-agent.publish.pub
+.usersdb/database.sqlite

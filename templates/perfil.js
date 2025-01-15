@@ -28,7 +28,7 @@ async function sendUserRoles(message) {
     return (rolesMessage);
 }
 
-export async function run(message, user) {
+export async function perfilembed(message, user) {
     const color = randomColor();
     const embed = new EmbedBuilder()
         .setColor(color)
@@ -40,7 +40,5 @@ export async function run(message, user) {
 
             { name: 'Miembro desde: ', value: message.member.joinedAt.toString()}
         )
-
-
     message.channel.send({ embeds: [embed] });
 }

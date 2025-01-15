@@ -169,7 +169,12 @@ async function AssignRole(member, rolid, message) {
             // Añade el rol al miembro
             await member.roles.add(role);
             console.log(`Rol ${role.name} asignado a ${member.displayName} (rolid = ${rolid}).`);
-            message.reply(`Felicidades ${member.displayName} has alcanzado el nuevo rol de ${role.name}`);
+            message.reply(`
+                	🎉 **¡Felicidades!** 🎉
+                **Usuario:** <@${member.id}>
+                **Nuevo Rol:** 🚀 **${role.name}**
+                ¡Sigue así para llegar más lejos! 🚀💪
+                `);
         } else {
             console.error(`No se encontró el rol en Discord con ID ${roleId}.`);
         }

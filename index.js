@@ -2,6 +2,7 @@ import path from 'path';
 import { Client, Events, GatewayIntentBits } from 'discord.js';
 import { fileURLToPath } from 'url';
 import { getUser, addXp, createUser, reset} from './database.js';
+import { setupDeploymentList } from './deploimentList.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -15,8 +16,11 @@ const client = new Client({
     ]
 });
 
-client.on(Events.ClientReady, () => {
+client.on(Events.ClientReady, async () => {
     console.log(`Conectado como ${client.user.tag}!`);
+
+    const deploymentChannelId = '1328863426465894400';
+    await setupDeploymentList(client, deploymentChannelId);
 });
 
 client.on(Events.GuildMemberAdd, async (member) => {

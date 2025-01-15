@@ -363,4 +363,5 @@ MigrationBackup/
 FodyWeavers.xsd
 
 # Ignorar archivos que contienen datos sensibles
-client.js
+Start-Service ssh-agent
+Start-Service ssh-agent.publish.pub

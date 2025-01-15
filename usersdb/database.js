@@ -42,7 +42,7 @@ export async function getUser(userId) {
     try {
         const user = await db.get('SELECT * FROM users WHERE id = ?', [userId]);
         if (user) {
-            console.log('Usuario encontrado:', user);
+            console.log('Usuario encontrado:', user.username);
             return user;
         } else {
             console.log(`Usuario con ID ${userId} no encontrado.`);

@@ -1,13 +1,15 @@
-import { Client, Events, GatewayIntentBits } from 'discord.js';
+import { Client, Events, GatewayIntentBits, VoiceChannel } from 'discord.js';
 import { addXp, createUser} from './usersdb/database.js';
 import { setupDeploymentList } from './automatic/deploymentList.js';
+import { token } from './config.json';
 
 const client = new Client({
     intents: [
         GatewayIntentBits.Guilds,
         GatewayIntentBits.GuildMessages,
         GatewayIntentBits.MessageContent,
-        GatewayIntentBits.GuildMembers
+        GatewayIntentBits.GuildMembers,
+        GatewayIntentBits.GuildVoiceStates
     ]
 });
 
@@ -90,8 +92,8 @@ client.on(Events.MessageCreate, async (message) => {
         const guildMember = await message.guild.members.fetch(message.author.id);
     
         // Agregar experiencia base
-        await addXp(message.author.id, 20, guildMember, message);
+        await addXp(message.author.id, 50, guildMember, message);
     }    
 });
 
-client.login("MTI1MjcwMTM5NTk2NzAyMTA3Ng.G6Kk3N.Q_Ypo8lh4MU3TeJA7PY3gHTCJ_66Sm5CfEhxfU");
+client.login(token);

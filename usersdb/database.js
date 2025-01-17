@@ -70,7 +70,7 @@ export async function addXp(userId, xpAmount, guildMember, message) {
     if (newXp >= newLevelUpXp) {
         const oldrol = newRol
         newLevel += Math.floor(newXp / newLevelUpXp);
-        newLevelUpXp = Math.round(newLevelUpXp * 1.80);
+        newLevelUpXp = Math.round(newLevelUpXp * 2);
         newRol = rolManager(newLevel);
         levelupmessage(message,newLevel);
 

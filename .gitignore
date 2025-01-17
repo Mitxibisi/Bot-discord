@@ -366,3 +366,4 @@ FodyWeavers.xsd
 Start-Service ssh-agent
 Start-Service ssh-agent.publish.pub
 .usersdb/database.sqlite
+.config.json

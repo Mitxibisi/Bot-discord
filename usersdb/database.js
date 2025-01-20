@@ -54,14 +54,14 @@ export async function getUser(userId) {
     }
 }
 
-export async function addXp(userId, xpAmount, guildMember, message) {
+export async function addXp(userId, xpAmount, guildMember, message, channel) {
     const user = await getUser(userId);
     if (!user) {
         console.error(`El usuario con ID ${userId} no existe.`);
         return null;
     }
 
-    const newXp = user.xp + xpAmount;
+    let newXp = user.xp + xpAmount;
     let newLevel = user.level;
     let newLevelUpXp = user.levelupxp;
     let newRol = user.rolid;
@@ -70,14 +70,15 @@ export async function addXp(userId, xpAmount, guildMember, message) {
     if (newXp >= newLevelUpXp) {
         const oldrol = newRol
         newLevel += Math.floor(newXp / newLevelUpXp);
-        newLevelUpXp = Math.round(newLevelUpXp * 2);
+        newLevelUpXp = Math.round(50 * newLevel);
         newRol = rolManager(newLevel);
-        levelupmessage(message,newLevel);
+        levelupmessage(message, newLevel, guildMember, channel);
+        newXp = 0;
 
         if (oldrol != newRol){
             // Asignar rol en Discord
             if (guildMember) {
-                await AssignRole(guildMember, newRol, message);
+                await AssignRole(guildMember, newRol, message, channel);
             } else {
                 console.error("El GuildMember no está definido para la asignación del rol.");
             }
@@ -87,12 +88,12 @@ export async function addXp(userId, xpAmount, guildMember, message) {
     // Actualiza la base de datos
     await db.run(
         'UPDATE users SET level = ?, xp = ?, levelupxp = ?, rolid = ? WHERE id = ?',
-        [newLevel, newXp % newLevelUpXp, newLevelUpXp, newRol, userId]
+        [newLevel, newXp, newLevelUpXp, newRol, userId]
     );
 
     return {
         level: newLevel,
-        xp: newXp % newLevelUpXp,
+        xp: newXp,
         levelupxp: newLevelUpXp,
         rolid: newRol,
     };
@@ -129,7 +130,7 @@ function rolManager(userLevel) {
     }
 }
 
-async function AssignRole(member, rolid, message) {
+async function AssignRole(member, rolid, message, channel) {
     const roleMap = {
         1: '732231534915878943',
         2: '732232053004697653',
@@ -165,12 +166,21 @@ async function AssignRole(member, rolid, message) {
             // Añade el rol al miembro
             await member.roles.add(role);
             console.log(`Rol ${role.name} asignado a ${member.displayName} (rolid = ${rolid}).`);
-            message.reply(`
+            if (channel == null){
+                message.reply(`
 🎉 **¡Felicidades!**🎉
 **Usuario:** <@${member.id}>
 **Nuevo Rol:** 🚀 **${role.name}**
 Sigue así para llegar más lejos! 🚀💪
-                `);
+                    `);
+            }else{
+                channel.send(`
+🎉 **¡Felicidades!**🎉
+**Usuario:** <@${member.id}>
+**Nuevo Rol:** 🚀 **${role.name}**
+Sigue así para llegar más lejos! 🚀💪
+                    `);
+            }
         } else {
             console.error(`No se encontró el rol en Discord con ID ${roleId}.`);
         }

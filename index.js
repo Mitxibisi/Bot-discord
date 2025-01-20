@@ -1,7 +1,6 @@
 import { Client, Events, GatewayIntentBits, VoiceChannel } from 'discord.js';
 import { addXp, createUser} from './usersdb/database.js';
 import { setupDeploymentList } from './automatic/deploymentList.js';
-import { token } from './config.json';
 
 const client = new Client({
     intents: [
@@ -12,6 +11,8 @@ const client = new Client({
         GatewayIntentBits.GuildVoiceStates
     ]
 });
+
+const userVoiceTimes = new Map();
 
 client.on(Events.ClientReady, async () => {
     console.log(`Conectado como ${client.user.tag}!`);
@@ -92,8 +93,63 @@ client.on(Events.MessageCreate, async (message) => {
         const guildMember = await message.guild.members.fetch(message.author.id);
     
         // Agregar experiencia base
-        await addXp(message.author.id, 50, guildMember, message);
+        await addXp(message.author.id, 50, guildMember, message, null);
     }    
 });
 
-client.login(token);
+client.on('voiceStateUpdate', async (oldState, newState) => {
+    const userId = newState.id;
+    const guildMember = newState.member || oldState.member; // Obtén el miembro del servidor (GuildMember)
+    const ignoredChannelId = '731920860885286974'; // ID del canal a ignorar
+
+       // Ignorar si el usuario es un bot
+       if (guildMember.user.bot) {
+        return;
+    }
+
+    // Ignorar si el usuario está silenciado en ambos estados
+    if ((newState.selfMute || newState.serverMute) && (!oldState.channelId || oldState.selfMute || oldState.serverMute)) {
+        return;
+    }
+
+    // Si el usuario entra en un canal de voz
+    if (!oldState.channelId && newState.channelId) {
+        // Ignorar el canal específico
+        if (newState.channelId === ignoredChannelId) {
+            return;
+        }
+        userVoiceTimes.set(userId, Date.now()); // Guardamos el tiempo de entrada
+    }
+
+    // Si el usuario sale de un canal de voz
+    else if (oldState.channelId && !newState.channelId) {
+        const enterTime = userVoiceTimes.get(userId);
+        if (enterTime) {
+            const elapsedTime = (Date.now() - enterTime) / 1000; // Tiempo en segundos
+
+            // Ignorar el canal específico
+            if (oldState.channelId === ignoredChannelId) {
+                userVoiceTimes.delete(userId);
+                return;
+            }
+
+            const channelId = '731926366131453982';
+            try {
+                const channel = await client.channels.fetch(channelId); // Espera a que se resuelva la promesa
+                if (!channel.isTextBased()) {
+                    console.error('El canal especificado no es de texto.');
+                    return;
+                }
+
+                await addXp(userId, elapsedTime * 0.1, guildMember, null, channel);
+
+                // Borra el tiempo de entrada del usuario
+                userVoiceTimes.delete(userId);
+            } catch (error) {
+                console.error('Error al obtener el canal:', error);
+            }
+        }
+    }
+});
+
+client.login("MTI1MjcwMTM5NTk2NzAyMTA3Ng.G6Kk3N.Q_Ypo8lh4MU3TeJA7PY3gHTCJ_66Sm5CfEhxfU");

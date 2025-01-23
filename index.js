@@ -3,6 +3,7 @@ import { addXp, createUser} from './usersdb/database.js';
 import { setupDeploymentList } from './automatic/deploymentList.js';
 import { readFile } from 'fs/promises';
 
+
 const client = new Client({
     intents: [
         GatewayIntentBits.Guilds,
@@ -118,59 +119,83 @@ client.on(Events.MessageCreate, async (message) => {
     }    
 });
 
-client.on('voiceStateUpdate', async (oldState, newState) => {
+// ... (Todo tu código previo permanece igual)
+
+// Inicializa el conjunto global para los canales temporales
+if (!global.temporaryChannels) {
+    global.temporaryChannels = new Set();
+}
+
+    client.on('voiceStateUpdate', async (oldState, newState) => {
     const userId = newState.id;
-    const guildMember = newState.member || oldState.member; // Obtén el miembro del servidor (GuildMember)
+    const guildMember = newState.member || oldState.member; // Obtén el miembro del servidor
     const ignoredChannelId = config.IgnoredChannelId; // ID del canal a ignorar
 
-       // Ignorar si el usuario es un bot
-       if (guildMember.user.bot) {
-        return;
+    // Ignorar si el usuario es un bot
+    if (guildMember.user.bot) {
+    return;
     }
 
     // Ignorar si el usuario está silenciado en ambos estados
     if ((newState.selfMute || newState.serverMute) && (!oldState.channelId || oldState.selfMute || oldState.serverMute)) {
-        return;
+    return;
     }
 
     // Si el usuario entra en un canal de voz
     if (!oldState.channelId && newState.channelId) {
-        // Ignorar el canal específico
-        if (newState.channelId === ignoredChannelId) {
-            return;
-        }
-        userVoiceTimes.set(userId, Date.now()); // Guardamos el tiempo de entrada
+    // Ignorar el canal específico
+    if (newState.channelId === ignoredChannelId) {
+    return;
+    }
+    userVoiceTimes.set(userId, Date.now()); // Guardamos el tiempo de entrada
     }
 
     // Si el usuario sale de un canal de voz
     else if (oldState.channelId && !newState.channelId) {
-        const enterTime = userVoiceTimes.get(userId);
-        if (enterTime) {
-            const elapsedTime = (Date.now() - enterTime) / 1000; // Tiempo en segundos
+    const enterTime = userVoiceTimes.get(userId);
+    if (enterTime) {
+    const elapsedTime = (Date.now() - enterTime) / 1000; // Tiempo en segundos
 
-            // Ignorar el canal específico
-            if (oldState.channelId === ignoredChannelId) {
-                userVoiceTimes.delete(userId);
-                return;
-            }
-
-            const channelId = config.VoiceMessagesChannel;
-            try {
-                const channel = await client.channels.fetch(channelId); // Espera a que se resuelva la promesa
-                if (!channel.isTextBased()) {
-                    console.error('El canal especificado no es de texto.');
-                    return;
-                }
-
-                await addXp(userId, elapsedTime * 0.1, guildMember, null, channel, config);
-
-                // Borra el tiempo de entrada del usuario
-                userVoiceTimes.delete(userId);
-            } catch (error) {
-                console.error('Error al obtener el canal:', error);
-            }
-        }
+    // Ignorar el canal específico
+    if (oldState.channelId === ignoredChannelId) {
+    userVoiceTimes.delete(userId);
+    return;
     }
+
+    const channelId = config.VoiceMessagesChannel;
+    try {
+    const channel = await client.channels.fetch(channelId); // Espera a que se resuelva la promesa
+    if (!channel.isTextBased()) {
+    console.error('El canal especificado no es de texto.');
+    return;
+    }
+
+    await addXp(userId, elapsedTime * 0.1, guildMember, null, channel, config);
+
+    // Borra el tiempo de entrada del usuario
+    userVoiceTimes.delete(userId);
+    } catch (error) {
+    console.error('Error al obtener el canal:', error);
+    }
+    }
+    }
+
+    if (oldState.channelId && global.temporaryChannels.has(oldState.channelId)) {
+        const channel = await client.channels.fetch(oldState.channelId);
+        
+        // Si el canal queda vacío, programar su eliminación
+        if (channel.members.size === 0) {
+        setTimeout(async () => {
+        const fetchedChannel = await client.channels.fetch(channel.id);
+        if (fetchedChannel && fetchedChannel.members.size === 0) {
+        await fetchedChannel.delete(
+        'Canal temporal eliminado automáticamente porque quedó vacío.'
+        );
+        global.temporaryChannels.delete(channel.id);
+        }
+        }, 30000); // 30 segundos
+        }
+        }
 });
 
 client.login(config.token);

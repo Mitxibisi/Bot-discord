@@ -47,4 +47,4 @@ export async function run(message, client, config) {
         console.error('Error al crear el canal temporal:', error);
         message.reply('Hubo un error al intentar crear el canal temporal.');
         }
-        }        
+}        

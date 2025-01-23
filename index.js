@@ -184,17 +184,25 @@ if (!global.temporaryChannels) {
         const channel = await client.channels.fetch(oldState.channelId);
         
         // Si el canal queda vacío, programar su eliminación
-        if (channel.members.size === 0) {
-        setTimeout(async () => {
+
+setTimeout(async () => {
+    try {
         const fetchedChannel = await client.channels.fetch(channel.id);
         if (fetchedChannel && fetchedChannel.members.size === 0) {
-        await fetchedChannel.delete(
-        'Canal temporal eliminado automáticamente porque quedó vacío.'
-        );
-        global.temporaryChannels.delete(channel.id);
+            await fetchedChannel.delete(
+                'Canal temporal eliminado automáticamente por estar vacío.'
+            );
+            global.temporaryChannels.delete(channel.id); // Limpia el conjunto
         }
-        }, 30000); // 30 segundos
+    } catch (error) {
+        if (error.code === 10003) {
+            console.log(`El canal ${channel.id} ya no existe.`);
+            global.temporaryChannels.delete(channel.id); // Limpia el conjunto
+        } else {
+            console.error(`Error al eliminar el canal ${channel.id}:`, error);
         }
+    }
+}, 30000); // 30 segundos
         }
 });
 

@@ -1,6 +1,7 @@
 import { Client, Events, GatewayIntentBits, VoiceChannel } from 'discord.js';
 import { addXp, createUser} from './usersdb/database.js';
 import { setupDeploymentList } from './automatic/deploymentList.js';
+import { readFile } from 'fs/promises';
 
 const client = new Client({
     intents: [
@@ -12,19 +13,24 @@ const client = new Client({
     ]
 });
 
+//Acceso a los datos de configuracion
+const config = JSON.parse(await readFile(new URL('./config.json', import.meta.url)));
+
+// Un mapa para rastrear la actividad de entrada y salida de los usuarios de los canalez de voz
 const userVoiceTimes = new Map();
+
+// Un mapa para rastrear los últimos mensajes de cada usuario
+const userCooldowns = new Map();
 
 client.on(Events.ClientReady, async () => {
     console.log(`Conectado como ${client.user.tag}!`);
 
-    const deploymentChannelId = '1328863426465894400';
-    const guildId = '715955472502489129'
-    await setupDeploymentList(client, deploymentChannelId, guildId);
+    Deploy(config);
 });
 
 client.on(Events.GuildMemberAdd, async (member) => {
-    const welcomeChannelId = '732006205454811206';
-    let role = member.guild.roles.cache.get('718115642691289164');
+    const welcomeChannelId = config.GuildMemberAdd/RemoveId;
+    let role = member.guild.roles.cache.get(config.NewmemberRoleId);
     await member.roles.add(role);
     
     try {
@@ -46,7 +52,7 @@ client.on(Events.GuildMemberAdd, async (member) => {
 });
 
 client.on(Events.GuildMemberRemove, async (member) => {
-    const welcomeChannelId = '732006205454811206';
+    const welcomeChannelId = config.GuildMemberAdd/RemoveId;
     try {
         const channel = await client.channels.fetch(welcomeChannelId);
         if (channel) {
@@ -66,9 +72,6 @@ client.on(Events.GuildMemberRemove, async (member) => {
 
 client.on(Events.MessageCreate, async (message) => {
     if (message.author.bot) return;
-
-    // Crear usuario si no existe
-    createUser(message.author.id, message.author.username);
     
     if (message.content.startsWith('%')) {
         const args = message.content.slice(1).split(' ')[0];  // Extrae el comando
@@ -79,7 +82,7 @@ client.on(Events.MessageCreate, async (message) => {
             const commandModule = await import(commandPath);
             console.log(`Módulo cargado desde: ${commandPath}`);
             if (typeof commandModule.run === 'function') {
-                await commandModule.run(message, client);
+                await commandModule.run(message, client, config);
             } else {
                 console.error(`El comando ${args} no tiene una función 'run'.`);
                 message.reply("Comando no encontrado.");
@@ -89,18 +92,36 @@ client.on(Events.MessageCreate, async (message) => {
             message.reply("Hubo un error al ejecutar el comando.");
         }
     }else {
-        // Obtener el GuildMember del autor del mensaje
-        const guildMember = await message.guild.members.fetch(message.author.id);
+        const userId = message.author.id;
+        const now = Date.now();
+        const cooldownTime = 2000; // Tiempo en milisegundos (5 segundos)
     
-        // Agregar experiencia base
-        await addXp(message.author.id, 50, guildMember, message, null);
+        // Comprobar si el usuario está en cooldown
+        if (userCooldowns.has(userId)) {
+            const lastMessageTime = userCooldowns.get(userId);
+            const timeDifference = now - lastMessageTime;
+    
+            if (timeDifference < cooldownTime) {
+                // Está en cooldown, no hacer nada
+                return;
+            }
+        }
+    
+        // Si no está en cooldown, otorgar experiencia
+        const xpAmount = 50; // Cantidad base de experiencia
+        const guildMember = await message.guild.members.fetch(userId);
+    
+        await addXp(userId, xpAmount, guildMember, message, null, config);
+    
+        // Actualizar el tiempo del último mensaje
+        userCooldowns.set(userId, now);
     }    
 });
 
 client.on('voiceStateUpdate', async (oldState, newState) => {
     const userId = newState.id;
     const guildMember = newState.member || oldState.member; // Obtén el miembro del servidor (GuildMember)
-    const ignoredChannelId = '731920860885286974'; // ID del canal a ignorar
+    const ignoredChannelId = config.IgnoredChannelId; // ID del canal a ignorar
 
        // Ignorar si el usuario es un bot
        if (guildMember.user.bot) {
@@ -133,7 +154,7 @@ client.on('voiceStateUpdate', async (oldState, newState) => {
                 return;
             }
 
-            const channelId = '731926366131453982';
+            const channelId = config.VoiceMessagesChannel;
             try {
                 const channel = await client.channels.fetch(channelId); // Espera a que se resuelva la promesa
                 if (!channel.isTextBased()) {
@@ -141,7 +162,7 @@ client.on('voiceStateUpdate', async (oldState, newState) => {
                     return;
                 }
 
-                await addXp(userId, elapsedTime * 0.1, guildMember, null, channel);
+                await addXp(userId, elapsedTime * 0.1, guildMember, null, channel, config);
 
                 // Borra el tiempo de entrada del usuario
                 userVoiceTimes.delete(userId);
@@ -152,4 +173,10 @@ client.on('voiceStateUpdate', async (oldState, newState) => {
     }
 });
 
-client.login("MTI1MjcwMTM5NTk2NzAyMTA3Ng.G6Kk3N.Q_Ypo8lh4MU3TeJA7PY3gHTCJ_66Sm5CfEhxfU");
+client.login(config.token);
+
+export async function Deploy(config) {
+    const deploymentChannelId = config.ListDeploymentChannel;
+    const guildId = config.GuildId;
+    await setupDeploymentList(client, deploymentChannelId, guildId);
+}

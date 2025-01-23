@@ -24,12 +24,12 @@ async function clearChannel(channelId, client) {
     }
 }
 
-export async function run(message, client) {
+export async function run(message, client,config) {
 // Obtener el GuildMember del autor del mensaje
 const guildMember = await message.guild.members.fetch(message.author.id);
         
 // ID del rol requerido
-const requiredRoleId = '731870690206154785'; // Reemplaza con el ID del rol necesario
+const requiredRoleId = config.adminRoleId;
 
 // Comprobar si el autor tiene el rol requerido
 if (guildMember.roles.cache.has(requiredRoleId)) {

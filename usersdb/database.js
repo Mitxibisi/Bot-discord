@@ -54,7 +54,7 @@ export async function getUser(userId) {
     }
 }
 
-export async function addXp(userId, xpAmount, guildMember, message, channel) {
+export async function addXp(userId, xpAmount, guildMember, message, channel,config) {
     const user = await getUser(userId);
     if (!user) {
         console.error(`El usuario con ID ${userId} no existe.`);
@@ -78,7 +78,7 @@ export async function addXp(userId, xpAmount, guildMember, message, channel) {
         if (oldrol != newRol){
             // Asignar rol en Discord
             if (guildMember) {
-                await AssignRole(guildMember, newRol, message, channel);
+                await AssignRole(guildMember, newRol, message, channel, config);
             } else {
                 console.error("El GuildMember no está definido para la asignación del rol.");
             }
@@ -130,20 +130,20 @@ function rolManager(userLevel) {
     }
 }
 
-async function AssignRole(member, rolid, message, channel) {
+async function AssignRole(member, rolid, message, channel, config) {
     const roleMap = {
-        1: '732231534915878943',
-        2: '732232053004697653',
-        3: '732230701025329284',
-        4: '1328442723388096565',
-        5: '732232898517663775',
-        6: '732229932029050980',
-        7: '1328442988942332006',
-        8: '1328444632639737941',
-        9: '1328444510941745183',
-        10: '1328443356858023946',
-        11: '1328855786385834098',
-        12: '732234069232058440',
+            1: config.RolId1,
+            2: config.RolId2,
+            3: config.RolId3,
+            4: config.RolId4,
+            5: config.RolId5,
+            6: config.RolId6,
+            7: config.RolId7,
+            8: config.RolId8,
+            9: config.RolId9,
+            10: config.RolId10,
+            11: config.RolId11,
+            12: config.RolId12
     };
 
     const roleId = roleMap[rolid];

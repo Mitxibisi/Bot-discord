@@ -76,8 +76,6 @@ async function updateDeploymentList(channel) {
     }
 }
 
-export { updateDeploymentList };
-
 // Función para obtener el Top 100 usuarios
 export async function getTop100() {
         try {

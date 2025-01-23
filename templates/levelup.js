@@ -4,31 +4,33 @@ function getRandomNumber(min, max) {
 
 export async function levelupmessage(message, level, GuildMember, channel) {
     const textMap = {
-        1: `**GG ${GuildMember}, Felicidades eres tan puto retrasado que en vez de subir al nivel ${level.toString()} en un juego lo subes en discord paleto de playa**`,
-        2: `**GG ${GuildMember}, ya era hora de que subieras al nivel ${level.toString()}, al menos en algo estás progresando, aunque sea aquí.**`,
-        3: `**GG ${GuildMember}, nivel ${level.toString()} desbloqueado. Ahora intenta no caerte subiendo escaleras, crack.**`,
-        4: `**GG ${GuildMember}, nivel ${level.toString()} y seguimos en Discord. Quizá algún día lo hagas en la vida real.**`,
-        5: `**GG ${GuildMember}, ¡nivel ${level.toString()} alcanzado! Cuidado, no se te vaya a subir la fama a la cabeza.**`,
-        6: `**GG ${GuildMember}, nivel ${level.toString()}... A ver si al menos te sirve para algo, aunque sea de adorno.**`,
-        7: `**GG ${GuildMember}, ya estás en nivel ${level.toString()}. Una pena que el progreso no se transfiera al intelecto.**`,
-        8: `**GG ${GuildMember}, nivel ${level.toString()} y contando. Tal vez ya puedas desbloquear el rol de "noob profesional".**`,
-        9: `**GG ${GuildMember}, ¡nivel ${level.toString()} conseguido! ¿Es este tu logro más grande del año?**`,
-        10: `**GG ${GuildMember}, nivel ${level.toString()} alcanzado. Si tu vida fuera un videojuego, estarías listo para el tutorial.**`,
-        11: `**GG ${GuildMember}, nivel ${level.toString()}. Ahora oficialmente eres el "rey del salón" en Discord.**`,
-        12: `**GG ${GuildMember}, ¡nivel ${level.toString()}! Veamos si este ritmo lo mantienes fuera de la pantalla.**`,
-        13: `**GG ${GuildMember}, nivel ${level.toString()} desbloqueado. Ya casi eres más famoso que tu meme favorito.**`,
-        14: `**GG ${GuildMember}, nivel ${level.toString()} y sigues aquí. Es admirable cómo evitas la luz del sol con tanto estilo.**`,
-        15: `**GG ${GuildMember}, ¡nivel ${level.toString()} alcanzado! Si esto fuera un deporte, tendrías medalla de cartón.**`,
-        16: `**GG ${GuildMember}, nivel ${level.toString()} logrado. La dedicación a esta causa sigue siendo cuestionable, pero impresionante.**`,
-        17: `**GG ${GuildMember}, nivel ${level.toString()} y aún no te han dado un trofeo. A lo mejor en el nivel 100, quién sabe.**`,
-        18: `**GG ${GuildMember}, ¡nivel ${level.toString()} desbloqueado! Tal vez el próximo nivel venga con un manual de instrucciones.**`,
-        19: `**GG ${GuildMember}, nivel ${level.toString()}. Seguro que los de tu clan estarán orgullosos... si tuvieras uno.**`,
-        20: `**GG ${GuildMember}, nivel ${level.toString()} y subiendo. ¿Has considerado postularte para alcalde de este Discord?**`
+        1: `**GG ${GuildMember}, Felicidades, ¡tu nivel en Discord ha subido más rápido que tu nivel de habilidad en cualquier juego! Nivel ${level.toString()} desbloqueado.** 🎮`,
+        2: `**GG ${GuildMember}, ya era hora, ¿eh? Nivel ${level.toString()} alcanzado. ¡Al menos aquí estás avanzando!** 🚀`,
+        3: `**GG ${GuildMember}, nivel ${level.toString()} desbloqueado. Ya casi estás tan alto como tu ego. ¡Sigue así!** 😎`,
+        4: `**GG ${GuildMember}, nivel ${level.toString()} alcanzado. Este es el único juego en el que subes de nivel, crack.** 🎯`,
+        5: `**GG ${GuildMember}, ¡nivel ${level.toString()} alcanzado! Espero que no te sientas demasiado famoso ahora. No quiero verte en la portada de una revista.** 📸`,
+        6: `**GG ${GuildMember}, nivel ${level.toString()}... Esto puede que no te sirva de mucho, pero al menos sigue siendo un logro.** 🏅`,
+        7: `**GG ${GuildMember}, ya eres nivel ${level.toString()}. ¿Te sube la inteligencia o solo el ego?** 🤔`,
+        8: `**GG ${GuildMember}, nivel ${level.toString()} y contando. Tal vez en el futuro puedas desbloquear el rol de "Procrastinador Profesional".** ⏳`,
+        9: `**GG ${GuildMember}, nivel ${level.toString()} conseguido. ¿Este es tu mayor logro del día? No te preocupes, es solo el principio.** 🏆`,
+        10: `**GG ${GuildMember}, nivel ${level.toString()} alcanzado. Si tu vida fuera un videojuego, el tutorial estaría terminando.** 🎮`,
+        11: `**GG ${GuildMember}, nivel ${level.toString()} desbloqueado. Ahora oficialmente eres el "rey del Discord". ¡Corona en camino!** 👑`,
+        12: `**GG ${GuildMember}, ¡nivel ${level.toString()}! Pero ahora, ¿será suficiente para subir de nivel en la vida real?** 🌱`,
+        13: `**GG ${GuildMember}, nivel ${level.toString()} desbloqueado. Casi más famoso que tu meme favorito.** 🌐`,
+        14: `**GG ${GuildMember}, nivel ${level.toString()} y sigues aquí, deslumbrando con tu estilo... desde la sombra.** 🕶️`,
+        15: `**GG ${GuildMember}, ¡nivel ${level.toString()} alcanzado! Si esto fuera un deporte, seguro estarías en el equipo de "lo intenté".** 🏅`,
+        16: `**GG ${GuildMember}, nivel ${level.toString()} logrado. La dedicación está ahí... aunque no sé si por las razones correctas.** 🤷‍♂️`,
+        17: `**GG ${GuildMember}, nivel ${level.toString()} y aún sin trofeo. Pero no te preocupes, ¡el nivel 100 lo cambiará todo!** 🏆`,
+        18: `**GG ${GuildMember}, ¡nivel ${level.toString()} desbloqueado! Quizás el siguiente nivel venga con un manual de instrucciones... O no.** 📚`,
+        19: `**GG ${GuildMember}, nivel ${level.toString()} desbloqueado. No estoy seguro si tu clan estaría orgulloso... si tuvieras uno.** 💬`,
+        20: `**GG ${GuildMember}, nivel ${level.toString()} y subiendo. ¿Qué tal si te postulas para ser el alcalde de este Discord?** 🏛️`
     };
 
-    if (channel == null){
-        message.reply(textMap[getRandomNumber(1,20)]);
-    }else{
-        channel.send(textMap[getRandomNumber(1,20)]);
+    const randomMessage = textMap[getRandomNumber(1, 20)];
+
+    if (channel == null) {
+        message.reply(randomMessage);
+    } else {
+        channel.send(randomMessage);
     }
 }

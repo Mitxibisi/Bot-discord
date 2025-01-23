@@ -206,6 +206,23 @@ setTimeout(async () => {
         }
 });
 
+// Manejar la interacción del botón
+client.on('interactionCreate', async (interaction) => {
+  if (!interaction.isButton()) return; // Verificar que es un botón
+  if (interaction.customId === 'actualizar') {
+    // Actualizar las variables aquí
+    variables.data = 'Nueva información actualizada';
+
+    // Responder a la interacción y actualizar el mensaje
+    await interaction.update({
+      content: `${variables.data}`,
+      components: [new ActionRowBuilder().addComponents(
+        new ButtonBuilder().setCustomId('actualizar').setLabel('Actualizar').setStyle(ButtonStyle.Primary)
+      )],
+    });
+  }
+}
+
 client.login(config.token);
 
 export async function Deploy(config) {

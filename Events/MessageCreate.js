@@ -23,7 +23,7 @@ export default () => {
                     console.log('1')
                     try {
                         if (typeof commandModule.run === 'function') {
-                            await commandModule.run(message, client, config);
+                            await commandModule.run(message);
                         } else {
                             console.error(`El comando ${args} no tiene una función 'run'.`);
                             message.reply("Comando no encontrado.");
@@ -71,7 +71,7 @@ export default () => {
                             // Confirmación positiva
                             // Ejecutar el comando desde el módulo
                             if (typeof commandModule.run === 'function') {
-                                await commandModule.run(message, client, config);
+                                await commandModule.run(message);
                             } else {
                                 console.error(`El comando ${args} no tiene una función 'run'.`);
                                 return message.reply('Comando no encontrado.');
@@ -112,7 +112,7 @@ export default () => {
             const xpAmount = 50; // Cantidad base de experiencia
             const guildMember = await message.guild.members.fetch(userId);
         
-            await addXp(userId, xpAmount, guildMember, message, null, config);
+            await addXp(userId, xpAmount, guildMember, message, null);
         
             // Actualizar el tiempo del último mensaje
             userCooldowns.set(userId, now);

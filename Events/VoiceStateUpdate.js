@@ -50,7 +50,7 @@ export default () => {
             return;
             }
         
-            await addXp(userId, Math.ceil(elapsedTime * 0.1), guildMember, null, channel, config);
+            await addXp(userId, Math.ceil(elapsedTime * 0.1), guildMember, null, channel);
         
             // Borra el tiempo de entrada del usuario
             userVoiceTimes.delete(userId);

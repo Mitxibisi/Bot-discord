@@ -1,6 +1,7 @@
 import sqlite3 from 'sqlite3';
 import { open } from 'sqlite';
-import { levelupmessage } from '../Templates/levelup.js'
+import { levelupmessage } from '../Templates/levelup.js';
+import { config } from '../index.js';
 
 // Conexión inicial a la base de datos
 export const db = await open({
@@ -54,7 +55,7 @@ export async function getUser(userId) {
     }
 }
 
-export async function addXp(userId, xpAmount, guildMember, message, channel,config) {
+export async function addXp(userId, xpAmount, guildMember, message, channel) {
     const user = await getUser(userId);
     if (!user) {
         console.error(`El usuario con ID ${userId} no existe.`);
@@ -78,7 +79,7 @@ export async function addXp(userId, xpAmount, guildMember, message, channel,conf
         if (oldrol != newRol){
             // Asignar rol en Discord
             if (guildMember) {
-                await AssignRole(guildMember, newRol, message, channel, config);
+                await AssignRole(guildMember, newRol, message, channel);
             } else {
                 console.error("El GuildMember no está definido para la asignación del rol.");
             }
@@ -130,7 +131,7 @@ function rolManager(userLevel) {
     }
 }
 
-async function AssignRole(member, rolid, message, channel, config) {
+async function AssignRole(member, rolid, message, channel) {
     const roleMap = {
             1: config.RolId1,
             2: config.RolId2,

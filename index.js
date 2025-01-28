@@ -1,8 +1,21 @@
 import { Client, GatewayIntentBits } from 'discord.js';
-import { readFile } from 'fs/promises';
+import { readFile, writeFile } from 'fs/promises';
 import { readdir } from 'fs/promises'; // Para leer los archivos de eventos
 
 export const config = JSON.parse(await readFile(new URL('./config.json', import.meta.url)));
+
+// Actualizar configuración
+export async function updateConfig(newValues) {
+    try {
+      const configPath = new URL('./config.json', import.meta.url);
+      config = { ...config, ...newValues };
+      await writeFile(configPath, JSON.stringify(config, null, 2));
+      console.log('Config.json actualizado correctamente.');
+    } catch (error) {
+      console.error('Error al actualizar config.json:', error);
+      throw error;
+    }
+  }
 
 export const client = new Client({
     intents: [

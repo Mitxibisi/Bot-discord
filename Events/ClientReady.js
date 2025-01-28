@@ -9,8 +9,8 @@ export default () => {
     });
 };
 
-export async function Deploy(config) {
+export async function Deploy() {
     const deploymentChannelId = config.ListDeploymentChannel;
     const guildId = config.GuildId;
-    await setupDeploymentList(client, deploymentChannelId, guildId);
+    await setupDeploymentList(deploymentChannelId, guildId);
 }

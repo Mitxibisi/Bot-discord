@@ -1,7 +1,7 @@
 import { EmbedBuilder } from 'discord.js';
 import randomColor from 'randomcolor';
 
-export async function run(message, client, config) {
+export async function run(message) {
         try {
                 // Obtener la información del servidor (guild)
                 const guild = message.guild;

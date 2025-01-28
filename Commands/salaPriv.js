@@ -1,4 +1,6 @@
-export async function run(message, client, config) {
+import { client, config } from '../index.js';
+
+export async function run(message) {
         if (!message.guild) {
         return message.reply("Este comando solo se puede usar en un servidor.");
         }

@@ -36,7 +36,7 @@ const requiredRoleId = config.adminRoleId;
 // Comprobar si el autor tiene el rol requerido
 if (guildMember.roles.cache.has(requiredRoleId)) {
     if (message.content.startsWith('%clear')) {
-        await clearChannel(message.channel.id, client);
+        await clearChannel(message.channel.id);
         return message.channel.send('Channel cleared!').then(msg => {
             setTimeout(() => msg.delete(), 5000);
         })

@@ -1,6 +1,7 @@
 import { Deploy } from "../Events/ClientReady.js";
+import { config } from "../index.js";
 
-export async function run(message,client,config) {
+export async function run(message) {
     const guildMember = await message.guild.members.fetch(message.author.id);
     try{
         // ID del rol requerido

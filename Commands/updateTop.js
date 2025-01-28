@@ -1,4 +1,4 @@
-import { Deploy } from "../index.js";
+import { Deploy } from "../Events/ClientReady.js";
 
 export async function run(message,client,config) {
     const guildMember = await message.guild.members.fetch(message.author.id);

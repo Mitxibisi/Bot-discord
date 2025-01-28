@@ -1,4 +1,4 @@
-import { createUser } from '../usersdb/database.js';
+import { createUser } from '../Usersdb/database.js';
 
 export async function run(message, client, config) {
     // Obtener el GuildMember del autor del mensaje

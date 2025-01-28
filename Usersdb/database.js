@@ -1,10 +1,10 @@
 import sqlite3 from 'sqlite3';
 import { open } from 'sqlite';
-import { levelupmessage } from '../templates/levelup.js'
+import { levelupmessage } from '../Templates/levelup.js'
 
 // Conexión inicial a la base de datos
 export const db = await open({
-    filename: './usersdb/database.sqlite',
+    filename: './Usersdb/database.sqlite',
     driver: sqlite3.Database
 });
 

@@ -1,5 +1,5 @@
-import { getUser } from '../usersdb/database.js';
-import { perfilembed } from '../templates/perfil.js'
+import { getUser } from '../Usersdb/database.js';
+import { perfilembed } from '../Templates/perfil.js'
 
 export async function run(message) {
     try {

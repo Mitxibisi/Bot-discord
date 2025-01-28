@@ -15,7 +15,6 @@ export async function run(message) {
                     .setDescription(`
 🎵 **%audio Texto que deseas decir**: Reproduce un texto en forma de audio.
 👤 **%perfil**: Consulta tu perfil o el de otro usuario.
-🔍 **%search Texto que deseas buscar en internet**: Realiza una búsqueda en internet.
 🔒 **%salaPriv**: Crea un canal de voz temporal y privado para ti. Se eliminará automáticamente si no hay usuarios conectados.
 📊 **%stats**: Devuelve las estadísticas del servidor, incluyendo información sobre miembros, roles y más.
 🔄 **%reset**: Resetea tu base de datos. (Solo admins)

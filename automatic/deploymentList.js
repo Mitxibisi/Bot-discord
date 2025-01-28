@@ -1,5 +1,5 @@
 import schedule from 'node-schedule'; // Asegúrate de instalarlo con `npm install node-schedule`
-import { db } from '../usersdb/database.js';
+import { db } from '../Usersdb/database.js';
 import { EmbedBuilder } from 'discord.js'; // Importa el objeto Embed
 import randomColor from 'randomcolor';
 

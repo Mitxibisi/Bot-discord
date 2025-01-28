@@ -1,4 +1,6 @@
-async function clearChannel(channelId, client) {
+import { client, config } from '../index.js'
+
+async function clearChannel(channelId) {
     try {
         const channel = await client.channels.fetch(channelId);
         if (!channel || !channel.isTextBased()) {
@@ -24,7 +26,7 @@ async function clearChannel(channelId, client) {
     }
 }
 
-export async function run(message, client,config) {
+export async function run(message) {
 // Obtener el GuildMember del autor del mensaje
 const guildMember = await message.guild.members.fetch(message.author.id);
         

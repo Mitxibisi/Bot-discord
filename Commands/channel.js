@@ -52,9 +52,8 @@ export async function run(interaction) {
 
   // Verifica si hay canales o roles disponibles
   if (textChannels.length === 0 && roles.length === 0 && VoiceChannels.length === 0 && Category.length === 0) {
-    return interaction.reply({
+    return channel.send({
       content: 'No hay canales ni roles disponibles en este servidor.',
-      ephemeral: true,
     });
   }
 
@@ -71,10 +70,33 @@ export async function run(interaction) {
   const row4 = new ActionRowBuilder().addComponents(VoiceMessagesChannel);
   const row5 = new ActionRowBuilder().addComponents(Lv1Rol);
 
-  // Envía el mensaje con texto adicional antes de cada fila
-  await interaction.reply({
-    content: `Ajustes del servidor:`,
-    components: [row1, row2, row3, row4, row5],
-    ephemeral: true, // Opcional: Solo visible para el usuario que ejecutó el comando
+  const channel = interaction.channel;
+
+  // Agregar texto antes de cada fila de menú
+  await channel.send({
+    content: `**Ajustes del servidor:**
+- Elige un canal para gestionar miembros:`,
+    components: [row1],
+  });
+
+  // Enviar más filas con texto
+  await channel.send({
+    content: `- Elige el canal de despliegue:`,
+    components: [row2],
+  });
+
+  await channel.send({
+    content: `- Elige un canal para ignorar cuando los usuarios estén inactivos:`,
+    components: [row3],
+  });
+
+  await channel.send({
+    content: `- Elige un canal de voz para asignar mensajes:`,
+    components: [row4],
+  });
+
+  await channel.send({
+    content: `- Elige el rol de los administradores:`,
+    components: [row5],
   });
 }

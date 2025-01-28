@@ -1,6 +1,6 @@
 import { Events } from 'discord.js';
 import { client, config } from '../index.js';
-import { setupDeploymentList } from '../automatic/deploymentList.js';
+import { setupDeploymentList } from '../Automatic/deploymentList.js';
 
 export default () => {
     client.on(Events.ClientReady, async () => {

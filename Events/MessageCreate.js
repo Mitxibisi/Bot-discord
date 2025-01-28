@@ -20,7 +20,6 @@ export default () => {
                 console.log(`Módulo cargado desde: ${commandPath}`);
 
                 if (!['addAllPlayers', 'clear', 'reset'].includes(args)){
-                    console.log('1')
                     try {
                         if (typeof commandModule.run === 'function') {
                             await commandModule.run(message);

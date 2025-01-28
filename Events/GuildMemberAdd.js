@@ -2,7 +2,7 @@ import { Events } from 'discord.js';
 import { client, config } from '../index.js';
 import { createUser} from '../Usersdb/database.js';
 
-export default (client) => {
+export default () => {
     client.on(Events.GuildMemberAdd, async (member) => {
         const welcomeChannelId = config.GuildMemberAdd/RemoveId;
         let role = member.guild.roles.cache.get(config.NewmemberRoleId);

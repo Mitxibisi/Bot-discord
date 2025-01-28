@@ -4,7 +4,8 @@ import { addXp } from '../Usersdb/database.js';
 
 // Un mapa para rastrear los últimos mensajes de cada usuario
 const userCooldowns = new Map();
-export default (client) => {
+
+export default () => {
     client.on(Events.MessageCreate, async (message) => {
         if (message.author.bot) return;
         

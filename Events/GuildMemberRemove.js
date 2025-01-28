@@ -1,7 +1,7 @@
 import { Events } from 'discord.js';
 import { client, config } from '../index.js';
 
-export default (client) => {
+export default () => {
     client.on(Events.GuildMemberRemove, async (member) => {
         const welcomeChannelId = config.GuildMemberAdd/RemoveId;
         try {

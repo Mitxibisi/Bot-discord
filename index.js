@@ -26,7 +26,7 @@ async function main() {
         for (const file of eventFiles) {
             if (file.endsWith('.js')) {
                 const { default: event } = await import(`./Events/${file}`);
-                event(client); // Llama a cada archivo de evento
+                event(); // Llama a cada archivo de evento
                 console.log(`Evento ${file} registrado.`);
             }
         }

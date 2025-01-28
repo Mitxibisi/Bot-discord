@@ -4,7 +4,7 @@ import { client, config } from '../index.js';
 // Un mapa para rastrear la actividad de entrada y salida de los usuarios de los canalez de voz
 const userVoiceTimes = new Map();
 
-export default (client) => {
+export default () => {
     client.on('voiceStateUpdate', async (oldState, newState) => {
         try{
             const userId = newState.id;

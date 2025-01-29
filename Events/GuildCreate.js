@@ -4,8 +4,8 @@ import { setupDeploymentList } from '../Automatic/deploymentList.js';
 import { OptionsMenu } from '../Automatic/OpcionesMenu.js';
 
 export default () => {
-    client.on(Events.ClientReady, async () => {
-        console.log(`Conectado como ${client.user.tag}!`);
+    client.on(Events.GuildCreate, async () => {
+        console.log(`Conectado a un nuevo servidor`);
         await OptionsMenu();
         await Deploy(config);
     });

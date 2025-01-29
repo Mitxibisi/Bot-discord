@@ -62,6 +62,7 @@ export async function run(interaction) {
   const IgnoredChannelAFK = MenuBuilder('select-ignoredchannelafk', 'Selecciona un canal de texto', voiceChannels, config.IgnoredChannelId);
   const VoiceMessagesChannel = MenuBuilder('select-voicemessageschannel', 'Selecciona un canal de texto', textChannels, config.VoiceMessagesChannel);
   const AdminRole = MenuBuilder('select-admrole', 'Selecciona un rol', roles, config.adminRoleId);
+const TemporalChannelsCategory = MenuBuilder ('select-temporalchannelscategory','Selecciona una categoria',Category, config.TemporalChannelsId);
 
   // Agrega cada menú desplegable a su propia fila
   const row1 = new ActionRowBuilder().addComponents(GuildMember);
@@ -69,6 +70,7 @@ export async function run(interaction) {
   const row3 = new ActionRowBuilder().addComponents(IgnoredChannelAFK);
   const row4 = new ActionRowBuilder().addComponents(VoiceMessagesChannel);
   const row5 = new ActionRowBuilder().addComponents(AdminRole);
+const Row6 = new ActionRowBuilder().addComponents(TemporalChannelsCategory);
 
   const channel = interaction.channel;
 
@@ -98,5 +100,10 @@ export async function run(interaction) {
   await channel.send({
     content: `- Elige el rol de los administradores:`,
     components: [row5],
+  });
+
+await channel.send({
+    content: `- Elige la categoría para canales temporales :`,
+    components: [row6],
   });
 }

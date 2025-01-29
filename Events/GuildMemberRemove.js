@@ -8,7 +8,7 @@ export default () => {
             const channel = await client.channels.fetch(welcomeChannelId);
             if (channel) {
                 console.log("Intentando cargar el comando: profile");
-                const commandPath = '../templates/despedida.js';
+                const commandPath = '../Templates/despedida.js';
                 const commandModule = await import(commandPath);
                 console.log(`Módulo cargado desde: ${commandPath}`);
                 if (typeof commandModule.run === 'function') {

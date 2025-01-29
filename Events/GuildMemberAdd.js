@@ -4,7 +4,7 @@ import { createUser} from '../Usersdb/database.js';
 
 export default () => {
     client.on(Events.GuildMemberAdd, async (member) => {
-        const welcomeChannelId = config.GuildMemberAdd/RemoveId;
+        const welcomeChannelId = config.GuildMemberAddRemoveId;
         let role = member.guild.roles.cache.get(config.NewmemberRoleId);
         await member.roles.add(role);
         

@@ -1,5 +1,5 @@
-import { ActionRowBuilder, StringSelectMenuBuilder, ChannelType, SystemChannelFlagsBitField } from 'discord.js';
-import { config } from '../index.js';
+import { ActionRowBuilder, StringSelectMenuBuilder, ChannelType } from 'discord.js';
+import { client, config } from '../index.js';
 
 function MenuBuilder(CustomId, PlaceHolder, Options, defaultValue = null) {
   // Agregar la propiedad `default: true` a la opción que coincide con el valor predeterminado
@@ -22,10 +22,9 @@ async function ChannelClear(channel){
   await channel.bulkDelete(messages);
 }
 
-const channel = config.OpcionesId;
-const guild = config.GuildId
-
 export async function run() {
+  const guild = client.guilds.cache.get(config.GuildId);
+  let channel = guild.channels.cache.get(config.OpcionesId);
 
   if(!config.OpcionesId){
     channel = guild.systemChannel;
@@ -118,10 +117,12 @@ export async function run() {
 
   // Agregar texto antes de cada fila de menú
   await channel.send({
-    content: `
-  **Ajustes del servidor:**
+    content: `**Ajustes del servidor:**
+    `
+  });
 
-  **Canal de las opciones:**`,
+  await channel.send({
+    content: `**Canal de las opciones:**`,
     components: [row0],
   });
 

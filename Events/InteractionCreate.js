@@ -22,7 +22,7 @@ export default () => {
             interaction.reply("4");
         }
       
-        if (interaction.customId === 'select-role') {
+        if (interaction.customId === 'select-admrole') {
             interaction.reply("5");
         }
     });

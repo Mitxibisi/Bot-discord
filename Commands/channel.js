@@ -61,14 +61,14 @@ export async function run(interaction) {
   const ListDeployment = MenuBuilder('select-listdeploymentchannel', 'Selecciona un canal de texto', textChannels, config.ListDeploymentChannel);
   const IgnoredChannelAFK = MenuBuilder('select-ignoredchannelafk', 'Selecciona un canal de texto', voiceChannels, config.IgnoredChannelId);
   const VoiceMessagesChannel = MenuBuilder('select-voicemessageschannel', 'Selecciona un canal de texto', textChannels, config.VoiceMessagesChannel);
-  const Lv1Rol = MenuBuilder('select-role', 'Selecciona un rol', roles, config.adminRoleId);
+  const AdminRole = MenuBuilder('select-admrole', 'Selecciona un rol', roles, config.adminRoleId);
 
   // Agrega cada menú desplegable a su propia fila
   const row1 = new ActionRowBuilder().addComponents(GuildMember);
   const row2 = new ActionRowBuilder().addComponents(ListDeployment);
   const row3 = new ActionRowBuilder().addComponents(IgnoredChannelAFK);
   const row4 = new ActionRowBuilder().addComponents(VoiceMessagesChannel);
-  const row5 = new ActionRowBuilder().addComponents(Lv1Rol);
+  const row5 = new ActionRowBuilder().addComponents(AdminRole);
 
   const channel = interaction.channel;
 

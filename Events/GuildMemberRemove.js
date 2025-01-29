@@ -3,7 +3,7 @@ import { client, config } from '../index.js';
 
 export default () => {
     client.on(Events.GuildMemberRemove, async (member) => {
-        const welcomeChannelId = config.GuildMemberAdd/RemoveId;
+        const welcomeChannelId = config.GuildMemberAddRemoveId;
         try {
             const channel = await client.channels.fetch(welcomeChannelId);
             if (channel) {

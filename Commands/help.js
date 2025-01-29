@@ -5,8 +5,6 @@ export async function run(message) {
     const lowerCaseMessage = message.content.toLowerCase();
 
     // Verifica si el mensaje contiene la palabra "help"
-    if (lowerCaseMessage.includes('help')) {
-
         message.reply({
             embeds: [
                 new EmbedBuilder()
@@ -28,6 +26,4 @@ export async function run(message) {
                     })
             ]
         });
-        
-    }
-}
+ }

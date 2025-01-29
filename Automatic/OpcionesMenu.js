@@ -1,4 +1,4 @@
-import { ActionRowBuilder, StringSelectMenuBuilder, ChannelType } from 'discord.js';
+import { ActionRowBuilder, StringSelectMenuBuilder, ChannelType, ButtonBuilder, ButtonStyle } from 'discord.js';
 import { client, config } from '../index.js';
 
 function MenuBuilder(CustomId, PlaceHolder, Options, defaultValue = null) {
@@ -98,6 +98,12 @@ export async function OptionsMenu() {
     const NvRol11 = MenuBuilder('select-nvrol11', 'Selecciona un rol', roles, config.RolId11);
     const NvRol12 = MenuBuilder('select-nvrol12', 'Selecciona un rol', roles, config.RolId12);
     const SecretRol1 = MenuBuilder('select-secretrol', 'Selecciona un rol', roles, config.SecretRolId1);
+    // Crear un botón interactivo
+    const lastButton = new ButtonBuilder()
+      .setCustomId('restart-button')
+      .setLabel('Confirmar Configuración') // Texto del botón
+      .setStyle(ButtonStyle.Primary); // Estilo azul
+
 
     // Agrega cada menú desplegable a su propia fila
     const row0 = new ActionRowBuilder().addComponents(OptionsChannel);
@@ -121,119 +127,125 @@ export async function OptionsMenu() {
     const row18 = new ActionRowBuilder().addComponents(NvRol11);
     const row19 = new ActionRowBuilder().addComponents(NvRol12);
     const row20 = new ActionRowBuilder().addComponents(SecretRol1);
+    const buttonRow = new ActionRowBuilder().addComponents(lastButton);
 
-    // Agregar texto antes de cada fila de menú
-    await channel.send({
-      content: `**Ajustes del servidor:**
-      `
-    });
-
-    await channel.send({
-      content: `**Canal de las opciones:**`,
-      components: [row0],
-    });
-
-      // Enviar más filas con texto
-      await channel.send({
+    await Promise.all([
+      channel.send({
+        content: `**Ajustes del servidor:**`,
+      }).catch(error => console.log("Error en Ajustes del servidor:", error)),
+    
+      channel.send({
+        content: `**Canal de las opciones:**`,
+        components: [row0],
+      }).catch(error => console.log("Error en Canal de las opciones:", error)),
+    
+      channel.send({
         content: `**Canal de Bienvenidas:**`,
         components: [row1],
-      });
-
-    // Enviar más filas con texto
-    await channel.send({
-      content: `**Canal del Top del server:**`,
-      components: [row2],
-    });
-
-    await channel.send({
-      content: `**Canal AFK:**`,
-      components: [row3],
-    });
-
-    await channel.send({
-      content: `**Subidas de nivel por canales de voz:**`,
-      components: [row4],
-    });
-
-    await channel.send({
-      content: `**Admin Rol:**`,
-      components: [row5],
-    });
-
-    await channel.send({
+      }).catch(error => console.log("Error en Canal de Bienvenidas:", error)),
+    
+      channel.send({
+        content: `**Canal del Top del server:**`,
+        components: [row2],
+      }).catch(error => console.log("Error en Canal del Top del server:", error)),
+    
+      channel.send({
+        content: `**Canal AFK:**`,
+        components: [row3],
+      }).catch(error => console.log("Error en Canal AFK:", error)),
+    
+      channel.send({
+        content: `**Subidas de nivel por canales de voz:**`,
+        components: [row4],
+      }).catch(error => console.log("Error en Subidas de nivel por canales de voz:", error)),
+    
+      channel.send({
+        content: `**Admin Rol:**`,
+        components: [row5],
+      }).catch(error => console.log("Error en Admin Rol:", error)),
+    
+      channel.send({
         content: `**Categoria para canales temp:**`,
         components: [row6],
-    });
-
-    await channel.send({
-      content: `**Rol usuario nuevo:**`,
-      components: [row7],
-    });
-
-    await channel.send({
-      content: `**Rol Nv1-10:**`,
-      components: [row8],
-    });
-
-    await channel.send({
-      content: `**Rol Nv11-20:**`,
-      components: [row9],
-    });
-
-    await channel.send({
-      content: `**Rol Nv21-30:**`,
-      components: [row10],
-    });
-
-    await channel.send({
-      content: `**Rol Nv31-40:**`,
-      components: [row11],
-    });
-
-    await channel.send({
-      content: `**Rol Nv41-50:**`,
-      components: [row12],
-    });
-
-    await channel.send({
-      content: `**Rol Nv51-60:**`,
-      components: [row13],
-    });
-
-    await channel.send({
-      content: `**Rol Nv61-70:**`,
-      components: [row14],
-    });
-
-    await channel.send({
-      content: `**Rol Nv71-80:**`,
-      components: [row15],
-    });
-
-    await channel.send({
-      content: `**Rol Nv81-90:**`,
-      components: [row16],
-    });
-
-    await channel.send({
-      content: `**Rol Nv91-100:**`,
-      components: [row17],
-    });
-
-    await channel.send({
-      content: `**Rol Nv101-120:**`,
-      components: [row18],
-    });
-
-    await channel.send({
-      content: `**Rol Nv+120:**`,
-      components: [row19],
-    });
-
-    await channel.send({
-      content: `**Rol Secreto:**`,
-      components: [row20],
-    });
+      }).catch(error => console.log("Error en Categoria para canales temp:", error)),
+    
+      channel.send({
+        content: `**Rol usuario nuevo:**`,
+        components: [row7],
+      }).catch(error => console.log("Error en Rol usuario nuevo:", error)),
+    
+      channel.send({
+        content: `**Rol Nv1-10:**`,
+        components: [row8],
+      }).catch(error => console.log("Error en Rol Nv1-10:", error)),
+    
+      channel.send({
+        content: `**Rol Nv11-20:**`,
+        components: [row9],
+      }).catch(error => console.log("Error en Rol Nv11-20:", error)),
+    
+      channel.send({
+        content: `**Rol Nv21-30:**`,
+        components: [row10],
+      }).catch(error => console.log("Error en Rol Nv21-30:", error)),
+    
+      channel.send({
+        content: `**Rol Nv31-40:**`,
+        components: [row11],
+      }).catch(error => console.log("Error en Rol Nv31-40:", error)),
+    
+      channel.send({
+        content: `**Rol Nv41-50:**`,
+        components: [row12],
+      }).catch(error => console.log("Error en Rol Nv41-50:", error)),
+    
+      channel.send({
+        content: `**Rol Nv51-60:**`,
+        components: [row13],
+      }).catch(error => console.log("Error en Rol Nv51-60:", error)),
+    
+      channel.send({
+        content: `**Rol Nv61-70:**`,
+        components: [row14],
+      }).catch(error => console.log("Error en Rol Nv61-70:", error)),
+    
+      channel.send({
+        content: `**Rol Nv71-80:**`,
+        components: [row15],
+      }).catch(error => console.log("Error en Rol Nv71-80:", error)),
+    
+      channel.send({
+        content: `**Rol Nv81-90:**`,
+        components: [row16],
+      }).catch(error => console.log("Error en Rol Nv81-90:", error)),
+    
+      channel.send({
+        content: `**Rol Nv91-100:**`,
+        components: [row17],
+      }).catch(error => console.log("Error en Rol Nv91-100:", error)),
+    
+      channel.send({
+        content: `**Rol Nv101-120:**`,
+        components: [row18],
+      }).catch(error => console.log("Error en Rol Nv101-120:", error)),
+    
+      channel.send({
+        content: `**Rol Nv+120:**`,
+        components: [row19],
+      }).catch(error => console.log("Error en Rol Nv+120:", error)),
+    
+      channel.send({
+        content: `**Rol Secreto:**`,
+        components: [row20],
+      }).catch(error => console.log("Error en Rol Secreto:", error)),
+    
+      // Enviar el botón como último mensaje
+      channel.send({
+        content: `✅ **Haz clic en el botón para confirmar la configuración.**`,
+        components: [buttonRow],
+      }).catch(error => console.log("Error en el botón de confirmación:", error)),
+    ]);
+    
   }catch(error){
     console.log(`Error en la ejecucion de las opciones : ${error}`);
   }

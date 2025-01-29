@@ -31,19 +31,49 @@ let variables = {
 
 export default () => {
     client.on(Events.InteractionCreate, async (interaction) => {
-        if (!interaction.isStringSelectMenu()) return;
+        if (!interaction.isStringSelectMenu() && !interaction.isButton()) return;
 
-        // Manejo de diferentes selectores
-        if (interaction.customId === 'select-optionschannel') {
-            variables.OpcionesId = interaction.values[0];
+        await interaction.deferReply({ ephemeral: true }); // Evita la interacción fallida
+
+        if (interaction.isStringSelectMenu()) {
+            const menuActions = {
+                'select-optionschannel': 'OpcionesId',
+                'select-guildmemberchannel': 'GuildMemberAddRemoveId',
+                'select-listdeploymentchannel': 'ListDeploymentChannel',
+                'select-ignoredchannelafk': 'IgnoredChannelId',
+                'select-voicemessageschannel': 'VoiceMessagesChannel',
+                'select-admrole': 'adminRoleId',
+                'select-temporalchannelscategory': 'TemporalChannelsId',
+                'select-newmemberrole': 'NewmemberRoleId',
+                'select-nvrol1': 'RolId1',
+                'select-nvrol2': 'RolId2',
+                'select-nvrol3': 'RolId3',
+                'select-nvrol4': 'RolId4',
+                'select-nvrol5': 'RolId5',
+                'select-nvrol6': 'RolId6',
+                'select-nvrol7': 'RolId7',
+                'select-nvrol8': 'RolId8',
+                'select-nvrol9': 'RolId9',
+                'select-nvrol10': 'RolId10',
+                'select-nvrol11': 'RolId11',
+                'select-nvrol12': 'RolId12',
+                'select-secretrol': 'SecretRolId1'
+            };
+
+            if (menuActions[interaction.customId]) {
+                variables[menuActions[interaction.customId]] = interaction.values[0];
+                await updateConfig(variables);
+                await interaction.editReply({ content: `✅ Configuración actualizada: ${menuActions[interaction.customId]}` });
+            }
         }
 
-        if (interaction.customId === 'select-admrole') {
-            console.log(interaction.id);
-            variables.adminRoleId = interaction.values[0];
+        if (interaction.isButton() && interaction.customId === 'restart-button') {
+            await interaction.editReply({ content: '🔄 Reiniciando opciones...' });
+            OptionsMenu();
         }
 
-        await updateConfig(variables);
-        await OptionsMenu();
+        setTimeout(async () => {
+            await interaction.deleteReply();
+        }, 5000); // 5000 ms = 5 segundos
     });
-}
+};

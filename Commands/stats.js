@@ -7,15 +7,12 @@ export async function run(message) {
                 const guild = message.guild;
 
                 // Asegurarse de que el bot tiene acceso al servidor
-                        if (!guild) {
-                                return message.reply('Este comando solo puede usarse en un servidor.');
-                        }
+                if (!guild) {
+                        return message.reply('Este comando solo puede usarse en un servidor.');
+                }
 
                 // Estadísticas básicas
                 const totalMembers = guild.memberCount; // Número total de miembros
-                const onlineMembers = guild.members.cache.filter(
-                        (member) => member.presence?.status === 'online' //Sale 0
-                ).size; // Miembros en línea
                 const botCount = guild.members.cache.filter((member) => member.user.bot).size; // Número de bots
                 const textChannels = guild.channels.cache.filter(
                         (channel) => channel.type === 0
@@ -24,6 +21,15 @@ export async function run(message) {
                         (channel) => channel.type === 2
                 ).size; // Número de canales de voz
                 const rolesCount = guild.roles.cache.size; // Número de roles
+                const guildName = guild.name; // Nombre del servidor
+                const guildIcon1 = guild.iconURL({ dynamic: true, size: 64 }); // URL del icono del servidor
+                const guildIcon2 = guild.iconURL({ dynamic: true, size: 1024 }); // URL del icono del servidor
+                const guildCreationDate = guild.createdAt.toLocaleDateString(); // Fecha de creación del servidor
+
+                // Obtener el dueño del servidor
+                const owner = await guild.members.fetch(guild.ownerId);
+                const ownerName = owner.user.tag; // Nombre del dueño
+                const ownerAvatar = owner.user.displayAvatarURL({ dynamic: true, size: 64 }); // Avatar del dueño
                 
                 // Color del embed
                 const color = randomColor();
@@ -31,17 +37,18 @@ export async function run(message) {
                 // Enviar el mensaje al canal
                 const embed = new EmbedBuilder()
                 .setColor(color)
-                .setTitle('📊 **Estadísticas del Servidor:**')
+                .setAuthor({ name: guildName, iconURL: guildIcon1 }) // Muestra el nombre con el icono
+                .setThumbnail(guildIcon2) // También puedes ponerlo como miniatura
                 .addFields(
-                        {name: '- Total de miembros:', value: `**${totalMembers}**`},
-                        {name: '- Miembros en línea:', value: `**${onlineMembers}**`},
-                        {name: '- Bots:', value: `**${botCount}**`},
-                        {name: '- Total de miembros:', value: `**${totalMembers}**`},
-                        {name: '📁 **Canales:**', value: `- Canales de texto: **${textChannels}**
-                        - Canales de voz: **${voiceChannels}**
-                        `},
-                        {name: '🎭 **Roles:**', value: `- Total de roles: **${rolesCount}**`},
+                        {name: 'Total de miembros:', value: `**${totalMembers}**`},
+                        {name: 'Bots:', value: `**${botCount}**`},
+                        {name: 'Canales de texto:', value: `**${textChannels}**`},
+                        {name: 'Canales de voz:', value: `**${voiceChannels}**`},
+                        {name: 'Total de roles:', value: `**${rolesCount}**`},
+                        {name: 'Dueño del servidor:', value: `**${ownerName}**`}
                 )
+                .setFooter({ text: `ID: ${guild.id} || Created date: ${guildCreationDate}` })
+                .setImage(ownerAvatar); // Avatar del dueño como imagen
 
                 message.channel.send({ embeds: [embed] });
         } catch (error) {

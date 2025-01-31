@@ -2,6 +2,8 @@ import { Events } from 'discord.js';
 import { client, config } from '../index.js';
 import { updateConfig } from '../index.js';
 import { OptionsMenu } from '../Automatic/OpcionesMenu.js';
+import { ticketView, ticketDelete } from '../Commands/tickets.js';
+
 
 let variables = {
     token: config.token,
@@ -33,11 +35,10 @@ export default () => {
     client.on(Events.InteractionCreate, async (interaction) => {
         if (!interaction.isStringSelectMenu() && !interaction.isButton()) return;
 
-        await interaction.deferReply({ ephemeral: true }); // Evita la interacción fallida
-
         if (interaction.isStringSelectMenu()) {
+            await interaction.deferReply({ ephemeral: true }); // Evita la interacción fallida
+
             const menuActions = {
-                'select-optionschannel': 'OpcionesId',
                 'select-guildmemberchannel': 'GuildMemberAddRemoveId',
                 'select-listdeploymentchannel': 'ListDeploymentChannel',
                 'select-ignoredchannelafk': 'IgnoredChannelId',
@@ -68,12 +69,28 @@ export default () => {
         }
 
         if (interaction.isButton() && interaction.customId === 'restart-button') {
+            await interaction.deferReply({ ephemeral: true }); // Evita la interacción fallida
             await interaction.editReply({ content: '🔄 Reiniciando opciones...' });
-            OptionsMenu();
+            await OptionsMenu();
         }
 
-        setTimeout(async () => {
-            await interaction.deleteReply();
-        }, 5000); // 5000 ms = 5 segundos
+        if (interaction.isButton() && interaction.customId === 'new-ticket') {
+            ticketView(interaction);
+        }
+
+        if (interaction.isButton() && interaction.customId === 'close-ticket') {
+            await ticketDelete(interaction);
+        }
+
+        // Eliminar la respuesta de la interacción solo si fue respondida correctamente
+        if (interaction.replied || interaction.deferred) {
+            setTimeout(async () => {
+                try {
+                    await interaction.deleteReply(); // Eliminar la respuesta de la interacción
+                } catch (error) {
+                    console.log("Error al eliminar la respuesta de la interacción:", error);
+                }
+            }, 5000); // 5000 ms = 5 segundos
+        }
     });
 };

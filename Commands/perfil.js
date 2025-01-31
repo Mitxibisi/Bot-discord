@@ -3,6 +3,7 @@ import { perfilembed } from '../Templates/perfil.js'
 
 export async function run(message) {
     try {
+        const guildId = message.guild.id;
         const guildMember = await message.guild.members.fetch(message.author.id);
         const args = message.content.split(' ');
         const targetUserMention = args[1]; // Mención del usuario objetivo
@@ -28,7 +29,7 @@ export async function run(message) {
         }
     
         // Resetear miembro
-        const user = await getUser(targetMember.id); // Obtén los datos del usuario de la base de datos
+        const user = await getUser(guildId,targetMember.id); // Obtén los datos del usuario de la base de datos
             console.log(user); // Para depuración
             console.log("Intentando cargar el comando: embed");
             perfilembed(message, user);

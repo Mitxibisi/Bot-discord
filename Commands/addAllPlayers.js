@@ -10,7 +10,7 @@ export async function run(message) {
     for (const [id, member] of members) {
         if (!member.user.bot) {
             // Llamar a la función para añadir a la base de datos
-            await createUser(id, member.user.username);
+            await createUser(guild.id, id, member.user.username);
             addedCount++;
         }
      }

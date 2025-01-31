@@ -7,6 +7,7 @@ const userVoiceTimes = new Map();
 export default () => {
     client.on('voiceStateUpdate', async (oldState, newState) => {
         try{
+            const guildId = newState.guild.id;
             const userId = newState.id;
             const guildMember = newState.member || oldState.member; // Obtén el miembro del servidor
             const ignoredChannelId = config.IgnoredChannelId; // ID del canal a ignorar
@@ -50,7 +51,7 @@ export default () => {
             return;
             }
         
-            await addXp(userId, Math.ceil(elapsedTime * 0.1), guildMember, null, channel);
+            await addXp(guildId, userId, Math.ceil(elapsedTime * 0.1), guildMember, null, channel);
         
             // Borra el tiempo de entrada del usuario
             userVoiceTimes.delete(userId);

@@ -1,6 +1,7 @@
 import { reset } from '../Usersdb/database.js'
 
 export async function run(message) {
+    const guildId = message.guild.id;
     // Obtener el GuildMember del autor del mensaje
     const guildMember = await message.guild.members.fetch(message.author.id).catch(() => null);
 
@@ -28,7 +29,7 @@ export async function run(message) {
 
     try {
         // Ejecutar el reseteo
-        await reset(targetMember.id);
+        await reset(guildId,targetMember.id);
         return message.reply(
             `✅ Se han reseteado los datos del usuario: **${targetMember.user.username}**.`
         );

@@ -1,4 +1,4 @@
-import { ActionRowBuilder, StringSelectMenuBuilder, ChannelType, ButtonBuilder, ButtonStyle } from 'discord.js';
+import { ActionRowBuilder, StringSelectMenuBuilder, ChannelType, ButtonBuilder, ButtonStyle, PermissionsBitField } from 'discord.js';
 import { client, config } from '../index.js';
 
 function MenuBuilder(CustomId, PlaceHolder, Options, defaultValue = null) {
@@ -30,13 +30,27 @@ async function ChannelClear(channel){
 export async function OptionsMenu() {
   try{
     const guild = client.guilds.cache.get(config.GuildId);
-    let channel = guild.channels.cache.get(config.OpcionesId);
-
-    if(config.OpcionesId === ""){
-      channel = guild.systemChannel;
-    }else{
-      await ChannelClear(channel);
+    let categoria = guild.channels.cache.find(c => c.name === "Opciones" && c.type === ChannelType.GuildCategory);
+    if (!categoria) {
+        categoria = await guild.channels.create({
+          name: "Opciones",
+          type: ChannelType.GuildCategory
+    });
     }
+
+    const channel = await guild.channels.create({
+        name: `goodlife`,
+        type: ChannelType.GuildText,
+        parent: categoria.id,
+        permissionOverwrites: [
+          {
+            id: config.adminRoleId, // Rol que puede ver los tickets
+            allow: [PermissionsBitField.Flags.ViewChannel, PermissionsBitField.Flags.SendMessages]
+          }
+        ]
+    });
+
+    await ChannelClear(channel);
 
     // Obtén los canales de texto del servidor donde se ejecutó el comando
     const textChannels = guild.channels.cache
@@ -77,7 +91,7 @@ export async function OptionsMenu() {
         content: 'No hay canales ni roles disponibles en este servidor.',
       });
     }
-    const OptionsChannel = MenuBuilder('select-optionschannel', 'Selecciona un canal de texto', textChannels, config.OpcionesId);
+
     const GuildMember = MenuBuilder('select-guildmemberchannel', 'Selecciona un canal de texto', textChannels, config.GuildMemberAddRemoveId);
     const ListDeployment = MenuBuilder('select-listdeploymentchannel', 'Selecciona un canal de texto', textChannels, config.ListDeploymentChannel);
     const IgnoredChannelAFK = MenuBuilder('select-ignoredchannelafk', 'Selecciona un canal de texto', voiceChannels, config.IgnoredChannelId);
@@ -106,7 +120,6 @@ export async function OptionsMenu() {
 
 
     // Agrega cada menú desplegable a su propia fila
-    const row0 = new ActionRowBuilder().addComponents(OptionsChannel);
     const row1 = new ActionRowBuilder().addComponents(GuildMember);
     const row2 = new ActionRowBuilder().addComponents(ListDeployment);
     const row3 = new ActionRowBuilder().addComponents(IgnoredChannelAFK);
@@ -133,11 +146,6 @@ export async function OptionsMenu() {
       channel.send({
         content: `**Ajustes del servidor:**`,
       }).catch(error => console.log("Error en Ajustes del servidor:", error)),
-    
-      channel.send({
-        content: `**Canal de las opciones:**`,
-        components: [row0],
-      }).catch(error => console.log("Error en Canal de las opciones:", error)),
     
       channel.send({
         content: `**Canal de Bienvenidas:**`,

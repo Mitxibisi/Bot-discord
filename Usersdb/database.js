@@ -12,7 +12,8 @@ export const db = await open({
 // Crear tabla al iniciar (si no existe)
 await db.exec(`
     CREATE TABLE IF NOT EXISTS users (
-        id TEXT PRIMARY KEY,
+        guild TEXT PRIMARY KEY,
+        id,
         username TEXT,
         level INTEGER DEFAULT 0,
         xp INTEGER DEFAULT 0,
@@ -21,17 +22,17 @@ await db.exec(`
     )
 `);
 
-export async function createUser(userId, username) {
+export async function createUser(guildId, userId, username) {
     try {
-        const existingUser = await db.get('SELECT * FROM users WHERE id = ?', [userId]);
+        const existingUser = await db.get('SELECT * FROM users WHERE id = ? AND guild = ?', [userId, guildId]);
         if (!existingUser) {
             await db.run(
-                'INSERT INTO users (id, username, level, xp, levelupxp, rolid) VALUES (?, ?, ?, ?, ?, ?)',
-                [userId, username, 0, 0, 50, 0]
+                'INSERT INTO users (guild, id, username, level, xp, levelupxp, rolid) VALUES (?, ?, ?, ?, ?, ?, ?)',
+                [guildId, userId, username, 0, 0, 50, 0]
             );
-            console.log(`Usuario ${username} creado con éxito.`);
+            console.log(`En el servidor con ID: ${guildId} se ha creado el perfil del usuario: ${username}`);
         } else {
-            console.log(`Usuario ${username} ya existe.`);
+            return;
         }
     } catch (error) {
         console.error('Error en createUser:', error.message);
@@ -39,9 +40,9 @@ export async function createUser(userId, username) {
 }
 
 // Funciones para manejar la base de datos
-export async function getUser(userId) {
+export async function getUser(guildId, userId) {
     try {
-        const user = await db.get('SELECT * FROM users WHERE id = ?', [userId]);
+        const user = await db.get('SELECT * FROM users WHERE id = ? AND guild = ?', [userId, guildId]);
         if (user) {
             console.log('Usuario encontrado:', user.username);
             return user;
@@ -55,8 +56,8 @@ export async function getUser(userId) {
     }
 }
 
-export async function addXp(userId, xpAmount, guildMember, message, channel) {
-    const user = await getUser(userId);
+export async function addXp(guildId, userId, xpAmount, guildMember, message, channel) {
+    const user = await getUser(guildId, userId);
     if (!user) {
         console.error(`El usuario con ID ${userId} no existe.`);
         return null;
@@ -88,8 +89,8 @@ export async function addXp(userId, xpAmount, guildMember, message, channel) {
 
     // Actualiza la base de datos
     await db.run(
-        'UPDATE users SET level = ?, xp = ?, levelupxp = ?, rolid = ? WHERE id = ?',
-        [newLevel, newXp, newLevelUpXp, newRol, userId]
+        'UPDATE users SET level = ?, xp = ?, levelupxp = ?, rolid = ? WHERE id = ? AND guild = ?',
+        [newLevel, newXp, newLevelUpXp, newRol, userId, guildId]
     );
 
     return {
@@ -190,13 +191,13 @@ Sigue así para llegar más lejos! 🚀💪
     }
 }
 
-export async function reset(userId) {
+export async function reset(guildId, userId) {
     const newLevel = 0; 
     const newXp = 0;
     const newLevelUpXp = 50;
     const newRol = 0;
     await db.run(
-        'UPDATE users SET level = ?, xp = ?, levelupxp = ?, rolid = ? WHERE id = ?',
-        [newLevel, newXp, newLevelUpXp, newRol, userId]
+        'UPDATE users SET level = ?, xp = ?, levelupxp = ?, rolid = ? WHERE id = ? AND guild = ?',
+        [newLevel, newXp, newLevelUpXp, newRol, userId, guildId]
     );
 }

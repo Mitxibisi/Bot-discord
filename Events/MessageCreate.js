@@ -92,6 +92,7 @@ export default () => {
                 message.reply(`El comando ${args} no existe`)
             }
         }else if (message.content.length > 1){
+            const guildId = message.guild.id;
             const userId = message.author.id;
             const now = Date.now();
             const cooldownTime = 2000; // Tiempo en milisegundos (5 segundos)
@@ -111,7 +112,7 @@ export default () => {
             const xpAmount = 50; // Cantidad base de experiencia
             const guildMember = await message.guild.members.fetch(userId);
         
-            await addXp(userId, xpAmount, guildMember, message, null);
+            await addXp(guildId ,userId, xpAmount, guildMember, message, null);
         
             // Actualizar el tiempo del último mensaje
             userCooldowns.set(userId, now);

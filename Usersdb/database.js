@@ -12,8 +12,8 @@ export const db = await open({
 // Crear tabla al iniciar (si no existe)
 await db.exec(`
     CREATE TABLE IF NOT EXISTS users (
-        guild TEXT PRIMARY KEY,
-        id,
+        guild TEXT NOT NULL,
+        id TEXT NOT NULL,
         username TEXT,
         level INTEGER DEFAULT 0,
         xp INTEGER DEFAULT 0,

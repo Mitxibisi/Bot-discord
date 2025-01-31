@@ -6,12 +6,13 @@ import { OptionsMenu } from '../Automatic/OpcionesMenu.js';
 export default () => {
     client.on(Events.ClientReady, async () => {
         console.log(`Conectado como ${client.user.tag}!`);
-        await OptionsMenu();
-        await Deploy(config);
+        Deploy();
+
+
     });
 };
 
-async function Deploy() {
+export async function Deploy() {
     const deploymentChannelId = config.ListDeploymentChannel;
     const guildId = config.GuildId;
     await setupDeploymentList(deploymentChannelId, guildId);

@@ -3,7 +3,7 @@ import { open } from 'sqlite';
 
 // Conexión inicial a la base de datos
 export const tdb = await open({
-    filename: './Tickets/tickets.sqlite',
+    filename: './Database/tickets.sqlite',
     driver: sqlite3.Database
 });
 

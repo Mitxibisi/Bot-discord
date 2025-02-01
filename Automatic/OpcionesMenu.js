@@ -37,8 +37,12 @@ export async function OptionsMenu() {
           type: ChannelType.GuildCategory
     });
     }
+   let channel = guild.channels.cache.find(c => c.name === `goodlife`);
+     if (!canalExistente) {
 
-    const channel = await guild.channels.create({
+
+
+    channel = await guild.channels.create({
         name: `goodlife`,
         type: ChannelType.GuildText,
         parent: categoria.id,
@@ -49,6 +53,7 @@ export async function OptionsMenu() {
           }
         ]
     });
+  };
 
     await ChannelClear(channel);
 

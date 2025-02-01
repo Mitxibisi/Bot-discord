@@ -50,13 +50,26 @@ async function main() {
             }
         }
 
+        if (!config.token) {
+                console.error('Token no encontrado en config.json.');
+                    process.exit(1);
+                    }
+
+
         client.login(config.token);
     } catch (error) {
         console.error('Error al iniciar el bot:', error);
     }
 }
 
+process.on('unhandledRejection', (reason, promise) => {
+        console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+        });
+
+        process.on('uncaughtException', (err) => {
+            console.error('Uncaught Exception thrown:', err);
+                process.exit(1); // Opcional: salir del proceso
+                });
+
+
 main(); // Llamar a la función principal
-
-
-client.login(config.token);

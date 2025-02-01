@@ -38,18 +38,15 @@ export async function OptionsMenu() {
     });
     }
    let channel = guild.channels.cache.find(c => c.name === `goodlife`);
-     if (!canalExistente) {
-
-
-
+     if (!channel) {
     channel = await guild.channels.create({
         name: `goodlife`,
         type: ChannelType.GuildText,
         parent: categoria.id,
         permissionOverwrites: [
           {
-            id: config.adminRoleId, // Rol que puede ver los tickets
-            allow: [PermissionsBitField.Flags.ViewChannel, PermissionsBitField.Flags.SendMessages]
+            id: config.adminRoleId, // Rol que puede ver las opciones 
+            allow:       [PermissionsBitField.Flags.ViewChannel, PermissionsBitField.Flags.SendMessages]
           }
         ]
     });

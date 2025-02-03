@@ -35,9 +35,11 @@ export default () => {
                     try {
                         // Obtener el GuildMember del autor del mensaje
                         const guildMember = await message.guild.members.fetch(message.author.id);
+
+const Guild = getGuild(message.guild.id)
                 
                         // ID del rol requerido
-                        const requiredRoleId = config.adminRoleId;
+                        const requiredRoleId = Guild.adminRoleId;
                 
                         // Comprobar si el autor tiene el rol requerido
                         if (!guildMember.roles.cache.has(requiredRoleId)) {

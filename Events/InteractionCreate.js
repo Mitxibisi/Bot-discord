@@ -33,14 +33,12 @@ export default () => {
                 'select-nvrol12': 'RolId12',
                 'select-secretrol': 'SecretRolId1'
             };
-
-            if (interaction.customId === 'select-admrole'){
- await update(interaction.guild.id, interaction.id);
-}
-
                 await interaction.editReply({ content: `✅ Configuración actualizada: ${configField}` });
             }
-        }
+
+        if (interaction.customId === 'select-admrole'){
+            await update(interaction.guild.id, interaction.id);
+           }
 
         if (interaction.isButton() && interaction.customId === 'restart-button') {
             await interaction.deferReply({ flags: 64 }); // Evita la interacción fallida

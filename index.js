@@ -49,10 +49,7 @@ process.on('unhandledRejection', (reason, promise) => {
 
 process.on('uncaughtException', (err) => {
     console.error('Uncaught Exception thrown:', err);
-    console.log('Reiniciando el bot en 5 segundos...');
-
-
-
+    process.exit(1);
 });
 
 main(); // Llamar a la función principal

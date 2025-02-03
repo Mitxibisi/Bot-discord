@@ -34,16 +34,9 @@ export default () => {
                 'select-secretrol': 'SecretRolId1'
             };
 
-            const configField = menuActions[interaction.customId];
-            if (configField) {
-                // Actualizar directamente en la base de datos
-                const result = await gdb.run(`
-    UPDATE guilds
-    SET ${configField} = ?
-    WHERE guildId = ?
-`, [interaction.values[0], interaction.guild.id]);
-
-console.log(`Actualización de ${configField}:`, result.changes);
+            if (interaction.customId === 'select-admrole'){
+ await update(interaction.guild.id, interaction.id);
+}
 
                 await interaction.editReply({ content: `✅ Configuración actualizada: ${configField}` });
             }

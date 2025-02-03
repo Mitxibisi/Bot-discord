@@ -30,8 +30,7 @@ await gdb.exec(`
         RolId11 TEXT DEFAULT NULL,
         RolId12 TEXT DEFAULT NULL,
         TemporalChannelsId TEXT DEFAULT NULL,
-        SecretRolId1 TEXT DEFAULT NULL,
-        OpcionesId TEXT DEFAULT NULL
+        SecretRolId1 TEXT DEFAULT NULL
     );
 `);
 

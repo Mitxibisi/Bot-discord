@@ -62,3 +62,17 @@ export async function getGuild(guildId) {
         return null;
     }
 }
+
+export async function addXp(guildId, value) {
+    const Guild = await getGuild(guildId);
+    if (!Guild) {
+        console.error(`El usuario con ID ${guildId} no existe.`);
+        return null;
+    }
+
+    // Actualiza la base de datos
+    await gdb.run(
+        'UPDATE guilds SET adminRoleId = ? WHERE guildId = ?',
+        [value, guildId]
+ );
+}

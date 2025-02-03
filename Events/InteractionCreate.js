@@ -37,11 +37,13 @@ export default () => {
             const configField = menuActions[interaction.customId];
             if (configField) {
                 // Actualizar directamente en la base de datos
-                await gdb.run(`
-                    UPDATE guilds
-                    SET ${configField} = ?
-                    WHERE guildId = ?
-                `, [interaction.values[0], interaction.guild.id]);
+                const result = await gdb.run(`
+    UPDATE guilds
+    SET ${configField} = ?
+    WHERE guildId = ?
+`, [interaction.values[0], interaction.guild.id]);
+
+console.log(`Actualización de ${configField}:`, result.changes);
 
                 await interaction.editReply({ content: `✅ Configuración actualizada: ${configField}` });
             }

@@ -8,74 +8,77 @@ export default () => {
     client.on(Events.InteractionCreate, async (interaction) => {
         if (!interaction.isStringSelectMenu() && !interaction.isButton()) return;
 
-if (interaction.isStringSelectMenu()) {
-    await interaction.deferReply({ flags: 64 }); // Evita la interacción fallida
-
-    const menuActions = {
-        'select-guildmemberchannel': 'GuildMemberAddRemoveId',
-        'select-listdeploymentchannel': 'ListDeploymentChannel',
-        'select-ignoredchannelafk': 'IgnoredChannelId',
-        'select-voicemessageschannel': 'VoiceMessagesChannel',
-        'select-admrole': 'adminRoleId',
-        'select-temporalchannelscategory': 'TemporalChannelsId',
-        'select-newmemberrole': 'NewmemberRoleId',
-        'select-nvrol1': 'RolId1',
-        'select-nvrol2': 'RolId2',
-        'select-nvrol3': 'RolId3',
-        'select-nvrol4': 'RolId4',
-        'select-nvrol5': 'RolId5',
-        'select-nvrol6': 'RolId6',
-        'select-nvrol7': 'RolId7',
-        'select-nvrol8': 'RolId8',
-        'select-nvrol9': 'RolId9',
-        'select-nvrol10': 'RolId10',
-        'select-nvrol11': 'RolId11',
-        'select-nvrol12': 'RolId12',
-        'select-secretrol': 'SecretRolId1'
-    };
-
-    const configField = menuActions[interaction.customId];
-    if (configField) {
         try {
-            // Actualizar directamente en la base de datos
-            await gdb.run(`
-                UPDATE guilds
-                SET ${configField} = ?
-                WHERE guildId = ?
-            `, [interaction.values[0], interaction.guild.id]);
+            // Defer solo si es necesario
+            if (!interaction.deferred && !interaction.replied) {
+                await interaction.deferReply({ flags: 64 });
+            }
 
-            await interaction.editReply({ content: `✅ Configuración actualizada: ${configField}` });
-        } catch (error) {
-            console.error('Error al actualizar la base de datos:', error);
-            await interaction.editReply({ content: '❌ Hubo un error al actualizar la configuración.' });
-        }
-    } else {
-        await interaction.editReply({ content: '⚠️ No se encontró la configuración para esta opción.' });
-    }
+            const menuActions = {
+                'select-guildmemberchannel': 'GuildMemberAddRemoveId',
+                'select-listdeploymentchannel': 'ListDeploymentChannel',
+                'select-ignoredchannelafk': 'IgnoredChannelId',
+                'select-voicemessageschannel': 'VoiceMessagesChannel',
+                'select-admrole': 'adminRoleId',
+                'select-temporalchannelscategory': 'TemporalChannelsId',
+                'select-newmemberrole': 'NewmemberRoleId',
+                'select-nvrol1': 'RolId1',
+                'select-nvrol2': 'RolId2',
+                'select-nvrol3': 'RolId3',
+                'select-nvrol4': 'RolId4',
+                'select-nvrol5': 'RolId5',
+                'select-nvrol6': 'RolId6',
+                'select-nvrol7': 'RolId7',
+                'select-nvrol8': 'RolId8',
+                'select-nvrol9': 'RolId9',
+                'select-nvrol10': 'RolId10',
+                'select-nvrol11': 'RolId11',
+                'select-nvrol12': 'RolId12',
+                'select-secretrol': 'SecretRolId1'
+            };
 
-        if (interaction.isButton() && interaction.customId === 'restart-button') {
-            await interaction.deferReply({ flags: 64 }); // Evita la interacción fallida
-            await interaction.editReply({ content: '🔄 Reiniciando opciones...' });
-            await OptionsMenu();
-        }
+            const configField = menuActions[interaction.customId];
+            if (interaction.isStringSelectMenu() && configField) {
+                await gdb.run(`
+                    UPDATE guilds
+                    SET ${configField} = ?
+                    WHERE guildId = ?
+                `, [interaction.values[0], interaction.guild.id]);
 
-        if (interaction.isButton() && interaction.customId === 'new-ticket') {
-            ticketView(interaction);
-        }
+                await interaction.editReply({ content: `✅ Configuración actualizada: ${configField}` });
+            } 
 
-        if (interaction.isButton() && interaction.customId === 'close-ticket') {
-            await ticketDelete(interaction);
-        }
-
-        // Eliminar la respuesta de la interacción solo si fue respondida correctamente
-        if (interaction.replied || interaction.deferred) {
-            setTimeout(async () => {
-                try {
-                    await interaction.deleteReply(); // Eliminar la respuesta de la interacción
-                } catch (error) {
-                    console.log("Error al eliminar la respuesta de la interacción:", error);
+            if (interaction.isButton()) {
+                if (interaction.customId === 'restart-button') {
+                    await interaction.editReply({ content: '🔄 Reiniciando opciones...' });
+                    await OptionsMenu();
                 }
-            }, 5000); // 5000 ms = 5 segundos
+
+                if (interaction.customId === 'new-ticket') {
+                    await ticketView(interaction);
+                }
+
+                if (interaction.customId === 'close-ticket') {
+                    await ticketDelete(interaction);
+                }
+            }
+
+            // Solo eliminar si se respondió o diferió correctamente
+            if (interaction.replied || interaction.deferred) {
+                setTimeout(async () => {
+                    try {
+                        await interaction.deleteReply();
+                    } catch (error) {
+                        console.log("Error al eliminar la respuesta de la interacción:", error);
+                    }
+                }, 5000);
+            }
+
+        } catch (error) {
+            console.error('Error durante la interacción:', error);
+            if (!interaction.replied && !interaction.deferred) {
+                await interaction.reply({ content: '❌ Ocurrió un error inesperado.', ephemeral: true });
+            }
         }
     });
 };

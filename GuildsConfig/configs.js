@@ -63,7 +63,7 @@ export async function getGuild(guildId) {
     }
 }
 
-export async function addXp(guildId, value) {
+export async function update(guildId, value) {
     const Guild = await getGuild(guildId);
     if (!Guild) {
         console.error(`El usuario con ID ${guildId} no existe.`);

@@ -86,7 +86,7 @@ export default () => {
         }, 30000); // 30 segundos
                 }
         }catch(error){
-            console.log('Error al ejecutar voideestateupdate: ',error);
+            console.log('Error al ejecutar voicestateupdate: ',error);
         }
     });
 };

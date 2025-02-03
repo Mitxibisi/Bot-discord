@@ -1,27 +1,8 @@
 import { Client, GatewayIntentBits } from 'discord.js';
-import { readFile, writeFile } from 'fs/promises';
+import { readFile } from 'fs/promises';
 import { readdir } from 'fs/promises'; // Para leer los archivos de eventos
 
 export let config = JSON.parse(await readFile(new URL('./config.json', import.meta.url)));
-
-export async function updateConfig(newValues) {
-    try {
-        const configPath = new URL('./config.json', import.meta.url);
-        
-        // Crear una nueva copia de config
-        const updatedConfig = { ...config, ...newValues };
-
-        // Escribir la nueva configuración en el archivo
-        await writeFile(configPath, JSON.stringify(updatedConfig, null, 2));
-
-        config = updatedConfig;
-
-        console.log('Config.json actualizado correctamente.');
-    } catch (error) {
-        console.error('Error al actualizar config.json:', error);
-        throw error;
-    }
-}
 
 export const client = new Client({
     intents: [
@@ -63,13 +44,15 @@ async function main() {
 }
 
 process.on('unhandledRejection', (reason, promise) => {
-        console.error('Unhandled Rejection at:', promise, 'reason:', reason);
-        });
+    console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+});
 
-        process.on('uncaughtException', (err) => {
-            console.error('Uncaught Exception thrown:', err);
-                process.exit(1); // Opcional: salir del proceso
-                });
+process.on('uncaughtException', (err) => {
+    console.error('Uncaught Exception thrown:', err);
+    console.log('Reiniciando el bot en 5 segundos...');
 
+
+
+});
 
 main(); // Llamar a la función principal

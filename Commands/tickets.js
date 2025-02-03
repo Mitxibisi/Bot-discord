@@ -41,7 +41,7 @@ export async function ticketView(interaction) {
     }
 
     // Responder de inmediato para evitar errores
-    await interaction.deferReply({ ephemeral: true });
+    await interaction.deferReply({ flags: 64 });
 
     let categoria = guild.channels.cache.find(c => c.name === "Tickets" && c.type === ChannelType.GuildCategory);
     if (!categoria) {
@@ -96,7 +96,7 @@ export async function ticketDelete(interaction) {
     if (TicketsCerrados) {
         await interaction.reply({
             content: '❌ No tienes un ticket abierto.',
-            flags: 64, // "ephemeral: true" ahora es "flags: 64" en DJS v14+
+            flags: 64, // "flags: 64" ahora es "flags: 64" en DJS v14+
         });
         return;
     }

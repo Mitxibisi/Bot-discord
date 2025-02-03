@@ -2,7 +2,8 @@ import schedule from 'node-schedule'; // Asegúrate de instalarlo con `npm insta
 import { db } from '../Usersdb/database.js';
 import { EmbedBuilder } from 'discord.js'; // Importa el objeto Embed
 import randomColor from 'randomcolor';
-import { config, client } from '../index.js';
+import { client } from '../index.js';
+import { gdb } from '../GuildsConfig/configs.js';
 
 //Este codigo es puro chatgpt con modificaciones y algunas correciones (estudiarse el codigo)
 
@@ -11,7 +12,8 @@ import { config, client } from '../index.js';
 * @param {string} channelId - ID del canal donde se actualizará la lista.
 */
 
-export async function setupDeploymentList( channelId) {
+export async function setupDeploymentList(channelId) {
+    client.guilds.cache.forEach(async (guild) => {});
         const channel = await client.channels.fetch(channelId);
             if (!channel || channel.type !== 0) { // Asegúrate de que sea un canal de texto.
                 console.error(`No se encontró un canal de texto con ID ${channelId}`);
@@ -43,7 +45,7 @@ async function updateDeploymentList(channel) {
         
         // Crear la lista usando los datos del top 10
         const deploymentList = await Promise.all(
-                top100.slice(0, 10).map((user, index) => {
+                top100.slice(0, 100).map((user, index) => {
                 // Asegurarse de que la primera letra del nombre de usuario esté en mayúscula
                 const usernameWithCapital = user.username.charAt(0).toUpperCase() + user.username.slice(1);
                 return {
@@ -87,15 +89,12 @@ export async function getTop100() {
         );
 
         if (top100.length > 0) {
-            console.log('Top 100 usuarios obtenidos correctamente:');
-            top100.forEach((user, index) => {
-                console.log(`${index + 1}. ${user.username} - Nivel: ${user.level}, XP: ${user.xp}`);
-            });
             return top100;
         } else {
             console.log('No hay usuarios en la base de datos.');
             return [];
         }
+        
     } catch (error) {
         console.error('Error al obtener el Top 100:', error.message);
         return [];

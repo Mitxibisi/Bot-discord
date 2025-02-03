@@ -5,7 +5,7 @@ import { config } from '../index.js';
 
 // Conexión inicial a la base de datos
 export const db = await open({
-    filename: './Usersdb/database.sqlite',
+    filename: './Database/database.sqlite',
     driver: sqlite3.Database
 });
 
@@ -40,14 +40,13 @@ export async function createUser(guildId, userId, username) {
 }
 
 // Funciones para manejar la base de datos
-export async function getUser(guildId, userId) {
+export async function getUser(guildId, userId, username) {
     try {
         const user = await db.get('SELECT * FROM users WHERE id = ? AND guild = ?', [userId, guildId]);
         if (user) {
-            console.log('Usuario encontrado:', user.username);
             return user;
         } else {
-            console.log(`Usuario con ID ${userId} no encontrado.`);
+            createUser(guildId,userId,username);
             return null; // Devuelve null explícitamente si no existe
         }
     } catch (error) {
@@ -57,7 +56,7 @@ export async function getUser(guildId, userId) {
 }
 
 export async function addXp(guildId, userId, xpAmount, guildMember, message, channel) {
-    const user = await getUser(guildId, userId);
+    const user = await getUser(guildId, userId, guildMember.user.username);
     if (!user) {
         console.error(`El usuario con ID ${userId} no existe.`);
         return null;

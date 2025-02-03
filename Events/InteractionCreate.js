@@ -1,42 +1,15 @@
 import { Events } from 'discord.js';
-import { client, config } from '../index.js';
-import { updateConfig } from '../index.js';
+import { client } from '../index.js';
 import { OptionsMenu } from '../Automatic/OpcionesMenu.js';
 import { ticketView, ticketDelete } from '../Commands/tickets.js';
-
-
-let variables = {
-    token: config.token,
-    GuildId: config.GuildId,
-    adminRoleId: config.adminRoleId,
-    GuildMemberAddRemoveId: config.GuildMemberAddRemoveId,
-    NewmemberRoleId: config.NewmemberRoleId,
-    ListDeploymentChannel: config.ListDeploymentChannel,
-    IgnoredChannelId: config.IgnoredChannelId,
-    VoiceMessagesChannel: config.VoiceMessagesChannel,
-    RolId1: config.RolId1,
-    RolId2: config.RolId2,
-    RolId3: config.RolId3,
-    RolId4: config.RolId4,
-    RolId5: config.RolId5,
-    RolId6: config.RolId6,
-    RolId7: config.RolId7,
-    RolId8: config.RolId8,
-    RolId9: config.RolId9,
-    RolId10: config.RolId10,
-    RolId11: config.RolId11,
-    RolId12: config.RolId12,
-    TemporalChannelsId: config.TemporalChannelsId,
-    SecretRolId1: config.SecretRolId1,
-    OpcionesId: config.OpcionesId
-}
+import { gdb } from '../GuildsConfig/configs.js';
 
 export default () => {
     client.on(Events.InteractionCreate, async (interaction) => {
         if (!interaction.isStringSelectMenu() && !interaction.isButton()) return;
 
         if (interaction.isStringSelectMenu()) {
-            await interaction.deferReply({ ephemeral: true }); // Evita la interacción fallida
+            await interaction.deferReply({ flags: 64 }); // Evita la interacción fallida
 
             const menuActions = {
                 'select-guildmemberchannel': 'GuildMemberAddRemoveId',
@@ -61,15 +34,21 @@ export default () => {
                 'select-secretrol': 'SecretRolId1'
             };
 
-            if (menuActions[interaction.customId]) {
-                variables[menuActions[interaction.customId]] = interaction.values[0];
-                await updateConfig(variables);
-                await interaction.editReply({ content: `✅ Configuración actualizada: ${menuActions[interaction.customId]}` });
+            const configField = menuActions[interaction.customId];
+            if (configField) {
+                // Actualizar directamente en la base de datos
+                await gdb.run(`
+                    UPDATE guilds
+                    SET ${configField} = ?
+                    WHERE guildId = ?
+                `, [interaction.values[0], interaction.guild.id]);
+
+                await interaction.editReply({ content: `✅ Configuración actualizada: ${configField}` });
             }
         }
 
         if (interaction.isButton() && interaction.customId === 'restart-button') {
-            await interaction.deferReply({ ephemeral: true }); // Evita la interacción fallida
+            await interaction.deferReply({ flags: 64 }); // Evita la interacción fallida
             await interaction.editReply({ content: '🔄 Reiniciando opciones...' });
             await OptionsMenu();
         }

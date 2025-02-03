@@ -1,11 +1,13 @@
 import { Events } from 'discord.js';
-import { client, config } from '../index.js';
+import { client } from '../index.js';
 import { createUser} from '../Usersdb/database.js';
+import { getGuild } from '../GuildsConfig/configs.js';
 
 export default () => {
     client.on(Events.GuildMemberAdd, async (member) => {
-        const welcomeChannelId = config.GuildMemberAddRemoveId;
-        let role = member.guild.roles.cache.get(config.NewmemberRoleId);
+        const Guild = getGuild(member.guild.id);
+        const welcomeChannelId = Guild.GuildMemberAddRemoveId;
+        let role = member.guild.roles.cache.get(Guild.NewmemberRoleId);
         await member.roles.add(role);
         
         try {
@@ -19,7 +21,7 @@ export default () => {
                     await commandModule.run(member, channel);
                     }
                 }
-                createUser(member.id,member.username);
+                createUser(member.guild.id,member.id,member.username);
         }
             catch (error) {
                 console.error(`Error en GuildMemberAdd: ${error.message}`);

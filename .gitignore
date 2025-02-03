@@ -364,6 +364,6 @@ FodyWeavers.xsd
 
 # Ignorar archivos que contienen datos sensibles
 Start-Service ssh-agent
-Start-Service ssh-agent.publish.pub
-.Database/
+Start-Service ssh-agent.pub
+Database/
 *config.json

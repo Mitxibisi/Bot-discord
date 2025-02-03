@@ -3,7 +3,7 @@ import {getGuild} from '../GuildsConfig/configs.js'
 
 export async function run(message) {
     if (message.author.id === config.userId){
-Guild = getGuild(messsge.guild.id);
+const Guild = getGuild(message.guild.id);
         console.log(Guild);
     }
 }

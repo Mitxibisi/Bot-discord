@@ -11,12 +11,12 @@ export const gdb = await open({
 await gdb.exec(`
     CREATE TABLE IF NOT EXISTS guilds (
         guildId TEXT PRIMARY KEY,
-        adminRoleId TEXT DEFAULT '',
-        GuildMemberAddRemoveId TEXT DEFAULT '',
-        NewmemberRoleId TEXT DEFAULT '',
-        ListDeploymentChannel TEXT DEFAULT '',
-        IgnoredChannelId TEXT DEFAULT '',
-        VoiceMessagesChannel TEXT DEFAULT '',
+        adminRoleId TEXT DEFAULT NULL,
+        GuildMemberAddRemoveId TEXT DEFAULT NULL,
+        NewmemberRoleId TEXT DEFAULT NULL,
+        ListDeploymentChannel TEXT DEFAULT NULL,
+        IgnoredChannelId TEXT DEFAULT NULL,
+        VoiceMessagesChannel TEXT DEFAULT NULL,
         RolId1 TEXT DEFAULT NULL,
         RolId2 TEXT DEFAULT NULL,
         RolId3 TEXT DEFAULT NULL,

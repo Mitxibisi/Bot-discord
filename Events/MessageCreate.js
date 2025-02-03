@@ -1,7 +1,7 @@
 import { Events } from 'discord.js';
 import { client, config } from '../index.js';
 import { addXp } from '../Usersdb/database.js';
-import { getGuild } from '../GuildsConfig/config.js';
+import { getGuild } from '../GuildsConfig/configs.js';
 
 // Un mapa para rastrear los últimos mensajes de cada usuario
 const userCooldowns = new Map();

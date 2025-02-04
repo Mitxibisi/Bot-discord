@@ -2,6 +2,8 @@ import { Client, GatewayIntentBits } from 'discord.js';
 import { readFile } from 'fs/promises';
 import { readdir } from 'fs/promises'; // Para leer los archivos de eventos
 
+
+// Actualmente este archivo solamente sera para el token
 export let config = JSON.parse(await readFile(new URL('./config.json', import.meta.url)));
 
 export const client = new Client({

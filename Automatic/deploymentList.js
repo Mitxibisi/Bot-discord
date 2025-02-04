@@ -85,6 +85,7 @@ export async function getTop100() {
             `SELECT username, level, xp 
                 FROM users 
                 ORDER BY level DESC, xp DESC 
+                WHERE guildId
                 LIMIT 100`
         );
 

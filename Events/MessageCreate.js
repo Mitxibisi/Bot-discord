@@ -43,7 +43,7 @@ const Guild = await getGuild(message.guild.id)
                         const requiredRoleId = Guild.adminRoleId;
                 
                         // Comprobar si el autor tiene el rol requerido
-                        if (!guildMember.roles.cache.has(requiredRoleId)) {
+                        if (!guildMember.roles.cache.has(Guild.adminRoleId)) {
                             // El usuario no tiene el rol requerido
                             return message.reply('No tienes los permisos necesarios para ejecutar este comando.');
                         }
@@ -96,6 +96,7 @@ const Guild = await getGuild(message.guild.id)
             }
         }else if (message.content.length > 1){
             const guildId = message.guild.id;
+            const Guild = getGuild(message.guild.id);
             const userId = message.author.id;
             const now = Date.now();
             const cooldownTime = 2000; // Tiempo en milisegundos (5 segundos)
@@ -115,7 +116,7 @@ const Guild = await getGuild(message.guild.id)
             const xpAmount = 50; // Cantidad base de experiencia
             const guildMember = await message.guild.members.fetch(userId);
         
-            await addXp(guildId ,userId, xpAmount, guildMember, message, null);
+            await addXp(guildId ,userId, xpAmount, guildMember, message, null, Guild);
         
             // Actualizar el tiempo del último mensaje
             userCooldowns.set(userId, now);

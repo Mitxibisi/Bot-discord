@@ -1,7 +1,7 @@
 import sqlite3 from 'sqlite3';
 import { open } from 'sqlite';
 import { levelupmessage } from '../Templates/levelup.js';
-import { config } from '../index.js';
+import { getGuild } from '../GuildsConfig/configs.js';
 
 // Conexión inicial a la base de datos
 export const db = await open({
@@ -55,8 +55,9 @@ export async function getUser(guildId, userId, username) {
     }
 }
 
-export async function addXp(guildId, userId, xpAmount, guildMember, message, channel) {
+export async function addXp(guildId, userId, xpAmount, guildMember, message, channel, Guild) {
     const user = await getUser(guildId, userId, guildMember.user.username);
+
     if (!user) {
         console.error(`El usuario con ID ${userId} no existe.`);
         return null;
@@ -79,7 +80,9 @@ export async function addXp(guildId, userId, xpAmount, guildMember, message, cha
         if (oldrol != newRol){
             // Asignar rol en Discord
             if (guildMember) {
-                await AssignRole(guildMember, newRol, message, channel);
+
+                console.log(Guild.RolId1);
+                await AssignRole(guildMember, newRol, message, channel, Guild);
             } else {
                 console.error("El GuildMember no está definido para la asignación del rol.");
             }
@@ -131,23 +134,24 @@ function rolManager(userLevel) {
     }
 }
 
-async function AssignRole(member, rolid, message, channel) {
+async function AssignRole(member, rolid, message, channel, Guild) {
     const roleMap = {
-            1: config.RolId1,
-            2: config.RolId2,
-            3: config.RolId3,
-            4: config.RolId4,
-            5: config.RolId5,
-            6: config.RolId6,
-            7: config.RolId7,
-            8: config.RolId8,
-            9: config.RolId9,
-            10: config.RolId10,
-            11: config.RolId11,
-            12: config.RolId12
+            1: Guild.RolId1,
+            2: Guild.RolId2,
+            3: Guild.RolId3,
+            4: Guild.RolId4,
+            5: Guild.RolId5,
+            6: Guild.RolId6,
+            7: Guild.RolId7,
+            8: Guild.RolId8,
+            9: Guild.RolId9,
+            10: Guild.RolId10,
+            11: Guild.RolId11,
+            12: Guild.RolId12
     };
 
     const roleId = roleMap[rolid];
+    console.log(roleId);
     if (!roleId) {
         console.error(`No se encontró un rol en Discord para rolid = ${rolid}`);
         return;

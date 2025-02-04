@@ -38,8 +38,20 @@ export async function createGuild(guildId) {
     try {
         const existingGuild = await gdb.get('SELECT * FROM guilds WHERE guildId = ?', [guildId]);
         if (!existingGuild) {
-            await gdb.run('INSERT INTO guilds (guildId) VALUES (?)', [guildId]);
-            console.log(`Creado servidor con ID: ${guildId}`);
+            await gdb.run(`
+                    INSERT INTO guilds (
+                            guildId, adminRoleId, GuildMemberAddRemoveId, NewmemberRoleId,
+                                    ListDeploymentChannel, IgnoredChannelId, VoiceMessagesChannel,
+                                            RolId1, RolId2, RolId3, RolId4, RolId5, RolId6, RolId7, RolId8, RolId9,
+                                                    RolId10, RolId11, RolId12, TemporalChannelsId, SecretRolId1
+                                                        ) VALUES (
+                                                                ?, NULL, NULL, NULL, NULL, NULL, NULL,
+                                                                        NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+                                                                                NULL, NULL, NULL, NULL, NULL
+                                                                                    )
+                                                                                    `, [guildId]);
+            
+            
         }
     } catch (error) {
         console.error('Error en createGuild:', error.message);

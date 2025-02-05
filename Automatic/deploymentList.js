@@ -5,6 +5,8 @@ import randomColor from 'randomcolor';
 import { client } from '../index.js';
 import { getGuild } from '../GuildsConfig/configs.js'; // Para obtener configuraciones del servidor
 
+const scheduledJobs = new Map(); // Mapa para rastrear tareas programadas
+
 // Configura la lista de despliegues y programa la actualización
 export async function setupDeploymentList() {
     client.guilds.cache.forEach(async (guild) => {
@@ -13,6 +15,12 @@ export async function setupDeploymentList() {
 
         if (!channelId) {
             console.log(`No hay un canal de despliegue configurado para ${guild.name}`);
+            return;
+        }
+
+        // Verificar si ya hay una tarea programada para este servidor
+        if (scheduledJobs.has(guild.id)) {
+            console.log(`La tarea ya está programada para ${guild.name}`);
             return;
         }
 
@@ -26,11 +34,14 @@ export async function setupDeploymentList() {
             // Actualizar la lista inmediatamente
             await updateDeploymentList(channel, guild.id);
 
-            // Programar la actualización diaria a las 12:00 AM (hora del servidor)
-            schedule.scheduleJob(`0 0 * * *`, async () => {
+            // Programar la actualización diaria a las 12:00 AM
+            const job = schedule.scheduleJob(`0 0 * * *`, async () => {
                 console.log(`Actualizando la lista de ${guild.name}`);
                 await updateDeploymentList(channel, guild.id);
             });
+
+            // Guardar la tarea programada
+            scheduledJobs.set(guild.id, job);
 
         } catch (error) {
             console.error(`Error en ${guild.name}:`, error.message);

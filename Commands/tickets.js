@@ -1,4 +1,4 @@
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle, PermissionsBitField, ChannelType, UserContextMenuCommandInteraction } from 'discord.js';
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, PermissionsBitField, ChannelType } from 'discord.js';
 import { updateTicketStatus, insertTicket, tieneTodosLosTicketsCerrados} from '../Tickets/tickets.js';
 
 function generateCode() {
@@ -30,6 +30,10 @@ export async function ticketView(interaction) {
     const user = interaction.user;
     const guild = interaction.guild;
 
+    if (!interaction.deferred && !interaction.replied) {
+        await interaction.deferReply({ flags: 64 });
+    }
+
     const TicketsAbiertos = await tieneTodosLosTicketsCerrados(user.id, guild.id);
 
     if (!TicketsAbiertos) {
@@ -39,9 +43,6 @@ export async function ticketView(interaction) {
         });
         return;
     }
-
-    // Responder de inmediato para evitar errores
-    await interaction.deferReply({ flags: 64 });
 
     let categoria = guild.channels.cache.find(c => c.name === "Tickets" && c.type === ChannelType.GuildCategory);
     if (!categoria) {
@@ -91,6 +92,10 @@ export async function ticketDelete(interaction) {
     const canal = interaction.channel;
     const guild = interaction.guild;
 
+    if (!interaction.deferred && !interaction.replied) {
+        await interaction.deferReply({ flags: 64 });
+    }
+
     const TicketsCerrados = await tieneTodosLosTicketsCerrados(user.id, guild.id);
 
     if (TicketsCerrados) {
@@ -100,9 +105,6 @@ export async function ticketDelete(interaction) {
         });
         return;
     }
-
-    // Deferimos la respuesta para evitar el error
-    await interaction.deferReply({ flags: 64 });
 
     // Actualizar el ticket en la base de datos
     await updateTicketStatus(canal.id, 'closed');

@@ -1,4 +1,5 @@
-import { client, config } from '../index.js'
+import { client } from '../index.js'
+import { getGuild } from '../GuildsConfig/configs.js'
 
 async function clearChannel(channelId) {
     try {
@@ -27,22 +28,13 @@ async function clearChannel(channelId) {
 }
 
 export async function run(message) {
-// Obtener el GuildMember del autor del mensaje
-const guildMember = await message.guild.members.fetch(message.author.id);
-        
-// ID del rol requerido
-const requiredRoleId = config.adminRoleId;
-
-// Comprobar si el autor tiene el rol requerido
-if (guildMember.roles.cache.has(requiredRoleId)) {
     if (message.content.startsWith('%clear')) {
         await clearChannel(message.channel.id);
         return message.channel.send('Channel cleared!').then(msg => {
             setTimeout(() => msg.delete(), 5000);
         })
-    }
-} else {
+    } else {
     // El usuario no tiene el rol requerido
     return message.reply('No tienes los permisos necesarios para ejecutar este comando.');
-}
+    }
 }

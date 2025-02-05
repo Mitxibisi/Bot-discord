@@ -7,46 +7,73 @@ import { getGuild } from '../GuildsConfig/configs.js'; // Para obtener configura
 
 const scheduledJobs = new Map(); // Mapa para rastrear tareas programadas
 
-// Configura la lista de despliegues y programa la actualización
 export async function setupDeploymentList() {
     client.guilds.cache.forEach(async (guild) => {
-        const GuildConfig = await getGuild(guild.id);
-        const channelId = GuildConfig.ListDeploymentChannel;
-
-        if (!channelId) {
-            console.log(`No hay un canal de despliegue configurado para ${guild.name}`);
-            return;
-        }
-
-        // Verificar si ya hay una tarea programada para este servidor
-        if (scheduledJobs.has(guild.id)) {
-            console.log(`La tarea ya está programada para ${guild.name}`);
-            return;
-        }
-
-        try {
-            const channel = await client.channels.fetch(channelId);
-            if (!channel || channel.type !== 0) {
-                console.error(`Canal no válido en ${guild.name}`);
-                return;
-            }
-
-            // Actualizar la lista inmediatamente
-            await updateDeploymentList(channel, guild.id);
-
-            // Programar la actualización diaria a las 12:00 AM
-            const job = schedule.scheduleJob(`0 0 * * *`, async () => {
-                console.log(`Actualizando la lista de ${guild.name}`);
-                await updateDeploymentList(channel, guild.id);
-            });
-
-            // Guardar la tarea programada
-            scheduledJobs.set(guild.id, job);
-
-        } catch (error) {
-            console.error(`Error en ${guild.name}:`, error.message);
-        }
+        await checkAndSetupDeployment(guild);
     });
+}
+
+async function checkAndSetupDeployment(guild) {
+    try {
+        const GuildConfig = await getGuild(guild.id);
+        let channelId = GuildConfig.ListDeploymentChannel;
+
+        // Si no hay canal configurado, verificar cada 30 segundos
+        if (!channelId) {
+            console.log(`Esperando configuración del canal para ${guild.name}...`);
+            const interval = setInterval(async () => {
+            const updatedConfig = await getGuild(guild.id);
+            channelId = updatedConfig.ListDeploymentChannel;
+
+            if (channelId) {
+                const channel = await client.channels.fetch(channelId).catch(() => null);
+                if (channel && channel.type === 0) {
+                    clearInterval(interval); // Detiene la verificación cuando se detecta un canal
+                    console.log(`Canal detectado para ${guild.name}. Configurando tarea...`);
+                    await setupScheduledTask(guild, channel);
+                }else{
+                    console.log(`Canal no valido en ${guild.id}`)
+                }
+            }
+            }, 30000); // Verificar cada 30 segundos
+
+            return;
+        }
+
+         // Si el canal ya está configurado, configurarlo de inmediato
+         const channel = await client.channels.fetch(channelId).catch(() => null);
+         if (channel && channel.type === 0) {
+             await setupScheduledTask(guild, channel);
+         } else {
+             console.log(`Canal no válido en ${guild.name}`);
+         }
+    } catch (error) {
+        console.error(`Error en ${guild.name}:`, error.message);
+    }
+}
+
+async function setupScheduledTask(guild, channel) {
+    // Evita tareas duplicadas
+    if (scheduledJobs.has(guild.id)) {
+        console.log(`La tarea ya está programada para ${guild.name}`);
+        return;
+    }
+
+    try {
+
+        // Actualiza la lista inmediatamente
+        await updateDeploymentList(channel, guild.id);
+
+        // Programa la actualización diaria a las 12:00 AM
+        const job = schedule.scheduleJob(`0 * * * *`, async () => {
+            console.log(`Actualizando la lista de ${guild.name}`);
+            await updateDeploymentList(channel, guild.id);
+        });
+
+        scheduledJobs.set(guild.id, job);
+    } catch (error) {
+        console.error(`Error al configurar la tarea para ${guild.name}:`, error.message);
+    }
 }
 
 // Actualiza la lista de ranking para un servidor específico
@@ -58,7 +85,7 @@ async function updateDeploymentList(channel, guildId) {
             return;
         }
 
-        const deploymentList = top100.map((user, index) => ({
+        const deploymentList = top100.map((user) => ({
             name: user.username.charAt(0).toUpperCase() + user.username.slice(1),
             level: `Nivel ${user.level}`,
         }));

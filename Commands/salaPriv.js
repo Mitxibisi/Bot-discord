@@ -1,4 +1,5 @@
-import { client, config } from '../index.js';
+import { client } from '../index.js';
+import { getGuild } from '../GuildsConfig/configs.js';
 
 export async function run(message) {
         if (!message.guild) {
@@ -8,10 +9,11 @@ export async function run(message) {
         const channelName = `Canal Temporal - ${message.author.username}`;
         
         try {
+        const Guild = await getGuild(message.guild.id);
         const channel = await message.guild.channels.create({
         name: channelName,
         type: 2, // Tipo 2 corresponde a un canal de voz
-        parent: config.TemporalChannelsId,
+        parent: Guild.TemporalChannelsId,
         permissionOverwrites: [
         {
         id: message.guild.id,

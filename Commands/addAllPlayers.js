@@ -29,7 +29,5 @@ export async function AddAllPlayers(guild) {
             addedCount++;
         }
      }
-
-    return message.reply(
-        `Se han añadido ${addedCount} miembros a la base de datos exitosamente.`);
+     console.log(`Se añadieron exitosamente ${addedCount} usuarios en ${guild.id}}`)
 }

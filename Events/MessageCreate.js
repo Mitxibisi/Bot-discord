@@ -1,5 +1,5 @@
 import { Events } from 'discord.js';
-import { client, config } from '../index.js';
+import { client } from '../index.js';
 import { addXp } from '../Usersdb/database.js';
 import { getGuild } from '../GuildsConfig/configs.js';
 
@@ -13,14 +13,12 @@ export default () => {
         if (message.content.startsWith('%')) {
             const args = message.content.slice(1).split(' ')[0];  // Extrae el comando
             try{
-                console.log(`Intentando cargar el comando: ${args}`);
                 // Intenta cargar el módulo del comando
                 const commandPath = `../Commands/${args}.js`;
                 const commandModule = await import(commandPath);
-                console.log(args);
-                console.log(`Módulo cargado desde: ${commandPath}`);
+                console.log(`La Guild ${message.guild.name} - ${message.guild.id} cargo el módulo: ${commandPath}`);
 
-                if (!['addAllPlayers', 'clear', 'reset'].includes(args)){
+                if (!['addAllPlayers', 'clear', 'reset', 'updateTop', 'tk', 'addAllPlayers'].includes(args)){
                     try {
                         if (typeof commandModule.run === 'function') {
                             await commandModule.run(message);
@@ -82,7 +80,7 @@ export default () => {
                         if (error.name === 'Error [time]') {
                             return message.reply('No se recibió una respuesta a tiempo. Acción cancelada.');
                         }
-                        console.error('Error al procesar el comando de reseteo:', error.message);
+                        console.error('Error al procesar el comando:', error.message);
                         return message.reply('Ocurrió un error al procesar el comando.');
                     }
                 }

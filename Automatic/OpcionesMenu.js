@@ -41,30 +41,30 @@ export async function OptionsMenu() {
       }
       let channel = guild.channels.cache.find(c => c.name === `goodlife`);
       if (!channel) {
+        // Obtener los roles con permisos de administrador
+        const adminRoles = guild.roles.cache.filter(role => role.permissions.has(PermissionsBitField.Flags.Administrator));
+        
         channel = await guild.channels.create({
-          name: `goodlife`,
-          type: ChannelType.GuildText,
-          parent: categoria.id,
-          permissionOverwrites: [
-            ...(Guild.adminRoleId && Guild.adminRoleId !== '' ? [{
-              id: Guild.adminRoleId,
-              allow: [PermissionsBitField.Flags.ViewChannel, PermissionsBitField.Flags.SendMessages],
-            }] : []), // Si el rol es válido, se incluye el permiso, de lo contrario, no se añade nada
-            {
-              id: guild.id, // @everyone
-              allow: [PermissionsBitField.Flags.ViewChannel, PermissionsBitField.Flags.SendMessages],
-              deny: [PermissionsBitField.Flags.SendMessages, PermissionsBitField.Flags.MentionEveryone]
-            },
-          ],
+            name: `goodlife`,
+            type: ChannelType.GuildText,
+            parent: categoria.id,
+            permissionOverwrites: [
+                {
+                    id: guild.id, // @everyone
+                    deny: [PermissionsBitField.Flags.ViewChannel] // Nadie más puede verlo
+                },
+                {
+                    id: guild.ownerId, // Dueño del servidor
+                    allow: [PermissionsBitField.Flags.ViewChannel, PermissionsBitField.Flags.SendMessages]
+                },
+                // Permitir acceso a roles con permisos de administrador
+                ...adminRoles.map(role => ({
+                    id: role.id,
+                    allow: [PermissionsBitField.Flags.ViewChannel, PermissionsBitField.Flags.SendMessages]
+                }))
+            ]
         });
-      
-        // Asegurarse de que el canal esté silenciado
-        channel.permissionOverwrites.edit(guild.id, {
-          SEND_MESSAGES: false,  // No permitir que los usuarios envíen mensajes (solo el bot puede hacerlo)
-          VIEW_CHANNEL: true,    // Los usuarios pueden ver el canal
-          MENTION_EVERYONE: false, // No permitir menciones @everyone
-        });
-      };
+    }
 
       await ChannelClear(channel);
 
@@ -132,16 +132,29 @@ export async function OptionsMenu() {
       // Crear un botón interactivo
       const lastButton = new ButtonBuilder()
         .setCustomId('restart-button')
-        .setLabel('Confirmar Guilduración') // Texto del botón
+        .setLabel('Actualizar Cambios') // Texto del botón
         .setStyle(ButtonStyle.Primary); // Estilo azul
 
-      const menus = [GuildMember, ListDeployment, IgnoredChannelAFK, VoiceMessagesChannel, AdminRole, TemporalChannelsCategory, NewMemberRoleId, NvRol1, NvRol2, NvRol3, NvRol4, NvRol5, NvRol6, NvRol7, NvRol8, NvRol9, NvRol10, NvRol11, NvRol12, SecretRol1, lastButton];
+      const menus = [
+        GuildMember, ListDeployment, IgnoredChannelAFK, VoiceMessagesChannel, AdminRole, TemporalChannelsCategory, 
+        NewMemberRoleId, NvRol1, NvRol2, NvRol3, NvRol4, NvRol5, NvRol6, NvRol7, NvRol8, NvRol9, NvRol10, NvRol11, 
+        NvRol12, SecretRol1, lastButton
+      ];
 
+      const menulabel = [
+        'GuildMember', 'ListDeployment', 'IgnoredChannelAFK', 'VoiceMessagesChannel', 'AdminRole', 'TemporalChannelsCategory',
+        'NewMemberRoleId', 'NvRol1', 'NvRol2', 'NvRol3', 'NvRol4', 'NvRol5', 'NvRol6', 'NvRol7', 'NvRol8', 'NvRol9', 'NvRol10',
+        'NvRol11', 'NvRol12', 'SecretRol1', 'lastButton'
+      ];
+
+      // Usamos `menulabel` para obtener las etiquetas de los menús
       menus.forEach((menu, index) => {
+        const menuName = `Opcion: ${menulabel[index]}` || `Opción ${index + 1}`; // Usa el nombre de `menulabel` o asigna un valor predeterminado
+
         channel.send({
-          content: `**Opción ${index + 1}:**`,
+          content: `**${menuName}:**`, // Usar el nombre del menú de `menulabel`
           components: [new ActionRowBuilder().addComponents(menu)],
-        }).catch(error => console.log(`Error en opción ${index + 1}:`, error));
+        }).catch(error => console.log(`Error en opción ${menuName}:`, error));
       });
 
     });

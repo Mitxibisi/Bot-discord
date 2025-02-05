@@ -1,7 +1,6 @@
 import sqlite3 from 'sqlite3';
 import { open } from 'sqlite';
 import { levelupmessage } from '../Templates/levelup.js';
-import { getGuild } from '../GuildsConfig/configs.js';
 
 // Conexión inicial a la base de datos
 export const db = await open({

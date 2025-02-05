@@ -1,5 +1,6 @@
+import { getGuild } from "../GuildsConfig/configs.js";
 import { addXp } from "../Usersdb/database.js";
-import { client, config } from '../index.js';
+import { client } from '../index.js';
 
 // Un mapa para rastrear la actividad de entrada y salida de los usuarios de los canalez de voz
 const userVoiceTimes = new Map();
@@ -8,9 +9,10 @@ export default () => {
     client.on('voiceStateUpdate', async (oldState, newState) => {
         try{
             const guildId = newState.guild.id;
+            const Guild = await getGuild(guildId);
             const userId = newState.id;
             const guildMember = newState.member || oldState.member; // Obtén el miembro del servidor
-            const ignoredChannelId = config.IgnoredChannelId; // ID del canal a ignorar
+            const ignoredChannelId = Guild.IgnoredChannelId; // ID del canal a ignorar
         
             // Ignorar si el usuario es un bot
             if (guildMember.user.bot) {
@@ -43,7 +45,7 @@ export default () => {
             return;
             }
         
-            const channelId = config.VoiceMessagesChannel;
+            const channelId = Guild.VoiceMessagesChannel;
             try {
             const channel = await client.channels.fetch(channelId); // Espera a que se resuelva la promesa
             if (!channel.isTextBased()) {

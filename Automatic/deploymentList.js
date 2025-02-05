@@ -8,7 +8,7 @@ import { getGuild } from '../GuildsConfig/configs.js'; // Para obtener configura
 // Configura la lista de despliegues y programa la actualización
 export async function setupDeploymentList() {
     client.guilds.cache.forEach(async (guild) => {
-        const GuildConfig = getGuild(guild.id);
+        const GuildConfig = await getGuild(guild.id);
         const channelId = GuildConfig.ListDeploymentChannel;
 
         if (!channelId) {
@@ -77,7 +77,7 @@ export async function getTop100(guildId) {
         const top100 = await db.all(
             `SELECT username, level, xp 
              FROM users 
-             WHERE guildId = ? 
+             WHERE guild = ? 
              ORDER BY level DESC, xp DESC 
              LIMIT 100`, 
             [guildId] // Filtrado por servidor

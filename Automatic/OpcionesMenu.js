@@ -135,7 +135,7 @@ export async function OptionsMenu() {
         .setLabel('Confirmar Guilduración') // Texto del botón
         .setStyle(ButtonStyle.Primary); // Estilo azul
 
-      const menus = [GuildMember, ListDeployment, IgnoredChannelAFK, VoiceMessagesChannel, AdminRole, TemporalChannelsCategory, NewMemberRoleId, NvRol1, NvRol2, NvRol3, NvRol4, NvRol5, NvRol6, NvRol7, NvRol8, NvRol9, NvRol10, NvRol11, NvRol12, SecretRol1];
+      const menus = [GuildMember, ListDeployment, IgnoredChannelAFK, VoiceMessagesChannel, AdminRole, TemporalChannelsCategory, NewMemberRoleId, NvRol1, NvRol2, NvRol3, NvRol4, NvRol5, NvRol6, NvRol7, NvRol8, NvRol9, NvRol10, NvRol11, NvRol12, SecretRol1, lastButton];
 
       menus.forEach((menu, index) => {
         channel.send({

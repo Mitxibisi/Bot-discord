@@ -31,7 +31,7 @@ async function ChannelClear(channel){
 export async function OptionsMenu() {
   try{
     client.guilds.cache.forEach(async (guild) => {
-      const Guild = getGuild(guild.id);
+      const Guild = await getGuild(guild.id);
       let categoria = guild.channels.cache.find(c => c.name === "Opciones" && c.type === ChannelType.GuildCategory);
       if (!categoria) {
           categoria = await guild.channels.create({
@@ -53,7 +53,7 @@ export async function OptionsMenu() {
             {
               id: guild.id, // @everyone
               allow: [PermissionsBitField.Flags.ViewChannel, PermissionsBitField.Flags.SendMessages],
-              deny: [PermissionsBitField.Flags.MentionEveryone, PermissionsBitField.Flags.SendMessages], // Silenciar el canal para todos
+              deny: [PermissionsBitField.Flags.SendMessages, PermissionsBitField.Flags.MentionEveryone]
             },
           ],
         });
@@ -135,141 +135,15 @@ export async function OptionsMenu() {
         .setLabel('Confirmar Guilduración') // Texto del botón
         .setStyle(ButtonStyle.Primary); // Estilo azul
 
+      const menus = [GuildMember, ListDeployment, IgnoredChannelAFK, VoiceMessagesChannel, AdminRole, TemporalChannelsCategory, NewMemberRoleId, NvRol1, NvRol2, NvRol3, NvRol4, NvRol5, NvRol6, NvRol7, NvRol8, NvRol9, NvRol10, NvRol11, NvRol12, SecretRol1];
 
-      // Agrega cada menú desplegable a su propia fila
-      const row1 = new ActionRowBuilder().addComponents(GuildMember);
-      const row2 = new ActionRowBuilder().addComponents(ListDeployment);
-      const row3 = new ActionRowBuilder().addComponents(IgnoredChannelAFK);
-      const row4 = new ActionRowBuilder().addComponents(VoiceMessagesChannel);
-      const row5 = new ActionRowBuilder().addComponents(AdminRole);
-      const row6 = new ActionRowBuilder().addComponents(TemporalChannelsCategory);
-      const row7 = new ActionRowBuilder().addComponents(NewMemberRoleId);
-      const row8 = new ActionRowBuilder().addComponents(NvRol1);
-      const row9 = new ActionRowBuilder().addComponents(NvRol2);
-      const row10 = new ActionRowBuilder().addComponents(NvRol3);
-      const row11 = new ActionRowBuilder().addComponents(NvRol4);
-      const row12 = new ActionRowBuilder().addComponents(NvRol5);
-      const row13 = new ActionRowBuilder().addComponents(NvRol6);
-      const row14 = new ActionRowBuilder().addComponents(NvRol7);
-      const row15 = new ActionRowBuilder().addComponents(NvRol8);
-      const row16 = new ActionRowBuilder().addComponents(NvRol9);
-      const row17 = new ActionRowBuilder().addComponents(NvRol10);
-      const row18 = new ActionRowBuilder().addComponents(NvRol11);
-      const row19 = new ActionRowBuilder().addComponents(NvRol12);
-      const row20 = new ActionRowBuilder().addComponents(SecretRol1);
-      const buttonRow = new ActionRowBuilder().addComponents(lastButton);
+      menus.forEach((menu, index) => {
+        channel.send({
+          content: `**Opción ${index + 1}:**`,
+          components: [new ActionRowBuilder().addComponents(menu)],
+        }).catch(error => console.log(`Error en opción ${index + 1}:`, error));
+      });
 
-      await Promise.all([
-        channel.send({
-          content: `**Ajustes del servidor:**`,
-        }).catch(error => console.log("Error en Ajustes del servidor:", error)),
-      
-        channel.send({
-          content: `**Canal de Bienvenidas:**`,
-          components: [row1],
-        }).catch(error => console.log("Error en Canal de Bienvenidas:", error)),
-      
-        channel.send({
-          content: `**Canal del Top del server:**`,
-          components: [row2],
-        }).catch(error => console.log("Error en Canal del Top del server:", error)),
-      
-        channel.send({
-          content: `**Canal AFK:**`,
-          components: [row3],
-        }).catch(error => console.log("Error en Canal AFK:", error)),
-      
-        channel.send({
-          content: `**Subidas de nivel por canales de voz:**`,
-          components: [row4],
-        }).catch(error => console.log("Error en Subidas de nivel por canales de voz:", error)),
-      
-        channel.send({
-          content: `**Admin Rol:**`,
-          components: [row5],
-        }).catch(error => console.log("Error en Admin Rol:", error)),
-      
-        channel.send({
-          content: `**Categoria para canales temp:**`,
-          components: [row6],
-        }).catch(error => console.log("Error en Categoria para canales temp:", error)),
-      
-        channel.send({
-          content: `**Rol usuario nuevo:**`,
-          components: [row7],
-        }).catch(error => console.log("Error en Rol usuario nuevo:", error)),
-      
-        channel.send({
-          content: `**Rol Nv1-10:**`,
-          components: [row8],
-        }).catch(error => console.log("Error en Rol Nv1-10:", error)),
-      
-        channel.send({
-          content: `**Rol Nv11-20:**`,
-          components: [row9],
-        }).catch(error => console.log("Error en Rol Nv11-20:", error)),
-      
-        channel.send({
-          content: `**Rol Nv21-30:**`,
-          components: [row10],
-        }).catch(error => console.log("Error en Rol Nv21-30:", error)),
-      
-        channel.send({
-          content: `**Rol Nv31-40:**`,
-          components: [row11],
-        }).catch(error => console.log("Error en Rol Nv31-40:", error)),
-      
-        channel.send({
-          content: `**Rol Nv41-50:**`,
-          components: [row12],
-        }).catch(error => console.log("Error en Rol Nv41-50:", error)),
-      
-        channel.send({
-          content: `**Rol Nv51-60:**`,
-          components: [row13],
-        }).catch(error => console.log("Error en Rol Nv51-60:", error)),
-      
-        channel.send({
-          content: `**Rol Nv61-70:**`,
-          components: [row14],
-        }).catch(error => console.log("Error en Rol Nv61-70:", error)),
-      
-        channel.send({
-          content: `**Rol Nv71-80:**`,
-          components: [row15],
-        }).catch(error => console.log("Error en Rol Nv71-80:", error)),
-      
-        channel.send({
-          content: `**Rol Nv81-90:**`,
-          components: [row16],
-        }).catch(error => console.log("Error en Rol Nv81-90:", error)),
-      
-        channel.send({
-          content: `**Rol Nv91-100:**`,
-          components: [row17],
-        }).catch(error => console.log("Error en Rol Nv91-100:", error)),
-      
-        channel.send({
-          content: `**Rol Nv101-120:**`,
-          components: [row18],
-        }).catch(error => console.log("Error en Rol Nv101-120:", error)),
-      
-        channel.send({
-          content: `**Rol Nv+120:**`,
-          components: [row19],
-        }).catch(error => console.log("Error en Rol Nv+120:", error)),
-      
-        channel.send({
-          content: `**Rol Secreto:**`,
-          components: [row20],
-        }).catch(error => console.log("Error en Rol Secreto:", error)),
-      
-        // Enviar el botón como último mensaje
-        channel.send({
-          content: `✅ **Haz clic en el botón para confirmar la Guilduración.**`,
-          components: [buttonRow],
-        }).catch(error => console.log("Error en el botón de confirmación:", error)),
-      ]);
     });
   }catch(error){
     console.log(`Error en la ejecucion de las opciones : ${error}`);

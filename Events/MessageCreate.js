@@ -36,11 +36,7 @@ export default () => {
                     try {
                         // Obtener el GuildMember del autor del mensaje
                         const guildMember = await message.guild.members.fetch(message.author.id);
-
-const Guild = await getGuild(message.guild.id)
-                
-                        // ID del rol requerido
-                        const requiredRoleId = Guild.adminRoleId;
+                        const Guild = await getGuild(message.guild.id)
                 
                         // Comprobar si el autor tiene el rol requerido
                         if (!guildMember.roles.cache.has(Guild.adminRoleId)) {
@@ -96,7 +92,7 @@ const Guild = await getGuild(message.guild.id)
             }
         }else if (message.content.length > 1){
             const guildId = message.guild.id;
-            const Guild = getGuild(message.guild.id);
+            const Guild = await getGuild(message.guild.id);
             const userId = message.author.id;
             const now = Date.now();
             const cooldownTime = 2000; // Tiempo en milisegundos (5 segundos)

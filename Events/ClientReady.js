@@ -8,6 +8,7 @@ export default () => {
     client.on(Events.ClientReady, async () => {
         console.log(`Conectado como ${client.user.tag}!`);
         OptionsMenu();
+        Deploy();
     });
 
     client.once('ready', () => {

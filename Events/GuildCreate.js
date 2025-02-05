@@ -3,6 +3,7 @@ import { client } from '../index.js';
 import { createGuild } from '../GuildsConfig/configs.js';
 import { AddAllPlayers } from '../Commands/addAllPlayers.js';
 import { Deploy } from './ClientReady.js';
+import { OptionsMenu } from '../Automatic/OpcionesMenu.js';
 
 export default () => {
     client.on(Events.GuildCreate, async (guild) => {
@@ -11,6 +12,8 @@ export default () => {
         try {
             await createGuild(guild.id);
             await AddAllPlayers(guild);
+            await OptionsMenu();
+            await Deploy();
             console.log(`✅ Configuración inicial creada para el servidor: ${guild.id}`);
         } catch (error) {
             console.error(`❌ Error al crear la configuración para el servidor ${guild.id}:`, error);

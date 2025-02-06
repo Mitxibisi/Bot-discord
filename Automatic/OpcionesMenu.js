@@ -142,10 +142,28 @@ export async function OptionsMenu() {
       ];
 
       const menulabel = [
-        'Canal de Bienvenidas', 'Top del server', 'Canal AFK', 'Canal de notificaciones de eventos de voz', 'Rol de administrador', 'Categoria para los canales de voz',
-        'Rol nuevo usuario', 'NvRol1', 'NvRol2', 'NvRol3', 'NvRol4', 'NvRol5', 'NvRol6', 'NvRol7', 'NvRol8', 'NvRol9', 'NvRol10',
-        'NvRol11', 'NvRol12', 'Rol secreto', 'Boton para actualizar la configuración al resto de usuarios'
-      ];
+    '👋 Canal de Bienvenidas', 
+    '🏆 Top del servidor', 
+    '🕹️ Canal AFK', 
+    '🔔 Canal de notificaciones de eventos de voz', 
+    '🔧 Rol de administrador', 
+    '📂 Categoría para los canales de voz',
+    '🆕 Rol nuevo usuario', 
+    '⭐ NvRol1', 
+    '⭐ NvRol2', 
+    '⭐ NvRol3', 
+    '⭐ NvRol4', 
+    '⭐ NvRol5', 
+    '⭐ NvRol6', 
+    '⭐ NvRol7', 
+    '⭐ NvRol8', 
+    '⭐ NvRol9', 
+    '⭐ NvRol10',
+    '⭐ NvRol11', 
+    '⭐ NvRol12', 
+    '🕵️‍♂️ Rol secreto', 
+    '🔄 Botón para actualizar la configuración al resto de usuarios'
+];
 
       // Usamos `menulabel` para obtener las etiquetas de los menús
       menus.forEach((menu, index) => {

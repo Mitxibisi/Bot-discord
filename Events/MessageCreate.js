@@ -111,9 +111,14 @@ export default () => {
 
             const guildMember = await message.guild.members.fetch(userId);
 
-        if (Guild.RolId1 !== null || Guild.RolId2 !== null) {
-            await addXp(guildId ,userId, xpAmount, guildMember, message, null, Guild);
-        }
+const rolKeys = [
+    'RolId1', 'RolId2', 'RolId3', 'RolId4', 'RolId5', 'RolId6',
+    'RolId7', 'RolId8', 'RolId9', 'RolId10', 'RolId11', 'RolId12'
+];
+
+if (rolKeys.some(key => Guild[key] !== null)) {
+    await addXp(guildId, userId, xpAmount, guildMember, message, null, Guild);
+}
 
             // Actualizar el tiempo del último mensaje
             userCooldowns.set(userId, now);

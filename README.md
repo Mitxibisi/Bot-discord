@@ -1,92 +1,63 @@
-Bot de Discord
+# Bot de Discord
 
-Este bot está diseñado para gestionar diversos aspectos de un servidor de Discord, como la administración de roles, niveles, moderación, y más. El bot se configura y administra a través de comandos personalizados y menús interactivos.
+Este es un bot de Discord que ofrece diversas funciones para la gestión del servidor, roles, interacción con los usuarios y más. Está diseñado para ser fácil de usar y altamente configurable. Este repositorio contiene el código fuente del bot y las instrucciones para su configuración.
 
-Funcionalidades
+## Características
 
-1. Gestión del Servidor y Roles: El bot permite gestionar roles y asignar permisos a los usuarios basados en su nivel.
+- **Gestión de servidores y roles**: El bot permite gestionar servidores de Discord, asignar roles automáticamente y realizar configuraciones a través de un menú interactivo.
+- **Sistema de niveles**: Los usuarios ganan experiencia y suben de nivel, con recompensas basadas en su actividad en el servidor.
+- **Moderación**: El bot puede eliminar mensajes inapropiados y gestionar roles para moderadores.
+- **Canales temporales**: Los canales de voz se eliminan automáticamente cuando están vacíos durante 30 segundos.
+- **Sistema de tickets**: Los usuarios pueden crear tickets para soporte, los cuales pueden ser gestionados por los administradores del servidor.
+- **Bienvenidas y despedidas personalizadas**: Los nuevos miembros del servidor son recibidos con un mensaje personalizado y una imagen.
+- **Comandos de administración**: Incluye comandos para ver perfiles de usuario, gestionar configuraciones y añadir o eliminar experiencia.
 
+## Estructura del Proyecto
 
-2. Sistema de Niveles: Los usuarios ganan experiencia en función de su actividad en el servidor (tanto en texto como en voz). Al subir de nivel, se asignan roles automáticamente.
+1. **Rama `main`**: Contiene el código estable y la versión principal del bot.
+2. **Rama `V1.0`**: Primera versión funcional del bot. Puedes usar esta rama como base si necesitas volver a una versión anterior.
+3. **Rama `desarrollo`**: Aquí se realizan las pruebas y el desarrollo de nuevas características. No se recomienda para producción.
 
+## Requisitos
 
-3. Moderación: El bot incluye comandos para eliminar mensajes y gestionar el comportamiento de los miembros.
+- Node.js (versión 16 o superior)
+- Discord.js (v14 o superior)
+- SQLite (base de datos)
+- Un servidor de Discord para agregar el bot
 
+## Instalación
 
-4. Canales Temporales de Voz: Los canales de voz pueden ser creados y eliminados automáticamente según la actividad de los usuarios.
+1. Clona el repositorio:
 
+   ```bash
+   git clone https://github.com/tu-usuario/bot-discord.git
 
-5. Bienvenidas y Despedidas Personalizadas: Al unirse o salir un miembro, se envía un mensaje con una imagen personalizada y un texto de bienvenida o despedida.
+2. Accede al directorio del proyecto:
 
-
-6. Perfil de Usuario: Los usuarios pueden ver su nivel, roles y otros detalles a través de un comando que muestra su perfil.
-
-
-7. Top 100 Usuarios: El bot mantiene un ranking de los 10 usuarios con más experiencia en el servidor.
-
-
-8. Sistema de Tickets: Los usuarios pueden crear un ticket para recibir soporte o hacer preguntas. El sistema de tickets permite un historial y estado de cada uno.
-
-
-9. Comandos de Administración: El bot ofrece comandos para moderadores y administradores, como la capacidad de reiniciar o resetear la base de datos.
-
-
-10. Configuración Personalizada: Los administradores pueden personalizar la configuración del servidor, como los canales de bienvenida, roles y más, a través de un menú interactivo.
-
-
-
-
----
-
-Instalación
-
-1. Clona este repositorio en tu máquina local.
+cd bot-discord
 
 
-2. Asegúrate de tener Node.js y npm instalados. Si no los tienes, puedes descargarlos desde aquí.
-
-
-3. Ejecuta el siguiente comando para instalar las dependencias:
+3. Instala las dependencias necesarias:
 
 npm install
 
 
-4. Crea un archivo configurado.js en la raíz del proyecto y agrega tu token de Discord y otras variables necesarias:
-{
-  "TOKEN":"your_token_here",
-}
+4. Configura el bot con los detalles de tu servidor de Discord. Asegúrate de tener el archivo config.json con el token de tu bot y otros parámetros de configuración.
 
-5. Ejecuta el bot con el siguiente comando:
+
+
+Uso
+
+Para ejecutar el bot, usa el siguiente comando:
 
 node index.js
 
-
-
-
----
-
-Cómo Funciona
-
-1. Comandos de Administración: Los administradores pueden acceder a comandos para modificar la configuración del bot y gestionar usuarios.
-
-
-2. Sistema de Niveles: Los usuarios ganan experiencia a través de su actividad, y cuando suben de nivel, el bot asigna nuevos roles automáticamente.
-
-
-3. Gestión de Canales: El bot puede gestionar canales de voz, eliminando aquellos que no tengan usuarios conectados durante un tiempo determinado.
-
-
-
-
----
+Asegúrate de que el archivo config.json esté correctamente configurado con el token de tu bot y la información necesaria.
 
 Contribuciones
 
-Este proyecto está diseñado para ser utilizado en servidores de Discord privados. Actualmente, no está disponible para el público, pero puedes clonar este repositorio y adaptarlo a tus necesidades.
-
-
----
+Si deseas contribuir a este proyecto, por favor crea un pull request o abre un issue con tus sugerencias.
 
 Licencia
 
-Este proyecto no tiene licencia específica por el momento. Si decides hacer modificaciones, asegúrate de seguir las mejores prácticas de código abierto y respetar los términos de servicio de Discord
+Este proyecto está licenciado bajo la MIT License.

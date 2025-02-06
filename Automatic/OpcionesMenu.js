@@ -167,7 +167,7 @@ export async function OptionsMenu() {
 
       // Usamos `menulabel` para obtener las etiquetas de los menús
       menus.forEach((menu, index) => {
-        const menuName = `Opcion: ${menulabel[index]}` || `Opción ${index + 1}`; // Usa el nombre de `menulabel` o asigna un valor predeterminado
+        const menuName = `${menulabel[index]}` || `Opción ${index + 1}`; // Usa el nombre de `menulabel` o asigna un valor predeterminado
 
         channel.send({
           content: `**${menuName}:**`, // Usar el nombre del menú de `menulabel`

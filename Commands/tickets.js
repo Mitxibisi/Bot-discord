@@ -96,15 +96,13 @@ export async function ticketDelete(interaction) {
         await interaction.deferReply({ flags: 64 });
     }
 
-    const TicketsCerrados = await tieneTodosLosTicketsCerrados(user.id, guild.id);
 
-    if (TicketsCerrados) {
-        await interaction.reply({
-            content: '❌ No tienes un ticket abierto.',
-            flags: 64, // "flags: 64" ahora es "flags: 64" en DJS v14+
-        });
-        return;
-    }
+
+
+
+
+
+
 
     // Actualizar el ticket en la base de datos
     await updateTicketStatus(canal.id, 'closed');

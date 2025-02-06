@@ -64,7 +64,7 @@ export default () => {
             }
 
             // Solo eliminar si se respondió o diferió correctamente
-            if (interaction.replied || interaction.deferred) {
+            if ((interaction.replied || interaction.deferred)&& interaction.customId !== 'close-ticket') {
                 setTimeout(async () => {
                     try {
                         await interaction.deleteReply();

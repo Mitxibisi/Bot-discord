@@ -5,21 +5,17 @@ import { getGuild } from '../GuildsConfig/configs.js';
 
 export default () => {
     client.on(Events.GuildMemberAdd, async (member) => {
+try{
         
         const Guild = await getGuild(member.guild.id);
         const welcomeChannelId = Guild.GuildMemberAddRemoveId;
         const role = member.guild.roles.cache.get(Guild.NewmemberRoleId);
-        
-
-            
-
-
+await createUser(member.guild.id,member.id,member.user.username);       
         if(role){
             await member.roles.add(role);
         }
         
         if (welcomeChannelId){
-            try {
                 const channel = await client.channels.fetch(welcomeChannelId);
                 if (channel) {
                     const commandPath = '../Templates/bienvenida.js';
@@ -29,10 +25,9 @@ export default () => {
                         await commandModule.run(member, channel);
                         }
                     }
-                    await createUser(member.guild.id,member.id,member.user.username);
-            }catch (error) {
-                    console.error(`Error en GuildMemberAdd: ${error.message}`);
-            }   
         }
+}catch (error) {
+                    console.error(`Error en GuildMemberAdd: ${error.message}`);
+            }
     });
 };

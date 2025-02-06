@@ -4,13 +4,15 @@ import { getGuild } from '../GuildsConfig/configs.js';
 
 export default () => {
     client.on(Events.GuildMemberRemove, async (member) => {
+        try{
         const Guild = await getGuild(member.guild.id);
         const welcomeChannelId = Guild.GuildMemberAddRemoveId;
 
         if (!welcomeChannelId){
+            console.log('Prueba');
             return;
         }else{
-            try {
+
                 const channel = await client.channels.fetch(welcomeChannelId);
                 if (channel) {
                     const commandPath = '../Templates/despedida.js';
@@ -19,10 +21,11 @@ export default () => {
                     if (typeof commandModule.run === 'function') {
                         await commandModule.run(member, channel);
                         }
-                    }
-            }catch (error) {
+                 }
+         }
+        }catch (error) {
                     console.error(`Error en GuildMemberAdd: ${error.message}`);
-            }
         }
+
     });
 };

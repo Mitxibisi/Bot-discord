@@ -5,13 +5,14 @@ import { getGuild } from '../GuildsConfig/configs.js';
 
 export default () => {
     client.on(Events.GuildMemberAdd, async (member) => {
+        
         const Guild = await getGuild(member.guild.id);
         const welcomeChannelId = Guild.GuildMemberAddRemoveId;
         const role = member.guild.roles.cache.get(Guild.NewmemberRoleId);
         
-        if (!welcomeChannelId || !role){
-            console.log('Error sin configurar');
-        }
+
+            
+
 
         if(role){
             await member.roles.add(role);

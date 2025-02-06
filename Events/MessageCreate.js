@@ -116,7 +116,7 @@ const rolKeys = [
     'RolId7', 'RolId8', 'RolId9', 'RolId10', 'RolId11', 'RolId12'
 ];
 
-if (rolKeys.some(key => Guild[key] !== null)) {
+if (rolKeys.every(key => Guild[key] !== null)) {
     await addXp(guildId, userId, xpAmount, guildMember, message, null, Guild);
 }
 

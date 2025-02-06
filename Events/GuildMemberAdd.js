@@ -5,8 +5,7 @@ import { getGuild } from '../GuildsConfig/configs.js';
 
 export default () => {
     client.on(Events.GuildMemberAdd, async (member) => {
-try{
-        
+try{  
         const Guild = await getGuild(member.guild.id);
         const welcomeChannelId = Guild.GuildMemberAddRemoveId;
         const role = member.guild.roles.cache.get(Guild.NewmemberRoleId);

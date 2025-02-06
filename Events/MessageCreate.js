@@ -108,10 +108,13 @@ export default () => {
         
             // Si no está en cooldown, otorgar experiencia
             const xpAmount = 50; // Cantidad base de experiencia
+
             const guildMember = await message.guild.members.fetch(userId);
-        
+
+        if (Guild.RolId1 !== null || Guild.RolId2 !== null) {
             await addXp(guildId ,userId, xpAmount, guildMember, message, null, Guild);
-        
+        }
+
             // Actualizar el tiempo del último mensaje
             userCooldowns.set(userId, now);
         }    

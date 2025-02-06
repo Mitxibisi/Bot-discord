@@ -26,6 +26,5 @@ export default () => {
         }catch (error) {
                     console.error(`Error en GuildMemberAdd: ${error.message}`);
         }
-
     });
 };

@@ -60,4 +60,4 @@ Si deseas contribuir a este proyecto, por favor crea un pull request o abre un i
 
 Licencia
 
-Este proyecto está licenciado bajo la MIT License.
+Este proyecto está licenciado bajo la CLUFs License.

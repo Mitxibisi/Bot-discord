@@ -39,19 +39,17 @@ export async function createGuild(guildId) {
         const existingGuild = await gdb.get('SELECT * FROM guilds WHERE guildId = ?', [guildId]);
         if (!existingGuild) {
             await gdb.run(`
-                    INSERT INTO guilds (
-                            guildId, adminRoleId, GuildMemberAddRemoveId, NewmemberRoleId,
-                                    ListDeploymentChannel, IgnoredChannelId, VoiceMessagesChannel,
-                                            RolId1, RolId2, RolId3, RolId4, RolId5, RolId6, RolId7, RolId8, RolId9,
-                                                    RolId10, RolId11, RolId12, TemporalChannelsId, SecretRolId1
-                                                        ) VALUES (
-                                                                ?, NULL, NULL, NULL, NULL, NULL, NULL,
-                                                                        NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
-                                                                                NULL, NULL, NULL, NULL, NULL
-                                                                                    )
-                                                                                    `, [guildId]);
-            
-            
+            INSERT INTO guilds (
+            guildId, adminRoleId, GuildMemberAddRemoveId, NewmemberRoleId,
+            ListDeploymentChannel, IgnoredChannelId, VoiceMessagesChannel,
+            RolId1, RolId2, RolId3, RolId4, RolId5, RolId6, RolId7, RolId8, RolId9,
+            RolId10, RolId11, RolId12, TemporalChannelsId, SecretRolId1
+            ) VALUES (
+            ?, NULL, NULL, NULL, NULL, NULL, NULL,
+            NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+            NULL, NULL, NULL, NULL, NULL
+            )
+            `, [guildId]);
         }
     } catch (error) {
         console.error('Error en createGuild:', error.message);
@@ -74,15 +72,10 @@ export async function getGuild(guildId) {
     }
 }
 
-
-
-
-
-        
-    
-
-    // Actualiza la base de datos
-
-
-  
-
+export async function guildDelete(guildId) {
+    try {
+            await gdb.run(`DELETE FROM guilds WHERE guildId = ?`, [guildId]);
+    } catch (error) {
+        console.error('Error en DeleteGuild:', error.message);
+    }
+}

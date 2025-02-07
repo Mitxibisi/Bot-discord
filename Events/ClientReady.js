@@ -6,7 +6,6 @@ import { setupDeploymentList } from '../Automatic/deploymentList.js';
 export default () => {
     client.on(Events.ClientReady, async () => {
         console.log(`Conectado como ${client.user.tag}!`);
-
         Deploy();
     });
 
@@ -18,4 +17,4 @@ export default () => {
 
 export async function Deploy() {
         await setupDeploymentList();
-    };
+};

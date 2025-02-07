@@ -39,7 +39,7 @@ async function main() {
                     }
 
 
-        client.login(config.token);
+        client.login(config.token2);
     } catch (error) {
         console.error('Error al iniciar el bot:', error);
     }

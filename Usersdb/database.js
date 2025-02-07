@@ -41,13 +41,13 @@ export async function createUser(guildId, userId, username) {
 // Funciones para manejar la base de datos
 export async function getUser(guildId, userId, username) {
     try {
-        const user = await db.get('SELECT * FROM users WHERE id = ? AND guild = ?', [userId, guildId]);
-        if (user) {
-            return user;
-        } else {
-            createUser(guildId,userId,username);
-            return null; // Devuelve null explícitamente si no existe
-        }
+            const user = await db.get('SELECT * FROM users WHERE id = ? AND guild = ?', [userId, guildId]);
+            if (user) {
+                return user;
+            } else {
+                await createUser(guildId,userId,username);
+                return null; // Devuelve null explícitamente si no existe
+            }
     } catch (error) {
         console.error('Error en getUser:', error.message);
         return null; // En caso de error, también devuelve null
@@ -202,4 +202,20 @@ export async function reset(guildId, userId) {
         'UPDATE users SET level = ?, xp = ?, levelupxp = ?, rolid = ? WHERE id = ? AND guild = ?',
         [newLevel, newXp, newLevelUpXp, newRol, userId, guildId]
     );
+}
+
+export async function usersDelete(guildId) {
+    try {
+            await db.run(`DELETE FROM users WHERE guild = ?`, [guildId]);
+    } catch (error) {
+        console.error('Error en DeleteGuild:', error.message);
+    }
+}
+
+export async function userDelete(userId, guildId) {
+    try {
+            await db.run(`DELETE FROM users WHERE id = ? AND guild = ?`, [userId, guildId]);
+    } catch (error) {
+        console.error('Error en DeleteGuild:', error.message);
+    }
 }

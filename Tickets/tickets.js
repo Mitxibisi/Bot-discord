@@ -48,3 +48,11 @@ export async function tieneTodosLosTicketsCerrados(userId, guildId) {
     );
     return !ticketAbierto; // Devuelve true si no hay tickets abiertos, false si hay al menos uno abierto
 }
+
+export async function ticketsDelete(guildId) {
+    try {
+            await tdb.run(`DELETE FROM tickets WHERE guildId = ?`, [guildId]);
+    } catch (error) {
+        console.error('Error en DeleteGuild:', error.message);
+    }
+}

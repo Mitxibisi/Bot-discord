@@ -21,32 +21,38 @@ async function checkAndSetupDeployment(guild) {
         // Si no hay canal configurado, verificar cada 30 segundos
         if (!channelId) {
             console.log(`Esperando configuración del canal para ${guild.name}...`);
-            const interval = setInterval(async () => {
-            const updatedConfig = await getGuild(guild.id);
-            channelId = updatedConfig.ListDeploymentChannel;
 
-            if (channelId) {
-                const channel = await client.channels.fetch(channelId).catch(() => null);
-                if (channel && channel.type === 0) {
-                    clearInterval(interval); // Detiene la verificación cuando se detecta un canal
-                    console.log(`Canal detectado para ${guild.name}. Configurando tarea...`);
-                    await setupScheduledTask(guild, channel);
-                }else{
-                    console.log(`Canal no valido en ${guild.id}`)
+            const checkChannel = async () => {
+                const updatedConfig = await getGuild(guild.id);
+                channelId = updatedConfig.ListDeploymentChannel;
+
+                if (channelId) {
+                    const channel = await client.channels.fetch(channelId).catch(() => null);
+                    if (channel && channel.type === 0) {
+                        console.log(`Canal detectado para ${guild.name}. Configurando tarea...`);
+                        await setupScheduledTask(guild, channel);
+                    } else {
+                        console.log(`Canal no válido en ${guild.id}`);
+                    }
                 }
-            }
-            }, 30000); // Verificar cada 30 segundos
+            };
+
+            // Comprobar el canal cada 30 segundos
+            const interval = setInterval(checkChannel, 30000);
+            
+            // Detener la verificación si ya se configuró el canal
+            checkChannel().then(() => clearInterval(interval));
 
             return;
         }
 
-         // Si el canal ya está configurado, configurarlo de inmediato
-         const channel = await client.channels.fetch(channelId).catch(() => null);
-         if (channel && channel.type === 0) {
-             await setupScheduledTask(guild, channel);
-         } else {
-             console.log(`Canal no válido en ${guild.name}`);
-         }
+        // Si el canal ya está configurado, configurarlo de inmediato
+        const channel = await client.channels.fetch(channelId).catch(() => null);
+        if (channel && channel.type === 0) {
+            await setupScheduledTask(guild, channel);
+        } else {
+            console.log(`Canal no válido en ${guild.name}`);
+        }
     } catch (error) {
         console.error(`Error en ${guild.name}:`, error.message);
     }
@@ -100,7 +106,8 @@ async function updateDeploymentList(channel, guildId) {
             .setTimestamp();
 
         const messages = await channel.messages.fetch({ limit: 10 });
-        await channel.bulkDelete(messages);
+        const messagesToDelete = messages.filter(message => message.author.id === client.user.id); // Filtrar por el autor del bot
+        await channel.bulkDelete(messagesToDelete);            
         await channel.send({ embeds: [embed] });
 
         console.log(`Ranking actualizado en ${channel.guild.name}`);

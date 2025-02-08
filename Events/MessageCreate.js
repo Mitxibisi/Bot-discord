@@ -10,6 +10,8 @@ export default () => {
     client.on(Events.MessageCreate, async (message) => {
         if (message.author.bot) return;
         
+        const Guild = await getGuild(message.guild.id);
+
         if (message.content.startsWith('%')) {
             const args = message.content.slice(1).split(' ')[0];  // Extrae el comando
             try{
@@ -23,7 +25,7 @@ export default () => {
                 if (!adminKeys.includes(args)){
                     try {
                         if (typeof commandModule.run === 'function') {
-                            await commandModule.run(message);
+                            await commandModule.run(message, Guild);
                         } else {
                             console.error(`El comando ${args} no tiene una función 'run'.`);
                             message.reply("Comando no encontrado.");
@@ -92,7 +94,6 @@ export default () => {
             }
         }else if (message.content.length > 1){
             const guildId = message.guild.id;
-            const Guild = await getGuild(message.guild.id);
             const userId = message.author.id;
             const now = Date.now();
             const cooldownTime = 2000; // Tiempo en milisegundos (5 segundos)

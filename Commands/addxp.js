@@ -1,6 +1,6 @@
 import { addXp} from '../Usersdb/database.js';
 
-export async function run (message){
+export async function run (message, Guild){
     const guildId = message.guild.id;
     // Obtener el GuildMember del autor del mensaje
     const guildMember = await message.guild.members.fetch(message.author.id);
@@ -35,6 +35,6 @@ export async function run (message){
     }
 
     // Añadir XP
-    await addXp(guildId,targetMember.id, xpAmount, targetMember, message, null);
+    await addXp(guildId, targetMember.id, xpAmount, targetMember, message, null, Guild);
     return message.reply(`Se han añadido ${xpAmount} XP a ${targetMember.user.displayName}.`);
 }

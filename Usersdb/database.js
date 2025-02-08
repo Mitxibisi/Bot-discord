@@ -66,26 +66,30 @@ export async function addXp(guildId, userId, xpAmount, guildMember, message, cha
     let newLevel = user.level;
     let newLevelUpXp = user.levelupxp;
     let newRol = user.rolid;
+    const oldrol = newRol;
+    let confirm = false;
 
     // Manejo de subida de nivel
-    if (newXp >= newLevelUpXp) {
-        const oldrol = newRol
-        newLevel += Math.floor(newXp / newLevelUpXp);
-        newLevelUpXp = Math.round(50 * newLevel);
+    while(newXp >= newLevelUpXp) {
+        newXp -= newLevelUpXp;  // Resta la XP usada para subir de nivel
+        newLevel++;  // Sube al siguiente nivel
+        newLevelUpXp = Math.round(50 * newLevel);  // Calcula la XP necesaria para el nuevo nivel
         newRol = rolManager(newLevel);
+        confirm = true;
+    }
+
+    if(confirm === true) {
         levelupmessage(message, newLevel, guildMember, channel);
-        newXp = 0;
 
         if (oldrol != newRol){
             // Asignar rol en Discord
             if (guildMember) {
-
-                console.log(Guild.RolId1);
                 await AssignRole(guildMember, newRol, message, channel, Guild);
             } else {
                 console.error("El GuildMember no está definido para la asignación del rol.");
             }
-         }
+        }
+        confirm = false;
     }
 
     // Actualiza la base de datos

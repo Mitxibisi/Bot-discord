@@ -16,7 +16,7 @@ Este es un bot de Discord que ofrece diversas funciones para la gestión del ser
 
 1. **Rama `main`**: Contiene el código estable y la versión principal del bot.
 2. **Rama `V1.0`**: Primera versión funcional del bot. Puedes usar esta rama como base si necesitas volver a una versión anterior.
-3. **Rama `desarrollo`**: Aquí se realizan las pruebas y el desarrollo de nuevas características. No se recomienda para producción.
+3. **Rama `dev`**: Aquí se realizan las pruebas y el desarrollo de nuevas características. No se recomienda para producción.
 
 ## Requisitos
 

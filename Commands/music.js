@@ -2,6 +2,7 @@ import { joinVoiceChannel, createAudioPlayer, createAudioResource, AudioPlayerSt
 import axios from "axios";
 import ytSearch from "yt-search";
 import { client } from "../index.js";
+import puppeteer from 'puppeteer';
 
 export async function run(message) {
     const query = message.content.replace("%music ", "").trim();
@@ -20,14 +21,7 @@ export async function run(message) {
         const video = searchResults.videos[0];
         const youtubeUrl = video.url;
 
-        // Obtener enlace de audio con Cobalt
-        const cobaltResponse = await axios.get("https://cobalt.tools/api/youtube", {
-            params: { url: youtubeUrl }
-        });
-
-        if (!cobaltResponse.data.url) {
-            return message.reply("No se pudo obtener el audio.");
-        }
+      descargarArchivo(youtubeUrl);
 
         const audioUrl = cobaltResponse.data.url;
 
@@ -54,4 +48,27 @@ export async function run(message) {
         console.error(error);
         message.reply("Hubo un error al buscar la música.");
     }
+}
+
+async function descargarArchivo(url) {
+  const browser = await puppeteer.launch({ headless: true }); // Lanzamos el navegador en modo no oculto
+  const page = await browser.newPage(); // Creamos una nueva página
+
+  // Navegamos a la página de Cobalt Tools
+  await page.goto('https://cobalt.tools/');
+
+  // Esperamos que el campo de URL esté disponible
+  await page.waitForSelector('input[name="url"]');
+  
+  // Escribimos la URL en el campo de entrada
+  await page.type('input[name="url"]', url);
+
+  // Esperamos que el botón de envío esté disponible y hacemos clic en él
+  await page.waitForSelector('button[type="submit"]');
+  await page.click('button[type="submit"]');
+
+  // Esperamos un poco antes de cerrar el navegador para permitir la descarga
+  await page.waitForTimeout(10000);
+
+  await browser.close(); // Cerramos el navegador
 }

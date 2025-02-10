@@ -32,14 +32,15 @@ export async function run(Pl1, Pl2, message) {
 
                                                                                                                     if (!players[O]) return message.reply("Debes mencionar a otro jugador para jugar.");
 
-                                                                                                                        const updateMessage = async (msg) => {
-                                                                                                                                const components = [
-                                                                                                                                            new ActionRowBuilder().addComponents(generateButtons(board).slice(0, 3)),
-                                                                                                                                                        new ActionRowBuilder().addComponents(generateButtons(board).slice(3, 6)),
-                                                                                                                                                                    new ActionRowBuilder().addComponents(generateButtons(board).slice(6, 9))
-                                                                                                                                                                            ];
-                                                                                                                                                                                    await msg.edit({ content: `Turno de ${players[currentPlayer]}`, components });
-                                                                                                                                                                                        };
+  const updateMessage = async (msg) => {
+    const buttons = generateButtons(board);
+    const components = [
+        new ActionRowBuilder().addComponents(buttons.slice(0, 3)),
+        new ActionRowBuilder().addComponents(buttons.slice(3, 6)),
+        new ActionRowBuilder().addComponents(buttons.slice(6, 9))
+    ];
+    await msg.edit({ content: `Turno de ${players[currentPlayer]}`, components });
+};                                                                                                                                                                                                                                                         };
 
                                                                                                                                                                                             const gameMessage = await message.channel.send({ content: `Turno de ${players[currentPlayer]}`, components: [] });
                                                                                                                                                                                                 await updateMessage(gameMessage);

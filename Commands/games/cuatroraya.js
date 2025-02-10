@@ -25,11 +25,6 @@ export async function run(Pl1, Pl2, message) {
     // Crear el colector de interacciones
     const collector = gameMessage.createMessageComponentCollector({ time: 30000 });
 
-if (!collector.ended) {
-    await gameMessage.edit({ content: result, components: [] });
-    collector.stop();
-}
-
     collector.on('collect', async (interaction) => {
 if (interaction.customId.startsWith('btn_')) {
     // Esta interacción es parte del juego, no la proceses aquí

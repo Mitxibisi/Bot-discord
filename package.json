@@ -14,6 +14,7 @@
     "@discordjs/opus": "^0.9.0",
     "@discordjs/voice": "^0.17.0",
     "@distube/spotify": "^0.1.0",
+    "axios": "^1.7.9",
     "canvas": "^2.11.2",
     "discord.js": "^14.17.3",
     "distube": "^5.0.2",
@@ -22,11 +23,12 @@
     "node-fetch": "^3.3.2",
     "node-schedule": "^2.1.1",
     "play-dl": "^1.9.7",
-    "puppeteer": "^23.3.0",
+    "puppeteer": "^23.11.1",
     "randomcolor": "^0.6.2",
     "sharp": "^0.33.5",
     "sqlite": "^5.1.1",
     "sqlite3": "^5.1.7",
+    "yt-search": "^2.12.1",
     "ytdl-core": "^4.11.5"
   }
 }

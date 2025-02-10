@@ -36,7 +36,7 @@ export async function run(message) {
                         const commandModule = await import(commandPath);
 
                         if (typeof commandModule.run === 'function') {
-                            await commandModule.run(targetUser,message);
+                            await commandModule.run(Pl1, Pl2, message);
                         } else {
                             console.error(`El comando ${args} no tiene una función 'run'.`);
                             message.reply("Comando no encontrado.");

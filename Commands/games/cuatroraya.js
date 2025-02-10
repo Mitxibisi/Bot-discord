@@ -26,6 +26,10 @@ export async function run(Pl1, Pl2, message) {
     const collector = gameMessage.createMessageComponentCollector({ time: 30000 });
 
     collector.on('collect', async (interaction) => {
+if (interaction.customId.startsWith('btn_')) {
+    // Esta interacción es parte del juego, no la proceses aquí
+    return;
+}
         // Verificar si la interacción es de uno de los jugadores
         if (interaction.user.id === Pl1.id || interaction.user.id === Pl2.id) {
             const choiceIndex = parseInt(interaction.customId.split('_')[1]);

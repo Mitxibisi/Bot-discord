@@ -14,15 +14,15 @@ const checkWinner = (board, player) => {
                                     return winningCombos.some(combo => combo.every(index => board[index] === player));
                                     };
 
-                                    const generateButtons = (board) => {
-                                        return board.map((cell, i) => 
-                                                new ButtonBuilder()
-                                                            .setCustomId(i.toString())
-                                                                        .setLabel(cell)
-                                                                                    .setStyle(cell === EMPTY ? ButtonStyle.Secondary : ButtonStyle.Primary)
-                                                                                                .setDisabled(cell !== EMPTY)
-                                                                                                    );
-                                                                                                    };
+const generateButtons = (board) => {
+    return board.map((cell, i) =>
+        new ButtonBuilder()
+            .setCustomId(`btn_${i}`) // Cambié el ID para evitar problemas
+            .setLabel(cell)
+            .setStyle(cell === EMPTY ? ButtonStyle.Secondary : ButtonStyle.Primary)
+            .setDisabled(cell !== EMPTY)
+    );
+};
 
                                                                                                     
 export async function run(Pl1, Pl2, message) {

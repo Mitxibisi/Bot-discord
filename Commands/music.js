@@ -14,7 +14,7 @@ export async function run(message){
         const youtubeUrl = `https://www.youtube.com/watch?v=${videoId}`;
 
         // Obtener enlace de audio con Cobalt
-        const cobaltResponse = await axios.post("https://cobalt.tools/api/youtube", { url: youtubeUrl });
+        const cobaltResponse = await axios.get("https://cobalt.tools/api/youtube", { url: youtubeUrl });
         const audioUrl = cobaltResponse.data.url;
 
         // Conectar al canal de voz

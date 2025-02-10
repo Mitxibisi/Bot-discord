@@ -35,10 +35,10 @@ if (interaction.customId.startsWith('btn_')) {
             const choiceIndex = parseInt(interaction.customId.split('_')[1]);
             if (interaction.user.id === Pl1.id) {
                 player1Choice = choices[choiceIndex];
-                await interaction.reply({ content: `Has elegido ${player1Choice}.`, flags: 64 });
+                await interaction.deferUpdate();
             } else if (interaction.user.id === Pl2.id) {
                 player2Choice = choices[choiceIndex];
-                await interaction.reply({ content: `Has elegido ${player2Choice}.`, flags: 64 });
+                await interaction.deferUpdate();
             }
         }
 

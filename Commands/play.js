@@ -11,7 +11,7 @@ export async function run(message) {
         }
 
         // Responder a la confirmación de inicio del juego
-        message.reply('Comenzando juego de Tres en Raya.');
+        message.reply(`Comenzando juego ${Game}`);
 
         // Ejecutar el juego (se importa el módulo del juego según el nombre)
         const commandModule = await import(`./games/${Game}.js`);

@@ -4,13 +4,11 @@ const EMPTY = '⬜';
 const X = '❌';
 const O = '⭕';
 
-const createBoard = () => Array(9).fill(EMPTY);
+const createBoard = () => Array(42).fill(EMPTY);
 
 const checkWinner = (board, player) => {
     const winningCombos = [
-        [0, 1, 2], [3, 4, 5], [6, 7, 8], 
-        [0, 3, 6], [1, 4, 7], [2, 5, 8], 
-        [0, 4, 8], [2, 4, 6]
+        
     ];
     return winningCombos.some(combo => combo.every(index => board[index] === player));
 };
@@ -35,9 +33,11 @@ export async function run(Pl1, Pl2, message) {
     const updateMessage = async (msg) => {
         const buttons = generateButtons(board);
         const components = [
-            new ActionRowBuilder().addComponents(buttons.slice(0, 3)),
-            new ActionRowBuilder().addComponents(buttons.slice(3, 6)),
-            new ActionRowBuilder().addComponents(buttons.slice(6, 9))
+            new ActionRowBuilder().addComponents(buttons.slice(0, 7)),
+            new ActionRowBuilder().addComponents(buttons.slice(7, 14)),
+            new ActionRowBuilder().addComponents(buttons.slice(14, 21)),
+            new ActionRowBuilder().addComponents(buttons.slice(21, 28)),
+            new ActionRowBuilder().addComponents(buttons.slice(35, 42))
         ];
         await msg.edit({ content: `Turno de ${players[currentPlayer]}`, components });
     };

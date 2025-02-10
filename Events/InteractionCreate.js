@@ -6,7 +6,7 @@ import { gdb } from '../GuildsConfig/configs.js';
 
 export default () => {
     client.on(Events.InteractionCreate, async (interaction) => {
-if (interaction.customId.startsWith('btn_')) {
+if (interaction.customId.startsWith('btn_' || 'choice_')) {
     // Esta interacción es parte del juego, no la proceses aquí
     return;
 }

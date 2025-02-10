@@ -18,7 +18,7 @@ const checkWinner = (board, player) => {
 const generateButtons = (board) => {
     return board.map((cell, i) => 
         new ButtonBuilder()
-            .setCustomId(btn_${i})
+            .setCustomId(`btn_${i}`)
             .setLabel(cell)
             .setStyle(cell === EMPTY ? ButtonStyle.Secondary : ButtonStyle.Primary)
             .setDisabled(cell !== EMPTY)
@@ -30,7 +30,7 @@ export async function run(Pl1, Pl2, message) {
     let currentPlayer = X;
     let players = { [X]: Pl1, [O]: Pl2 };
 
-    if (!players[O]) return message.reply("Debes mencionar a otro jugador para jugar.");
+    if (!players[O]) return message.reply(`Debes mencionar a otro jugador para jugar.`);
 
     const updateMessage = async (msg) => {
         const buttons = generateButtons(board);
@@ -39,20 +39,20 @@ export async function run(Pl1, Pl2, message) {
             new ActionRowBuilder().addComponents(buttons.slice(3, 6)),
             new ActionRowBuilder().addComponents(buttons.slice(6, 9))
         ];
-        await msg.edit({ content: Turno de ${players[currentPlayer]}, components });
+        await msg.edit({ content: `Turno de ${players[currentPlayer]}`, components });
     };
 
-    const gameMessage = await message.channel.send({ content: Turno de ${players[currentPlayer]}, components: [] });
+    const gameMessage = await message.channel.send({ content: `Turno de ${players[currentPlayer]}`, components: [] });
     await updateMessage(gameMessage);
 
     const collector = gameMessage.createMessageComponentCollector({ time: 60000 });
 
     collector.on('collect', async (interaction) => {
         if (interaction.user.id !== players[currentPlayer].id) {
-            return interaction.reply({ content: "No es tu turno.", ephemeral: true });
+            return interaction.reply({ content: `No es tu turno.`, flags: 64 });
         }
 
-        const index = parseInt(interaction.customId.replace("btn_", ""));
+        const index = parseInt(interaction.customId.replace(`btn_`, ``));
         if (board[index] !== EMPTY) return;
 
         board[index] = currentPlayer;
@@ -60,13 +60,13 @@ export async function run(Pl1, Pl2, message) {
         // Comprobación del ganador
         if (checkWinner(board, currentPlayer)) {
             await updateMessage(gameMessage);
-            return gameMessage.edit({ content: ${players[currentPlayer]} ha ganado! 🎉, components: [] });
+            return gameMessage.edit({ content: `${players[currentPlayer]} ha ganado! 🎉`, components: [] });
         }
 
         // Comprobación de empate
         if (!board.includes(EMPTY)) {
             await updateMessage(gameMessage);
-            return gameMessage.edit({ content: "¡Es un empate!", components: [] });
+            return gameMessage.edit({ content: `¡Es un empate!`, components: [] });
         }
 
         // Alternar turno
@@ -79,5 +79,5 @@ export async function run(Pl1, Pl2, message) {
         }
     });
 
-    collector.on('end', () => gameMessage.edit({ content: "El juego ha terminado por inactividad.", components: [] }));
+    collector.on('end', () => gameMessage.edit({ content: `El juego ha terminado por inactividad.`, components: [] }));
 }

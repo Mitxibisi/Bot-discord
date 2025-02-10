@@ -48,6 +48,10 @@ export async function run(Pl1, Pl2, message) {
     const collector = gameMessage.createMessageComponentCollector({ time: 60000 });
 
     collector.on('collect', async (interaction) => {
+if (interaction.customId.startsWith('choice_')) {
+    // Esta interacción es parte del juego, no la proceses aquí
+    return;
+}
         if (interaction.user.id !== players[currentPlayer].id) {
             return interaction.reply({ content: `No es tu turno.`, flags: 64 });
         }

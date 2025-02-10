@@ -24,7 +24,8 @@ const checkWinner = (board, player) => {
                                                                                                     );
                                                                                                     };
 
-                                                                                                    export async function run(user, message) {
+                                                                                                    
+export async function run(Pl1, Pl2, message) {
                                                                                                         let board = createBoard();
                                                                                                             let currentPlayer = X;
                                                                                                                 let players = { [X]: message.author, [O]: message.mentions.users.first() };

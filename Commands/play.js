@@ -2,6 +2,19 @@ import { ActionRowBuilder, StringSelectMenuBuilder, ChannelType, ButtonBuilder, 
 
 export async function run(message) {
     try {
+      // Crear un botón interactivo
+      const threeButton = new ButtonBuilder()
+        .setCustomId('game-three')
+        .setLabel('⭕❌') // Texto del        botón
+        .setStyle(ButtonStyle.Primary); // Estilo azul
+
+     // Crear un botón interactivo
+      const stoneButton = new ButtonBuilder()
+        .setCustomId('game-stone')
+        .setLabel('⭕❌') // Texto del        botón
+        .setStyle(ButtonStyle.Primary); // Estilo azul
+
+
         // Obtener el nombre del juego (tresenraya)
         const Game = message.content.split(' ')[1];
         const Pl1 = message.author;
@@ -13,7 +26,10 @@ export async function run(message) {
         }
 
         // Responder a la confirmación de inicio del juego
-        message.reply(`Comenzando juego ${Game}`);
+        message.reply({
+content:
+
+});
 
         // Ejecutar el juego (se importa el módulo del juego según el nombre)
         const commandModule = await import(`./games/${Game}.js`);

@@ -55,7 +55,7 @@ if (interaction.customId.startsWith('btn_') || interaction.customId.startsWith('
             if (interaction.isButton()) {
                 if (interaction.customId === 'restart-button') {
                     await interaction.editReply({ content: '🔄 Reiniciando opciones...' });
-                    await OptionsMenu();
+                    await OptionsMenu(interaction.guild);
                 }
 
                 if (interaction.customId === 'new-ticket') {

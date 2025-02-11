@@ -37,11 +37,10 @@ export default () => {
             else if (oldState.channelId && !newState.channelId) {
             const enterTime = userVoiceTimes.get(userId);
             if (enterTime) {
-            const elapsedTime = (Date.now() - enterTime) / 1000; // Tiempo en segundos
+            const elapsedTime = (Date.now() - enterTime) / 1000; // Tiempo e
+   
 
-            if (elapsedTime >= 3600){
-                return;
-            }
+
         
             // Ignorar el canal específico
             if (oldState.channelId === ignoredChannelId) {
@@ -55,6 +54,13 @@ export default () => {
             if (!channel.isTextBased()) {
             console.error('El canal especificado no es de texto.');
             return;
+            }
+
+            if (elapsedTime >= 28800){
+
+                await guildMember.roles.add(Guild.SecretRolId1);
+                channel.send('Alguien obtuvo el rol secreto');
+                return;
             }
         
             await addXp(guildId, userId, Math.ceil(elapsedTime * 0.1), guildMember, null, channel);

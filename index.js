@@ -34,9 +34,9 @@ async function main() {
         }
 
         if (!config.token) {
-                console.error('Token no encontrado en config.json.');
-                    process.exit(1);
-                    }
+            console.error('Token no encontrado en config.json.');
+            process.exit(1);
+        }
 
 
         client.login(config.token);

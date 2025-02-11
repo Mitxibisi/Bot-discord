@@ -30,7 +30,7 @@ export async function run(Pl1, Pl2, message) {
     let currentPlayer = X;
     let players = { [X]: Pl1, [O]: Pl2 };
 
-    if (!players[O]) return message.reply(`Debes mencionar a otro jugador para jugar.`);
+    if (!players[O]) return message.reply("Debes mencionar a otro jugador para jugar.");
 
     const updateMessage = async (msg) => {
         const buttons = generateButtons(board);
@@ -48,15 +48,11 @@ export async function run(Pl1, Pl2, message) {
     const collector = gameMessage.createMessageComponentCollector({ time: 60000 });
 
     collector.on('collect', async (interaction) => {
-if (interaction.customId.startsWith('choice_')) {
-    // Esta interacción es parte del juego, no la proceses aquí
-    return;
-}
         if (interaction.user.id !== players[currentPlayer].id) {
-            return interaction.reply({ content: `No es tu turno.`, flags: 64 });
+            return interaction.reply({ content: "No es tu turno.", ephemeral: true });
         }
 
-        const index = parseInt(interaction.customId.replace(`btn_`, ``));
+        const index = parseInt(interaction.customId.replace("btn_", ""));
         if (board[index] !== EMPTY) return;
 
         board[index] = currentPlayer;
@@ -70,7 +66,7 @@ if (interaction.customId.startsWith('choice_')) {
         // Comprobación de empate
         if (!board.includes(EMPTY)) {
             await updateMessage(gameMessage);
-            return gameMessage.edit({ content: `¡Es un empate!`, components: [] });
+            return gameMessage.edit({ content: "¡Es un empate!", components: [] });
         }
 
         // Alternar turno
@@ -83,5 +79,5 @@ if (interaction.customId.startsWith('choice_')) {
         }
     });
 
-    collector.on('end', () => gameMessage.edit({ content: `El juego ha terminado por inactividad.`, components: [] }));
+    collector.on('end', () => gameMessage.edit({ content: "El juego ha terminado por inactividad.", components: [] }));
 }

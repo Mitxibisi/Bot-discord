@@ -5,7 +5,7 @@ export async function run(message) {
         // Crear un botón interactivo
         const threeButton = new ButtonBuilder()
             .setCustomId('game-three')
-            .setLabel('⭕❌') // Texto del        botón
+            .setLabel('3️⃣') // Texto del        botón
             .setStyle(ButtonStyle.Primary); // Estilo azul
 
         // Crear un botón interactivo
@@ -14,20 +14,25 @@ export async function run(message) {
             .setLabel('✂️') // Texto del botón
             .setStyle(ButtonStyle.Primary); // Estilo azul
     
+        // Crear un botón interactivo
+        const chessButton = new ButtonBuilder()
+            .setCustomId('game-chess')
+            .setLabel('♟️') // Texto del botón
+            .setStyle(ButtonStyle.Primary); // Estilo azul
+        
         // Obtener el nombre del juego (tresenraya)
         const Pl1 = message.author;
         const Pl2 = message.mentions.users.first();
-        let Game = null;
 
         // Validación de jugadores
-        if (!Pl2) {
-            return message.reply('Por favor menciona al segundo jugador.');
+        if (!Pl2 || Pl1 === Pl2) {
+            return message.reply('Por favor mencione un segundo jugador.');
         }
 
         // Responder a la confirmación de inicio del juego
         const gameMessage = await message.channel.send({
             content: `**Juegos**`, // Usar el nombre del menú de `menulabel`
-            components: [new ActionRowBuilder().addComponents(threeButton, stoneButton)],
+            components: [new ActionRowBuilder().addComponents(threeButton, stoneButton, chessButton)],
         });
 
         const collector = gameMessage.createMessageComponentCollector({ time: 60000 });
@@ -40,24 +45,34 @@ export async function run(message) {
                 if (![Pl1.id, Pl2.id].includes(interaction.user.id)) {
                     return interaction.reply({ content: 'No puedes jugar esta partida.', ephemeral: true });
                 }
-                
+
                 await interaction.deferUpdate();
 
-                if (interaction.customId === 'game-three'){
-                    Game = 'tres';
-                    await gamerunner(Game, Pl1, Pl2, message);
-                }
+                const menuGames = {
+                    'game-three': 'tres',
+                    'game-stone': 'piedra',
+                    'game-chess': 'ajedrez'
+                };
 
-                if (interaction.customId === 'game-stone'){
-                    Game = 'piedra';
+                const Game = menuGames[interaction.customId];
+
+                if (Game){
+                    await gameMessage.delete().catch(console.error); // Borra el mensaje con los botones
                     await gamerunner(Game, Pl1, Pl2, message);
                 }
             }
         });
 
-        // Evento cuando el tiempo se acaba
-        collector.on('end', () => {
-            gameMessage.edit({ content: '**El tiempo se ha agotado! ⏳**', components: [] });
+        collector.on('end', async () => {
+            try {
+                await gameMessage.edit({ content: '**El tiempo se ha agotado! ⏳**', components: [] });
+            } catch (error) {
+                if (error.code === 10008) {
+                    console.log('El mensaje ya fue eliminado, no se puede editar.');
+                } else {
+                    console.error('Error al editar el mensaje:', error);
+                }
+            }
         });
 
     } catch (error) {
@@ -67,6 +82,7 @@ export async function run(message) {
 }
 
 async function gamerunner(Game, Pl1, Pl2, message) {
+    try{
             // Ejecutar el juego (se importa el módulo del juego según el nombre)
             const commandModule = await import(`./games/${Game}.js`);
 
@@ -76,4 +92,5 @@ async function gamerunner(Game, Pl1, Pl2, message) {
             } else {
                 message.reply("Comando no encontrado.");
             }
+    }catch(error){console.log(`Error en gamerunner: `,error)}
 }

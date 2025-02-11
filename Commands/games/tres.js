@@ -52,7 +52,7 @@ export async function run(Pl1, Pl2, message) {
             return;
         }
             if (interaction.user.id !== players[currentPlayer].id) {
-                return interaction.reply({ content: "No es tu turno.", ephemeral: true });
+                return interaction.reply({ content: "No es tu turno.", flags: 64 });
             }
 
             const index = parseInt(interaction.customId.replace("btn_", ""));

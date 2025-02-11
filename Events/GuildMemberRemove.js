@@ -6,7 +6,7 @@ import { userDelete } from '../Usersdb/database.js';
 export default () => {
     client.on(Events.GuildMemberRemove, async (member) => {
         try{
-            if(memeber.user.id !== client.id){
+            if(member.user.id !== client.user.id){
             const Guild = await getGuild(member.guild.id);
             const welcomeChannelId = Guild.GuildMemberAddRemoveId;
             if (!member.user.bot){

@@ -37,6 +37,7 @@ if (interaction.customId.startsWith('btn_') || interaction.customId.startsWith('
                 'select-nvrol10': 'RolId10',
                 'select-nvrol11': 'RolId11',
                 'select-nvrol12': 'RolId12',
+                'select-nvrol13': 'RolId13',
                 'select-secretrol': 'SecretRolId1'
             };
 
@@ -54,7 +55,7 @@ if (interaction.customId.startsWith('btn_') || interaction.customId.startsWith('
             if (interaction.isButton()) {
                 if (interaction.customId === 'restart-button') {
                     await interaction.editReply({ content: '🔄 Reiniciando opciones...' });
-                    await OptionsMenu();
+                    await OptionsMenu(interaction.guild);
                 }
 
                 if (interaction.customId === 'new-ticket') {

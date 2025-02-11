@@ -3,7 +3,7 @@ import { open } from 'sqlite';
 
 // Conexión inicial a la base de datos
 export const gdb = await open({
-    filename: './Database/guilds.sqlite',
+    filename: './Database/database.sqlite',
     driver: sqlite3.Database
 });
 
@@ -29,6 +29,7 @@ await gdb.exec(`
         RolId10 TEXT DEFAULT NULL,
         RolId11 TEXT DEFAULT NULL,
         RolId12 TEXT DEFAULT NULL,
+        RolId13 TEXT DEFAULT NULL,
         TemporalChannelsId TEXT DEFAULT NULL,
         SecretRolId1 TEXT DEFAULT NULL
     );
@@ -43,11 +44,19 @@ export async function createGuild(guildId) {
             guildId, adminRoleId, GuildMemberAddRemoveId, NewmemberRoleId,
             ListDeploymentChannel, IgnoredChannelId, VoiceMessagesChannel,
             RolId1, RolId2, RolId3, RolId4, RolId5, RolId6, RolId7, RolId8, RolId9,
+<<<<<<< HEAD
             RolId10, RolId11, RolId12, TemporalChannelsId, SecretRolId1
             ) VALUES (
             ?, NULL, NULL, NULL, NULL, NULL, NULL,
             NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
             NULL, NULL, NULL, NULL, NULL
+=======
+            RolId10, RolId11, RolId12, RolId13, TemporalChannelsId, SecretRolId1
+            ) VALUES (
+            ?, NULL, NULL, NULL, NULL, NULL, NULL,
+            NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+            NULL, NULL, NULL, NULL, NULL, NULL
+>>>>>>> dev
             )
             `, [guildId]);
         }

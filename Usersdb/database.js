@@ -128,10 +128,12 @@ function rolManager(userLevel) {
             return 9;
         case userLevel >= 91 && userLevel <= 100:
             return 10;
-        case userLevel > 100 && userLevel <= 120:
+        case userLevel > 100 && userLevel <= 110:
             return 11;
-        case userLevel > 120:
+        case userLevel > 110 && userLevel <= 120:
             return 12;
+        case userLevel > 120:
+            return 13;
         default:
             return 0; // En caso de que el nivel no encaje en ninguna categoría
     }
@@ -150,7 +152,8 @@ async function AssignRole(member, rolid, message, channel, Guild) {
             9: Guild.RolId9,
             10: Guild.RolId10,
             11: Guild.RolId11,
-            12: Guild.RolId12
+            12: Guild.RolId12,
+            13: Guild.RolId13
     };
 
     const roleId = roleMap[rolid];

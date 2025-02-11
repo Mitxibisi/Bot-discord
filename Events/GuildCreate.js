@@ -12,7 +12,7 @@ export default () => {
         try {
             await createGuild(guild.id);
             await AddAllPlayers(guild);
-            await OptionsMenu();
+            await OptionsMenu(guild);
             await Deploy();
             console.log(`✅ Configuración inicial creada para el servidor: ${guild.id}`);
         } catch (error) {

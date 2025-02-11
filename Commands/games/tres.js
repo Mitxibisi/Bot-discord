@@ -30,7 +30,11 @@ export async function run(Pl1, Pl2, message) {
     let currentPlayer = X;
     let players = { [X]: Pl1, [O]: Pl2 };
 
+<<<<<<< HEAD
     if (!players[O]) return message.reply(`Debes mencionar a otro jugador para jugar.`);
+=======
+    if (!players[O]) return message.reply("Debes mencionar a otro jugador para jugar.");
+>>>>>>> dev
 
     const updateMessage = async (msg) => {
         const buttons = generateButtons(board);
@@ -48,6 +52,7 @@ export async function run(Pl1, Pl2, message) {
     const collector = gameMessage.createMessageComponentCollector({ time: 60000 });
 
     collector.on('collect', async (interaction) => {
+<<<<<<< HEAD
 
 if (interaction.customId.startsWith('choice_')) {
     // Esta interacción es parte del juego, no la proceses aquí
@@ -113,4 +118,38 @@ if (interaction.customId.startsWith('choice_')) {
 
 
     collector.on('end', () => gameMessage.edit({ content: `El juego ha terminado por inactividad.`, components: [] }));
+=======
+        if (interaction.user.id !== players[currentPlayer].id) {
+            return interaction.reply({ content: "No es tu turno.", ephemeral: true });
+        }
+
+        const index = parseInt(interaction.customId.replace("btn_", ""));
+        if (board[index] !== EMPTY) return;
+
+        board[index] = currentPlayer;
+
+        // Comprobación del ganador
+        if (checkWinner(board, currentPlayer)) {
+            await updateMessage(gameMessage);
+            return gameMessage.edit({ content: `${players[currentPlayer]} ha ganado! 🎉`, components: [] });
+        }
+
+        // Comprobación de empate
+        if (!board.includes(EMPTY)) {
+            await updateMessage(gameMessage);
+            return gameMessage.edit({ content: "¡Es un empate!", components: [] });
+        }
+
+        // Alternar turno
+        currentPlayer = currentPlayer === X ? O : X;
+        await updateMessage(gameMessage);
+
+        // Deferir solo si no se ha respondido ya
+        if (!interaction.deferred) {
+            await interaction.deferUpdate();
+        }
+    });
+
+    collector.on('end', () => gameMessage.edit({ content: "El juego ha terminado por inactividad.", components: [] }));
+>>>>>>> dev
 }

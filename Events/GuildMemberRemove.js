@@ -6,6 +6,10 @@ import { userDelete } from '../Usersdb/database.js';
 export default () => {
     client.on(Events.GuildMemberRemove, async (member) => {
         try{
+<<<<<<< HEAD
+=======
+            if(member.user.id !== client.user.id){
+>>>>>>> dev
             const Guild = await getGuild(member.guild.id);
             const welcomeChannelId = Guild.GuildMemberAddRemoveId;
             if (!member.user.bot){
@@ -26,6 +30,10 @@ export default () => {
                     }
                 }
             }
+<<<<<<< HEAD
+=======
+        }
+>>>>>>> dev
         }catch (error) {
                     console.error(`Error en GuildMemberAdd: ${error.message}`);
         }

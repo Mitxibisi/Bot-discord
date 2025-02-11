@@ -48,6 +48,7 @@ export async function run(Pl1, Pl2, message) {
     const collector = gameMessage.createMessageComponentCollector({ time: 60000 });
 
     collector.on('collect', async (interaction) => {
+
 if (interaction.customId.startsWith('choice_')) {
     // Esta interacción es parte del juego, no la proceses aquí
     return;
@@ -56,32 +57,60 @@ if (interaction.customId.startsWith('choice_')) {
             return interaction.reply({ content: `No es tu turno.`, flags: 64 });
         }
 
-        const index = parseInt(interaction.customId.replace(`btn_`, ``));
-        if (board[index] !== EMPTY) return;
+    if (interaction.user.id !== players[currentPlayer].id) {
+        return interaction.reply({ content: "No es tu turno.", ephemeral: true });
+    }
+})
 
-        board[index] = currentPlayer;
+    const index = parseInt(interaction.customId);
+    if (board[index] !== EMPTY) return;
+
+    board[index] = currentPlayer;
+
+    // Comprobación del ganador
+    if (checkWinner(board, currentPlayer)) {
+        await updateMessage(gameMessage);
+        return gameMessage.edit({ content: `${players[currentPlayer]} ha ganado! 🎉`, components: [] });
+    }
+
+    // Comprobación de empate
+    if (!board.includes(EMPTY)) {
+        await updateMessage(gameMessage);
+        return gameMessage.edit({ content: "¡Es un empate!", components: [] });
+    }
+
+    // Alternar turno
+    currentPlayer = currentPlayer === X ? O : X;
+    await updateMessage(gameMessage);
+
+    // Deferir solo si no se ha respondido ya
+    if (!interaction.deferred) {
+        await interaction.deferUpdate();
+    }
+
+
+
+   
 
         // Comprobación del ganador
-        if (checkWinner(board, currentPlayer)) {
-            await updateMessage(gameMessage);
-            return gameMessage.edit({ content: `${players[currentPlayer]} ha ganado! 🎉`, components: [] });
-        }
 
-        // Comprobación de empate
-        if (!board.includes(EMPTY)) {
-            await updateMessage(gameMessage);
-            return gameMessage.edit({ content: `¡Es un empate!`, components: [] });
-        }
+
+
+
+
+
 
         // Alternar turno
-        currentPlayer = currentPlayer === X ? O : X;
-        await updateMessage(gameMessage);
 
-        // Deferir solo si no se ha respondido ya
-        if (!interaction.deferred) {
-            await interaction.deferUpdate();
-        }
-    });
+
+
+        // Deferir solo si n
+
+
+
+
+
+
 
     collector.on('end', () => gameMessage.edit({ content: `El juego ha terminado por inactividad.`, components: [] }));
 }

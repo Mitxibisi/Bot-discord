@@ -28,9 +28,8 @@ async function ChannelClear(channel){
   }
 }
 
-export async function OptionsMenu() {
+export async function OptionsMenu(guild) {
   try{
-    client.guilds.cache.forEach(async (guild) => {
       const Guild = await getGuild(guild.id);
       let categoria = guild.channels.cache.find(c => c.name === "Opciones" && c.type === ChannelType.GuildCategory);
       if (!categoria) {
@@ -176,8 +175,6 @@ export async function OptionsMenu() {
           components: [new ActionRowBuilder().addComponents(menu)],
         }).catch(error => console.log(`Error en opción ${menuName}:`, error));
       });
-
-    });
   }catch(error){
     console.log(`Error en la ejecucion de las opciones : ${error}`);
   }

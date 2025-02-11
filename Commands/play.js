@@ -1,3 +1,5 @@
+import { ActionRowBuilder, StringSelectMenuBuilder, ChannelType, ButtonBuilder, ButtonStyle, PermissionsBitField } from 'discord.js';
+
 export async function run(message) {
     try {
         // Obtener el nombre del juego (tresenraya)

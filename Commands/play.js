@@ -11,7 +11,7 @@ export async function run(message) {
      // Crear un botón interactivo
       const stoneButton = new ButtonBuilder()
         .setCustomId('game-stone')
-        .setLabel('⭕❌') // Texto del        botón
+        .setLabel('✂️') // Texto del        botón
         .setStyle(ButtonStyle.Primary); // Estilo azul
 
 
@@ -27,8 +27,8 @@ export async function run(message) {
 
         // Responder a la confirmación de inicio del juego
         message.reply({
-content:
-
+content:'juegos disponibles'
+components:
 });
 
         // Ejecutar el juego (se importa el módulo del juego según el nombre)

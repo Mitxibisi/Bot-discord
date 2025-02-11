@@ -14,8 +14,6 @@ export async function run(message) {
             .setLabel('✂️') // Texto del botón
             .setStyle(ButtonStyle.Primary); // Estilo azul
     
-
-
         // Obtener el nombre del juego (tresenraya)
         const Pl1 = message.author;
         const Pl2 = message.mentions.users.first();

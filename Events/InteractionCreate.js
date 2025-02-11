@@ -37,6 +37,7 @@ if (interaction.customId.startsWith('btn_') || interaction.customId.startsWith('
                 'select-nvrol10': 'RolId10',
                 'select-nvrol11': 'RolId11',
                 'select-nvrol12': 'RolId12',
+                'select-nveol13': 'RolId13',
                 'select-secretrol': 'SecretRolId1'
             };
 

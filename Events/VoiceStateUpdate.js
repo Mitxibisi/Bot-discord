@@ -38,6 +38,10 @@ export default () => {
             const enterTime = userVoiceTimes.get(userId);
             if (enterTime) {
             const elapsedTime = (Date.now() - enterTime) / 1000; // Tiempo en segundos
+
+            if (elapsedTime >= 3600){
+                return;
+            }
         
             // Ignorar el canal específico
             if (oldState.channelId === ignoredChannelId) {

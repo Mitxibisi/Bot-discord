@@ -127,6 +127,7 @@ export async function OptionsMenu() {
       const NvRol10 = MenuBuilder('select-nvrol10', 'Selecciona un rol', roles, Guild.RolId10);
       const NvRol11 = MenuBuilder('select-nvrol11', 'Selecciona un rol', roles, Guild.RolId11);
       const NvRol12 = MenuBuilder('select-nvrol12', 'Selecciona un rol', roles, Guild.RolId12);
+      const NvRol13 = MenuBuilder('select-nvrol13', 'Selecciona un rol', roles, Guild.RolId13);
       const SecretRol1 = MenuBuilder('select-secretrol', 'Selecciona un rol', roles, Guild.SecretRolId1);
       
       // Crear un botón interactivo
@@ -138,7 +139,7 @@ export async function OptionsMenu() {
       const menus = [
         GuildMember, ListDeployment, IgnoredChannelAFK, VoiceMessagesChannel, AdminRole, TemporalChannelsCategory, 
         NewMemberRoleId, NvRol1, NvRol2, NvRol3, NvRol4, NvRol5, NvRol6, NvRol7, NvRol8, NvRol9, NvRol10, NvRol11, 
-        NvRol12, SecretRol1, lastButton
+        NvRol12, NvRol13, SecretRol1, lastButton
       ];
 
       const menulabel = [
@@ -161,6 +162,7 @@ export async function OptionsMenu() {
     '⭐ NvRol10',
     '⭐ NvRol11', 
     '⭐ NvRol12', 
+    '⭐ NvRol13',
     '🕵️‍♂️ Rol secreto', 
     '🔄 Botón para actualizar la configuración al resto de usuarios'
 ];

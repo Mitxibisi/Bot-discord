@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <HTML>
 <HEAD>
-
+<meta charset = "UTF-8">
 <title>Prueba Basic</title>
 
 </HEAD>
@@ -13,15 +13,27 @@
 <button id = "boton2"> Prueba </button>
 
 <input type = "checkbox" id = "boton1">
+
+<p id = "mensaje">El checkblx esta desmarcado</p>
+
 <label for="boton1"> Activar opcion </label>
 
-<a>
-https://www.w3schools.com/html/default.asp
-</a>
+<a href="
+https://www.w3schools.com/html/default.asp" 
+target = "_blank"> Ir a pagina web </a>
+
 
 <script>
     document.getElementById("boton2").addEventListener("click", function() {
         alert("Realizaste click");
+    });
+
+    document.getElementById("boton1").addEventListener("change", function() {
+        let message = getElementById("mensaje")
+
+        if (this.checked){
+ document.body.style.backgroundColor = "lightblue";}
+ else{ document.body.style.backgroundColor = "white"}
     });
 </script>
 

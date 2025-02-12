@@ -14,8 +14,6 @@
 
 <input type = "checkbox" id = "boton1">
 
-<p id = "mensaje">El checkblx esta desmarcado</p>
-
 <label for="boton1"> Activar opcion </label>
 
 <a href="
@@ -32,8 +30,11 @@ target = "_blank"> Ir a pagina web </a>
         let message = document.getElementById("mensaje")
 
         if (this.checked){
- document.body.style.backgroundColor = "lightblue";}
+ document.body.style.backgroundColor = "lightblue";
+<p id = "mensaje">El checkblx esta marcado</p>
+}
  else{ document.body.style.backgroundColor = "white"}
+<p id = "mensaje">El checkbox esta desmarcado</p>
     });
 </script>
 

@@ -20,6 +20,7 @@
 https://www.w3schools.com/html/default.asp" 
 target = "_blank"> Ir a pagina web </a>
 
+<p id = "mensaje"></p>
 
 <script>
     document.getElementById("boton2").addEventListener("click", function() {
@@ -31,10 +32,10 @@ target = "_blank"> Ir a pagina web </a>
 
         if (this.checked){
  document.body.style.backgroundColor = "lightblue";
-<p id = "mensaje">El checkblx esta marcado</p>
+mensaje.textContent = "El botón se encuentra marcado";
 }
  else{ document.body.style.backgroundColor = "white"}
-<p id = "mensaje">El checkbox esta desmarcado</p>
+mensaje.textContent = "El botón se encuentra desmarcado";
     });
 </script>
 

@@ -1,5 +1,6 @@
 import { getUser } from '../Usersdb/database.js';
 import { perfilembed } from '../Templates/perfil.js'
+import { client } from '../index.js';
 
 export async function run(message) {
     try {
@@ -13,26 +14,30 @@ export async function run(message) {
         if (targetUserMention) {
             // Validar que se ha mencionado a un usuario
             const match = targetUserMention.match(/^<@!?(\d+)>$/);
-            if (!match) {
+            const userId = match ? match[1] : targetUserMention;
+
+            if (!userId) {
                 return message.reply('Por favor, menciona un usuario válido.');
             }
     
-            const targetUserId = match[1];
+            const targetUserId = userId;
+            if (targetUserId === client.user.id){
+                return message.reply("No es posible ver el perfil del mismo bot");
+            }
+
             targetMember = await message.guild.members.fetch(targetUserId).catch(() => null);
     
             if (!targetMember) {
                 return message.reply('No se ha encontrado al usuario mencionado en este servidor.');
             }
         } else {
-            // Si no se menciona, se resetea al autor en la base de datos
+            // Si no se menciona, se vuelve al autor en la base de datos
             targetMember = guildMember;
         }
     
         // Resetear miembro
-        const user = await getUser(guildId,targetMember.id); // Obtén los datos del usuario de la base de datos
-            console.log(user); // Para depuración
-            console.log("Intentando cargar el comando: embed");
-            perfilembed(message, user);
+        const user = await getUser(guildId, targetMember.id); // Obtén los datos del usuario de la base de datos
+        perfilembed(message, user);
     }  catch (error) {
            console.error(`Error en perfil: ${error.message}`);
            message.reply('Error al generar el perfil');

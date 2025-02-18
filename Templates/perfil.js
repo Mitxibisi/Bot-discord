@@ -8,7 +8,12 @@ async function sendUserRoles(message) {
     }
 
     // Obtén el usuario mencionado o el autor del mensaje si no se menciona a nadie
-    const member = message.mentions.members.first() || message.member;
+    const args = message.content.split(' ');
+    let mentionedMember = message.mentions.members.first();
+    if (/^\d+$/.test(args[1])){
+        mentionedMember = await message.guild.members.fetch(args[1]).catch(() => null);
+    }
+    const member = mentionedMember || message.member;
 
     // Si no se puede obtener el miembro, envía un mensaje de error
     if (!member) {
@@ -31,7 +36,11 @@ async function sendUserRoles(message) {
 
 export async function perfilembed(message, user) {
     const color = randomColor();
-    const mentionedMember = message.mentions.members.first();
+    const args = message.content.split(' ');
+    let mentionedMember = message.mentions.members.first();
+    if (/^\d+$/.test(args[1])){
+        mentionedMember = await message.guild.members.fetch(args[1]).catch(() => null);
+    }
     const member = mentionedMember || message.member;
 
     const joinedDate = member.joinedAt

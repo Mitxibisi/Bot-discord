@@ -71,7 +71,7 @@ export default () => {
                             // Confirmación positiva
                             // Ejecutar el comando desde el módulo
                             if (typeof commandModule.run === 'function') {
-                                await commandModule.run(message);
+                                await commandModule.run(message,Guild);
                             } else {
                                 console.error(`El comando ${args} no tiene una función 'run'.`);
                                 return message.reply('Comando no encontrado.');
